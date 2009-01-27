@@ -4,15 +4,7 @@ require 'ruby_parser'
 require 'ruby2ruby'
 
 toy_source=<<EOF
-class Toy
-  def a_func(x)
-    if x == 0
-      return 1
-    else
-      x * a_func(x-1)
-    end
-  end
-end
+      1 + 2 + 3
 EOF
 
 print "toy_source: ", toy_source, "\n"
