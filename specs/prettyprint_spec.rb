@@ -16,4 +16,10 @@ describe "pretty printing" do
     two_tree= @parser.s(:lit, 2)
     @prettyprinter.print(two_tree).should == 's(:lit, 2)'
   end
+
+  it "should print a variable reference for a properly" do
+    a_tree= @parser.s(:call, nil, :a, @parser.s(:arglist))
+    @prettyprinter.print(a_tree).should == 's(:call, nil, :a, s(:arglist))'
+  end
+
 end
