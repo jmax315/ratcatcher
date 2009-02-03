@@ -1,4 +1,6 @@
-require 'app/silly_tree'
+require File.join(File.dirname(__FILE__), '..', 'app', 'silly_tree')
+
+puts __FILE__
 
 describe "The model for our spike's tree data" do
   it "should have 'row one' in the first node" do

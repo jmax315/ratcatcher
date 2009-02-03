@@ -1,0 +1,9 @@
+require 'rake'
+require 'spec/rake/spectask'
+
+desc "Run tree_widget spike specs with RCov"
+Spec::Rake::SpecTask.new('tree_spike_rcov') do |t|
+  t.spec_files= FileList['spike/tree_widget/specs/**/*.rb']
+  t.rcov= true
+  t.rcov_opts= ['--exclude', 'specs']
+end

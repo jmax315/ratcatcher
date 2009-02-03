@@ -1,8 +1,0 @@
-require 'silly_tree'
-
-describe "The model for our spike's tree data" do
-  it "should have 'row one' in the first node" do
-    @the_tree= SillyTree.new
-    @the_tree.tree_data.get_iter("0")[0].should == "row one"
-  end
-end
