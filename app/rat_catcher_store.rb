@@ -1,6 +1,5 @@
 require 'gtk2'
 require 'ruby_parser'
-require 'app/rat_catcher_store_node'
 
 
 class RatCatcherStore < Gtk::TreeStore
@@ -10,12 +9,6 @@ class RatCatcherStore < Gtk::TreeStore
     @parse_tree= RubyParser.new.process source_code
 
     load @parse_tree, nil
-
-#     root= append nil
-#     root[0]= @parse_tree[0]
-
-#     child= append root
-#     child[0]= @parse_tree[1]
   end
 
   def load data, parent
