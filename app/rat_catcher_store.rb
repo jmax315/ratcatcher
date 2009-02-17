@@ -4,7 +4,7 @@ require 'ruby_parser'
 
 class RatCatcherStore < Gtk::TreeStore
   def initialize source_code
-    super Object
+    super String, Object
 
     @parse_tree= RubyParser.new.process source_code
 
@@ -13,14 +13,24 @@ class RatCatcherStore < Gtk::TreeStore
 
   def load data, parent
     new_node= append parent
-    if data.kind_of?(Sexp)
-      new_node[0]= data[0]
-      data[1..-1].each do |child|
-        load child, new_node
+
+    case data[0]
+    when :str
+      new_node[0]= data[1].inspect
+
+    when :lit
+      new_node[0]= data[1].inspect
+
+    when :call
+      new_node[0]= data[2].to_s
+      if data[1]
+        load data[1], new_node
       end
-    else
-      new_node[0]= data
+      data[3][1..-1].each do |arg|
+        load arg, new_node
+      end
     end
+    new_node[1]= data
   end
 
   def [] index

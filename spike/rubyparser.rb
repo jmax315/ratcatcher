@@ -4,7 +4,7 @@ require 'ruby_parser'
 require 'ruby2ruby'
 
 toy_source=<<EOF
-      a
+      f(2,3)
 EOF
 
 print "toy_source: ", toy_source, "\n"
