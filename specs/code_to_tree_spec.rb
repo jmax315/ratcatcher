@@ -331,3 +331,79 @@ describe 'tree for the expression f(3,6,9)' do
   end
 end
 
+
+describe 'tree for the expression - 8' do
+  before :each do
+    @tree= RatCatcherStore.new '- 8'
+  end
+
+  it "should have one top-level node containing f in the first column" do
+    @tree.get_iter("0")[0].should == '-'
+  end
+
+  it "should have one top-level node containing
+      s(:call, s(:lit, 8), :-, s(:arglist))
+      in the second column" do
+     @tree.get_iter("0")[1].should == s(:call, s(:lit, 8), :-@, s(:arglist))
+  end
+
+  it "should have a node at 0:0 containing '8' in the first column" do
+    @tree.get_iter("0:0")[0].should == '8'
+  end
+
+  it "should have a node at 0:0 containing
+      s(:lit, 8)
+      in the second column" do
+    @tree.get_iter("0:0")[1].should == s(:lit, 8)
+  end
+
+end
+
+
+describe 'tree for the expression 75? 0: 2' do
+  before :each do
+    @tree= RatCatcherStore.new '75? 0: 2'
+  end
+
+  it "should have one top-level node containing ?: in the first column" do
+    @tree.get_iter("0")[0].should == '?:'
+  end
+
+  it "should have one top-level node containing
+      s(:if, s(:lit, 75), s(:lit, 0), s(:lit, 2))
+      in the second column" do
+     @tree.get_iter("0")[1].should == s(:if, s(:lit, 75), s(:lit, 0), s(:lit, 2))
+  end
+
+  it "should have a node at 0:0 containing '75' in the first column" do
+    @tree.get_iter("0:0")[0].should == '75'
+  end
+
+  it "should have a node at 0:0 containing
+      s(:lit, 75)
+      in the second column" do
+    @tree.get_iter("0:0")[1].should == s(:lit, 75)
+  end
+
+  it "should have a node at 0:1 containing '0' in the first column" do
+    @tree.get_iter("0:1")[0].should == '0'
+  end
+
+  it "should have a node at 0:1 containing
+      s(:lit, 0)
+      in the second column" do
+    @tree.get_iter("0:1")[1].should == s(:lit, 0)
+  end
+
+  it "should have a node at 0:2 containing '2' in the first column" do
+    @tree.get_iter("0:2")[0].should == '2'
+  end
+
+  it "should have a node at 0:2 containing
+      s(:lit, 2)
+      in the second column" do
+    @tree.get_iter("0:2")[1].should == s(:lit, 2)
+  end
+
+end
+

@@ -22,13 +22,21 @@ class RatCatcherStore < Gtk::TreeStore
       new_node[0]= data[1].inspect
 
     when :call
-      new_node[0]= data[2].to_s
+      new_node[0]= (data[2] == :-@)? '-': data[2].to_s
+
       if data[1]
         load data[1], new_node
       end
+
       data[3][1..-1].each do |arg|
         load arg, new_node
       end
+
+      when :if
+        new_node[0]= '?:'
+        load data[1], new_node
+        load data[2], new_node
+        load data[3], new_node
     end
     new_node[1]= data
   end

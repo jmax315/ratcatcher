@@ -7,7 +7,7 @@ class SillyTree
   attr_accessor :tree_data, :tree_widget, :renderer, :col
 
   def initialize
-    @tree_data= RatCatcherStore.new 'def ferd a, b; a+b; end'
+    @tree_data= RatCatcherStore.new 'f(12, 6+4)'
     @tree_widget= Gtk::TreeView.new(@tree_data)
 
     @renderer= Gtk::CellRendererText.new

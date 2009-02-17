@@ -3,9 +3,7 @@
 require 'ruby_parser'
 require 'ruby2ruby'
 
-toy_source=<<EOF
-      f(2,3)
-EOF
+toy_source= ARGV[0]
 
 print "toy_source: ", toy_source, "\n"
 
