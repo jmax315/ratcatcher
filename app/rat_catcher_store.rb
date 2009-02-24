@@ -11,6 +11,14 @@ class RatCatcherStore < Gtk::TreeStore
     load @parse_tree, nil
   end
 
+  def text path
+    get_iter(path)[0]
+  end
+
+  def sexp path
+    get_iter(path)[1]
+  end
+
   def load data, parent
     new_node= append parent
 
