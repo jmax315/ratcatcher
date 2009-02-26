@@ -74,8 +74,8 @@ describe 'tree for the expression 1+2' do
     @tree.text('0').should == '+'
   end
 
-  it "should have one top-level node containing s(:call, s(:lit, 1), :+, s(:arglist, :_)) as its sexp" do
-    @tree.sexp('0').should be_a_tree_like(s(:call, s(:lit,1 ), :+, s(:arglist, :_)))
+  it "should have a call node with 1 as the recipient and + as the method" do
+    @tree.sexp('0').should be_a_tree_like(s(:call, :_, :+, :_))
   end
 
   it "should have a node at 0:0 containing '1' as display text" do
@@ -106,8 +106,8 @@ describe 'tree for the expression 1-2' do
     @tree.text('0').should == '-'
   end
 
-  it "should have one top-level node containing s(:call, s(:lit,1 ), :-, s(:arglist, s(:lit, 2))) as its sexp" do
-    @tree.sexp('0').should be_a_tree_like(s(:call, s(:lit,1 ), :-, s(:arglist, s(:lit, 2))))
+  it "should have a call node with 1 as the recepient and - as the method" do
+    @tree.sexp('0').should be_a_tree_like(s(:call, :_, :-, :_))
   end
 
   it "should have a node at 0:0 containing '1' as display text" do
@@ -137,8 +137,12 @@ describe 'tree for the expression 1+(2-3)' do
     @tree.text('0').should == '+'
   end
 
-  it "should have a node at 0 containing s(:call, s(:lit, 1), :+, s(:arglist, s(:call, s(:lit, 2), :-, s(:arglist, s(:lit, 3))))) as its sexp" do
-    @tree.sexp('0').should be_a_tree_like(s(:call, s(:lit, 1), :+, s(:arglist, s(:call, s(:lit, 2), :-, s(:arglist, s(:lit, 3))))))
+  it "should have a call node at 0 to 1 with the method +" do
+    @tree.sexp('0').should be_a_tree_like(s(:call, :_, :+, :_))
+  end
+
+  it "should have a call node at 0:3:1 to 2 with the method -" do
+    @tree.sexp('0')[3][1].should be_a_tree_like(s(:call, :_, :-, :_))
   end
 
   it "should have a node at 0:0 containing '1' as display text" do
@@ -153,8 +157,8 @@ describe 'tree for the expression 1+(2-3)' do
     @tree.text('0:1').should == '-'
   end
 
-  it "should have a node at 0:1 containing s(:call, s(:lit, 2), :-, s(:arglist, s(:lit, 3))) as its sexp" do
-    @tree.sexp('0:1').should be_a_tree_like(s(:call, s(:lit, 2), :-, s(:arglist, s(:lit, 3))))
+  it "should have a call node at 0:1 to 2 with the method -" do
+    @tree.sexp('0:1').should be_a_tree_like(s(:call, :_, :-, :_))
   end
 
   it "should have a node at 0:1:0 containing '2' as display text" do
@@ -185,10 +189,8 @@ describe 'tree for the expression (1+2)*3' do
     @tree.text('0').should == '*'
   end
 
-  it "should have a node at 0 containing
-      s(:call, s(:call, s(:lit, 1), :+, s(:arglist, s(:lit, 2))), :*, s(:arglist, s(:lit, 3)))
-      as its sexp" do
-    @tree.sexp('0').should be_a_tree_like(s(:call, s(:call, s(:lit, 1), :+, s(:arglist, s(:lit, 2))), :*, s(:arglist, s(:lit, 3))))
+  it "should have a call node at 0 to the object returned from a call with operator '*'" do
+    @tree.sexp('0').should be_a_tree_like(s(:call, s(:call, :_, :+, :_), :*, :_))
   end
 
   it "should have a node at 0:0 containing '+' as display text" do
