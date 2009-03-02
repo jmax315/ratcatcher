@@ -1,0 +1,2 @@
+class RatcatcherApp
+end

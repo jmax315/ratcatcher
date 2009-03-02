@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'app/ratcatcher_app'
+
+the_app= RatcatcherApp.new
+the_app.run
