@@ -381,3 +381,58 @@ describe 'tree for the expression 75? 0: 2' do
 
 end
 
+describe 'method definition with one statement' do
+  before :each do
+    @tree= RatCatcherStore.new %q{
+      def amethod
+        5
+      end
+    }
+  end
+
+  it "has a node" do
+    @tree.text('0').should == 'def amethod'
+  end
+
+  it "has an sexp" do
+    @tree.sexp('0').should be_a_tree_like(s(:defn, :amethod, :_, :_))
+  end
+
+  it "has the statement text" do
+    @tree.text('0:0').should == "5"
+  end
+
+  it "has the statement sexp" do
+    @tree.sexp('0:0').should be_a_tree_like(s(:lit, 5))
+  end
+
+end
+
+describe 'method definition with two statements' do
+  before :each do
+    @tree= RatCatcherStore.new %q{
+      def amethod
+        puts "one"
+        p "two"
+      end
+    }
+  end
+
+  it "has first statement of puts" do
+    @tree.text('0:0').should == "puts"
+  end
+
+  it 'has second statement of p' do
+    @tree.text('0:1').should == "p"
+  end
+
+  it "has first statement sexp" do
+    @tree.sexp('0:0').should be_a_tree_like(s(:call, nil, :puts, :_))
+  end
+
+  it "has second statement sexp" do
+    @tree.sexp('0:1').should be_a_tree_like(s(:call, nil, :p, :_))
+  end
+
+end
+
