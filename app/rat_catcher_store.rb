@@ -3,12 +3,39 @@ require 'ruby_parser'
 
 
 class RatCatcherStore < Gtk::TreeStore
-  def initialize source_code
+  TEXT= 0
+  SEXP= 1
+
+  def initialize source_code= ''
     super String, Object
 
     @parse_tree= RubyParser.new.process source_code
 
     load @parse_tree, nil
+  end
+
+  def ==(right)
+      compare_tree_iterators(iter_first, right.iter_first)
+  end
+
+  def compare_tree_iterators(left_it, right_it)
+    return true if left_it == nil  ||  right_it == nil
+
+    begin
+      return false if left_it[TEXT] != right_it[TEXT]
+      return false if left_it[SEXP] != right_it[SEXP]
+      return false if !compare_tree_iterators(left_it.first_child, right_it.first_child)
+
+      # *Caution* - The behavior of Gtk::TreeIter#next! is _highly_
+      # counter-intuitive when reaching the end of the node list. Be
+      # very careful and check the Gtk::gnome2::TreeIter docs when
+      # modifying the next three lines of code. JAM/CPB 4-Mar-2009
+      more_nodes_on_this_level= left_it.next!
+
+      return false if more_nodes_on_this_level != right_it.next!
+    end while more_nodes_on_this_level
+
+    return true
   end
 
   def text path
@@ -20,6 +47,8 @@ class RatCatcherStore < Gtk::TreeStore
   end
 
   def load data, parent
+    return if data == nil
+
     new_node= append parent
 
     case data[0]

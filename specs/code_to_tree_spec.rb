@@ -1,6 +1,27 @@
 require 'app/rat_catcher_store'
 require 'specs/tree_like_matcher'
 
+
+describe 'tree for no input' do
+  before :each do
+    @tree= RatCatcherStore.new
+  end
+
+  it 'should have no nodes' do
+    @tree.iter_first.should be_nil
+  end
+end
+
+describe 'tree for null (zero-length) input' do
+  before :each do
+    @tree= RatCatcherStore.new ''
+  end
+
+  it 'should have no nodes' do
+    @tree.iter_first.should be_nil
+  end
+end
+
 describe 'tree for the numeric literal 1' do
   before :each do
     @tree= RatCatcherStore.new '1'
