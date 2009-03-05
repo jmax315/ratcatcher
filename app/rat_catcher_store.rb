@@ -69,11 +69,20 @@ class RatCatcherStore < Gtk::TreeStore
         load arg, new_node
       end
 
-      when :if
-        new_node[0]= '?:'
-        load data[1], new_node
-        load data[2], new_node
-        load data[3], new_node
+    when :if
+      new_node[0]= '?:'
+      load data[1], new_node
+      load data[2], new_node
+      load data[3], new_node
+
+    when :defn
+      new_node[0]= "def #{data[1].to_s}"
+      block_node = data[3][1]
+      
+      block_node[1..-1].each do |node|
+        load node, new_node
+      end
+
     end
     new_node[1]= data
   end
