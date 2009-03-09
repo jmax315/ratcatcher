@@ -457,3 +457,29 @@ describe 'method definition with two statements' do
 
 end
 
+describe 'method definition with arguments' do
+  before :each do
+    @tree= RatCatcherStore.new %q{
+      def amethod(a, b, *c, &d)
+        77
+      end
+    }
+  end
+
+  it "has an sexp" do
+    @tree.sexp('0').should be_a_tree_like(
+      s(:defn, :amethod, s(:args, :a, :b, :'*c', :'&d'), :_))
+  end
+
+end
+
+describe 'yield statement' do
+  before :each do
+    @tree= RatCatcherStore.new %q{yield}
+  end
+
+  it "makes a sexp" do
+    @tree.sexp('0').should be_a_tree_like(s(:yield))
+  end
+end
+
