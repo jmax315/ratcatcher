@@ -1,6 +1,12 @@
 require 'rake'
 require 'spec/rake/spectask'
 
+desc "run specs with RCov"
+Spec::Rake::SpecTask.new('specs_rcov') do |t|
+  t.spec_files= FileList['specs/**/*.rb']
+  t.rcov= true
+end
+
 desc "Run tree_widget spike specs with RCov"
 Spec::Rake::SpecTask.new('tree_spike_rcov') do |t|
   t.spec_files= FileList['spike/tree_widget/specs/**/*.rb']
