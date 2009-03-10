@@ -354,9 +354,9 @@ describe 'tree for the expression - 8' do
     @tree.text('0:0').should == '8'
   end
 
-  it "should have a node at 0:0 containing
+  it %q{should have a node at 0:0 containing
       s(:lit, 8)
-      as its sexp" do
+      as its sexp} do
     @tree.sexp('0:0').should be_a_tree_like(s(:lit, 8))
   end
 
