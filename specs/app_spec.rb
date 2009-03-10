@@ -14,12 +14,28 @@ describe 'ratcatcher application controller' do
     @the_app.tree_view.should_not be_visible
   end
 
+  it "should have a main window" do
+    @the_app.main_window.should be_kind_of(Gtk::Window)
+  end
+
+  it "should have the TreeView inside the main window" do
+    @the_app.tree_view.should be_ancestor(@the_app.main_window)
+  end
+
   it "should have a RatCatcherStore" do
     @the_app.store.should be_kind_of(RatCatcherStore)
   end
 
   it "should have the RatCatcherStore connected to the TreeView" do
     @the_app.tree_view.model.should == @the_app.store
+  end
+
+  it "should have a single Gtk::CellRendererText" do
+    @the_app.cell_renderer.should be_kind_of(Gtk::CellRendererText)
+  end
+
+  it "should have one column in the TreeView" do
+    @the_app.tree_view.columns.should have(1).column
   end
 
 end
@@ -43,4 +59,13 @@ describe "loading a file" do
   it "should load the file specified on the command line" do
     @app.store.should == RatCatcherStore.new(@source)
   end
+
+  it "should show the Gtk::TreeView after loading the file" do
+    @app.tree_view.should be_visible
+  end
+
+  it "should show the main window after loading the file" do
+    @app.main_window.should be_visible
+  end
+
 end

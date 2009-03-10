@@ -3,4 +3,5 @@
 require 'app/ratcatcher_app'
 
 the_app= RatcatcherApp.new
+the_app.args(ARGV)
 the_app.run
