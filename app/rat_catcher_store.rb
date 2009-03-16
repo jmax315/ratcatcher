@@ -86,8 +86,5 @@ class RatCatcherStore < Gtk::TreeStore
     end
     new_node[1]= data
   end
-
-  def [] index
-    RatCatcherStoreNode.new @parse_tree[0], @parse_tree[1]
-  end
 end
+
