@@ -3,7 +3,8 @@ require 'app/rat_catcher_store.rb'
 
 class RatcatcherApp
 
-  attr_accessor :tree_view, :store, :main_window, :cell_renderer, :column
+  attr_accessor :store, :main_window, :cell_renderer, :column
+  attr_reader :tree_view
 
   def initialize
     @tree_view= Gtk::TreeView.new
@@ -32,6 +33,13 @@ class RatcatcherApp
   def run
     main_window.signal_connect("destroy") { Gtk.main_quit }
     Gtk.main
+  end
+
+  def tree_view=(new_value)
+    @tree_view= new_value
+    tree_view.signal_connect("button_press_event") do |widget, event|
+      # do something intelligent here eventually
+    end
   end
 
 end
