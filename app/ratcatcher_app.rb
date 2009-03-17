@@ -3,11 +3,11 @@ require 'app/rat_catcher_store.rb'
 
 class RatcatcherApp
 
-  attr_accessor :store, :main_window, :cell_renderer, :column
+  attr_accessor :store, :main_window, :cell_renderer, :column, :context_menu
   attr_reader :tree_view
 
   def initialize
-    @tree_view= Gtk::TreeView.new
+    self.tree_view= Gtk::TreeView.new
 
     @cell_renderer= Gtk::CellRendererText.new
 
@@ -35,11 +35,24 @@ class RatcatcherApp
     Gtk.main
   end
 
+  def popup_context_menu(widget, event)
+    context_menu.popup(nil, nil, event.button, event.time)
+  end
+
   def tree_view=(new_value)
     @tree_view= new_value
     tree_view.signal_connect("button_press_event") do |widget, event|
-      # do something intelligent here eventually
+#      if event.kind_of? Gdk::EventButton and event.button == 3
+        popup_context_menu(widget, event)
+#      end
     end
   end
+
+#   view.signal_connect("button_press_event") do |widget, event|
+#     if event.kind_of? Gdk::EventButton and event.button == 3
+#       menu.popup(nil, nil, event.button, event.time)
+#     end
+#   end
+
 
 end
