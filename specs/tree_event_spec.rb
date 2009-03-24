@@ -13,15 +13,23 @@ describe RatcatcherApp do
     @the_app= RatcatcherApp.new
   end
 
-  it "should connect the TreeView's button_press_event to the specified event handler" do
-    the_view= mock(Gtk::TreeView)
-    the_view.should_receive(:signal_connect).with("button_press_event")
-
-    @the_app.tree_view= the_view
-  end
-
   it "should have a context menu containing one entry: rename method" do
     @the_app.context_menu.item_text(0).should == "Rename Method"
+  end
+
+  it "should call the popup_context_menu on mouse button clicks" do
+    mock_widget= "mock widget"
+    mock_event= "mock event"
+    mock_tree_view= mock(Gtk::TreeView)
+
+    mock_tree_view.
+      should_receive(:signal_connect).
+      with("button_press_event").
+      and_yield(mock_widget, mock_event)
+
+    @the_app.should_receive(:popup_context_menu).with(mock_widget, mock_event)
+
+    @the_app.tree_view= mock_tree_view
   end
 
   def check_click_response(button, time)
