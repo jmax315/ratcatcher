@@ -19,6 +19,10 @@ class RatcatcherApp
 
     tree_view.model= store
 
+    self.context_menu= Gtk::Menu.new
+    rename_method= Gtk::MenuItem.new("Rename Method")
+    context_menu.append rename_method
+
     @main_window= Gtk::Window.new
     main_window.add(tree_view)
     main_window.show
@@ -36,15 +40,15 @@ class RatcatcherApp
   end
 
   def popup_context_menu(widget, event)
-    context_menu.popup(nil, nil, event.button, event.time)
+    if event.kind_of? Gdk::EventButton and event.button == 3
+      context_menu.popup(nil, nil, event.button, event.time)
+    end
   end
 
   def tree_view=(new_value)
     @tree_view= new_value
     tree_view.signal_connect("button_press_event") do |widget, event|
-#      if event.kind_of? Gdk::EventButton and event.button == 3
-        popup_context_menu(widget, event)
-#      end
+      popup_context_menu(widget, event)
     end
   end
 
