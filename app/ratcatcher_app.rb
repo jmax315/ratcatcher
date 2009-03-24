@@ -22,6 +22,8 @@ class RatcatcherApp
     self.context_menu= Gtk::Menu.new
     rename_method= Gtk::MenuItem.new("Rename Method")
     context_menu.append rename_method
+    context_menu.show
+    context_menu.children[0].show
 
     @main_window= Gtk::Window.new
     main_window.add(tree_view)

@@ -2,8 +2,12 @@ require 'app/ratcatcher_app'
 
 
 class Gtk::Menu
+  def item_label(index)
+    children[index].children[0]
+  end
+
   def item_text(index)
-    children[index].children[0].text
+    item_label(index).text
   end
 end
 
@@ -14,7 +18,12 @@ describe RatcatcherApp do
   end
 
   it "should have a context menu containing one entry: rename method" do
+    @the_app.context_menu.children[0].should be_visible
     @the_app.context_menu.item_text(0).should == "Rename Method"
+  end
+
+  it "should have a visible context menu" do
+    @the_app.context_menu.should be_visible
   end
 
   it "should call the popup_context_menu on mouse button clicks" do
