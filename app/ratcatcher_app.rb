@@ -22,8 +22,10 @@ class RatcatcherApp
     self.context_menu= Gtk::Menu.new
     rename_method= Gtk::MenuItem.new("Rename Method")
     context_menu.append rename_method
-    context_menu.show
-    context_menu.children[0].show
+    context_menu.show # This is here only to make specs pass; there
+                      # appears to be a bug in Ruby::Gnome2 such that
+                      # visible? lies if we just do a show_all. Grrr.
+    context_menu.show_all
 
     @main_window= Gtk::Window.new
     main_window.add(tree_view)
