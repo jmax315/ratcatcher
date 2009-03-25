@@ -17,12 +17,17 @@ describe RatcatcherApp do
     @the_app= RatcatcherApp.new
   end
 
-  it "should have a context menu containing one entry: rename method" do
+  it "has a context menu containing one entry: rename method" do
     @the_app.context_menu.children[0].should be_visible
     @the_app.context_menu.item_text(0).should == "Rename Method"
   end
 
-  it "should have a visible context menu" do
+  it "calls the app's rename_method method when 'rename method' is activated" do
+    @the_app.should_receive(:rename_method)
+    @the_app.context_menu.children[0].activate
+  end
+
+  it "has a visible context menu" do
     @the_app.context_menu.should be_visible
   end
 
@@ -55,6 +60,7 @@ describe RatcatcherApp do
 
   it "should pop up the context on right_click events" do
     check_click_response(3, 31416) do |mock_context_menu|
+      @the_app.tree_view.should_receive(:get_path_at_pos).and_return("0")
       mock_context_menu.should_receive(:popup).with(nil, nil, 3, 31416)
     end
   end

@@ -3,8 +3,13 @@ require 'app/rat_catcher_store.rb'
 
 class RatcatcherApp
 
-  attr_accessor :store, :main_window, :cell_renderer, :column, :context_menu
-  attr_reader :tree_view
+  attr_accessor :store,
+                :main_window,
+                :cell_renderer,
+                :column,
+                :context_menu,
+                :current_node
+  attr_reader   :tree_view
 
   def initialize
     self.tree_view= Gtk::TreeView.new
@@ -20,8 +25,9 @@ class RatcatcherApp
     tree_view.model= store
 
     self.context_menu= Gtk::Menu.new
-    rename_method= Gtk::MenuItem.new("Rename Method")
-    context_menu.append rename_method
+    rename_method_item= Gtk::MenuItem.new("Rename Method")
+    rename_method_item.signal_connect("activate") {|w| rename_method }
+    context_menu.append rename_method_item
     context_menu.show # This is here only to make specs pass; there
                       # appears to be a bug in Ruby::Gnome2 such that
                       # visible? lies if we just do a show_all. Grrr.
@@ -34,6 +40,7 @@ class RatcatcherApp
 
   def args(argv)
     store= RatCatcherStore.new(File.new(argv[0]).gets(nil))
+   
     tree_view.model= store
     tree_view.show
   end
@@ -45,6 +52,7 @@ class RatcatcherApp
 
   def popup_context_menu(widget, event)
     if event.kind_of? Gdk::EventButton and event.button == 3
+      self.current_node= tree_view.get_path_at_pos(event.x, event.y)
       context_menu.popup(nil, nil, event.button, event.time)
     end
   end
@@ -56,11 +64,6 @@ class RatcatcherApp
     end
   end
 
-#   view.signal_connect("button_press_event") do |widget, event|
-#     if event.kind_of? Gdk::EventButton and event.button == 3
-#       menu.popup(nil, nil, event.button, event.time)
-#     end
-#   end
-
-
+  def rename_method
+  end
 end

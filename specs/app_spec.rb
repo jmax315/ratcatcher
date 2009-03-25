@@ -69,3 +69,10 @@ describe "loading a file" do
   end
 
 end
+
+
+describe "calling the rename_method method" do
+  it "should have a rename_method" do
+    RatcatcherApp.new.methods.should include("rename_method")
+  end
+end
