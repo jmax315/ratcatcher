@@ -75,6 +75,16 @@ describe "loading a file" do
 end
 
 
+describe "initializing the tree view" do
+  it "should connect the popup menu" do
+    app= RatcatcherApp.new
+    app.should_receive(:connect_popup_signal)
+
+    app.initialize_tree_view(nil)
+  end
+end
+
+
 describe "calling the rename_method method" do
   it "should have a rename_method" do
     RatcatcherApp.new.methods.should include("rename_method")
