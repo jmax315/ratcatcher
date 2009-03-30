@@ -43,7 +43,7 @@ describe RatcatcherApp do
 
     @the_app.should_receive(:popup_context_menu).with(mock_widget, mock_event)
 
-    @the_app.tree_view= mock_tree_view
+    @the_app.connect_popup_signal(mock_tree_view)
   end
 
   def check_click_response(button, time)
