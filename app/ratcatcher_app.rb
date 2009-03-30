@@ -5,37 +5,40 @@ class RatcatcherApp
 
   attr_accessor :store,
                 :main_window,
-                :cell_renderer,
-                :column,
                 :context_menu,
                 :current_node
   attr_reader   :tree_view
 
   def initialize
-    self.tree_view= Gtk::TreeView.new
-
-    @cell_renderer= Gtk::CellRendererText.new
-
-    @column= Gtk::TreeViewColumn.new "", cell_renderer, :text => 0
-
-    tree_view.append_column(column)
-
     @store= RatCatcherStore.new
 
-    tree_view.model= store
-
-    self.context_menu= Gtk::Menu.new
-    rename_method_item= Gtk::MenuItem.new("Rename Method")
-    rename_method_item.signal_connect("activate") {|w| rename_method }
-    context_menu.append rename_method_item
-    context_menu.show # This is here only to make specs pass; there
-                      # appears to be a bug in Ruby::Gnome2 such that
-                      # visible? lies if we just do a show_all. Grrr.
-    context_menu.show_all
+    initialize_tree_view(store)
+    initialize_context_menu
 
     @main_window= Gtk::Window.new
     main_window.add(tree_view)
     main_window.show
+  end
+
+  def initialize_tree_view(store)
+    self.tree_view= Gtk::TreeView.new
+    tree_view.append_column(Gtk::TreeViewColumn.new("",
+                                                    Gtk::CellRendererText.new,
+                                                    :text => 0))
+    tree_view.model= store
+  end
+
+  def initialize_context_menu
+    self.context_menu= Gtk::Menu.new
+    
+    rename_method_item= Gtk::MenuItem.new("Rename Method")
+    rename_method_item.signal_connect("activate") {|w| rename_method }
+    
+    context_menu.append rename_method_item
+    context_menu.show # This is here only to make specs pass; there
+    # appears to be a bug in Ruby::Gnome2 such that
+    # visible? lies if we just do a show_all. Grrr.
+    context_menu.show_all
   end
 
   def args(argv)

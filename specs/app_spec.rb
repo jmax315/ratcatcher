@@ -31,11 +31,15 @@ describe 'ratcatcher application controller' do
   end
 
   it "should have a single Gtk::CellRendererText" do
-    @the_app.cell_renderer.should be_kind_of(Gtk::CellRendererText)
+    @the_app.tree_view.columns[0].cell_renderers[0].should be_kind_of(Gtk::CellRendererText)
   end
 
   it "should have one column in the TreeView" do
     @the_app.tree_view.columns.should have(1).column
+  end
+
+  it "should have the right sort of column" do
+    @the_app.tree_view.columns[0].should be_kind_of(Gtk::TreeViewColumn)
   end
 
 end
