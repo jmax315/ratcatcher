@@ -70,18 +70,20 @@ describe RatcatcherApp do
       mock_context_menu.should_not_receive(:popup)
     end
   end
+  
+  def should_return_array(object, *selectors)
+    puts "should_return_array(#{object}, #{selectors})"
 
-  def should_return_array(object, selector, rest)
-    object.should_receive(selector).and_return([rest])
+    return object if selectors.size <= 0
+
+    new_mock= mock(selectors[0].to_s)
+    object.should_receive(selectors[0]).and_return([new_mock])
+    should_return_array(new_mock, *selectors[1..-1])
   end
 
   it "should connect the tree's renderer's 'edited' signal to the app's rename_method method" do
     mock_tree_view= mock(Gtk::TreeView)
-    mock_renderer= mock("renderer")
-    mock_column= mock("column")
-
-    should_return_array(mock_tree_view, :columns, mock_column)
-    should_return_array(mock_column, :cell_renderers, mock_renderer)
+    mock_renderer= should_return_array(mock_tree_view, :columns, :cell_renderers)
 
     mock_renderer.
       should_receive(:signal_connect).
