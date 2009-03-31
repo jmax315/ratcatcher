@@ -25,19 +25,28 @@ class RatcatcherApp
 
   def initialize_tree_view(store)
     new_tree_view= Gtk::TreeView.new
+    renderer= Gtk::CellRendererText.new
+    renderer.editable= true
     new_tree_view.append_column(Gtk::TreeViewColumn.new("",
-                                                    Gtk::CellRendererText.new,
-                                                    :text => 0))
+                                                        renderer,
+                                                        :text => 0))
     new_tree_view.model= store
 
     connect_popup_signal(new_tree_view)
+    connect_edit_signal(new_tree_view)
 
     new_tree_view
   end
 
-  def connect_popup_signal(new_tree_view)
-    new_tree_view.signal_connect("button_press_event") do |widget, event|
+  def connect_popup_signal(a_tree_view)
+    a_tree_view.signal_connect("button_press_event") do |widget, event|
       popup_context_menu(widget, event)
+    end
+  end
+
+  def connect_edit_signal(a_tree_view)
+    a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |path, new_text|
+#      modify_node(path, new_text)
     end
   end
 
@@ -75,5 +84,6 @@ class RatcatcherApp
   end
 
   def rename_method
+    
   end
 end

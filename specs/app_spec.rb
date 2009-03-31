@@ -34,6 +34,10 @@ describe 'ratcatcher application controller' do
     @the_app.tree_view.columns[0].cell_renderers[0].should be_kind_of(Gtk::CellRendererText)
   end
 
+  it "should have an editable renderer" do
+    @the_app.tree_view.columns[0].cell_renderers[0].should be_editable
+  end
+
   it "should have one column in the TreeView" do
     @the_app.tree_view.columns.should have(1).column
   end
@@ -76,11 +80,20 @@ end
 
 
 describe "initializing the tree view" do
-  it "should connect the popup menu" do
-    app= RatcatcherApp.new
-    app.should_receive(:connect_popup_signal)
+  before :each do
+    @app= RatcatcherApp.new
+  end
 
-    app.initialize_tree_view(nil)
+  it "should connect the popup menu" do
+    @app.should_receive(:connect_popup_signal)
+
+    @app.initialize_tree_view(nil)
+  end
+
+  it "should connect the edit signal" do
+    @app.should_receive(:connect_edit_signal)
+
+    @app.initialize_tree_view(nil)
   end
 end
 

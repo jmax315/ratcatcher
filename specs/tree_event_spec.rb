@@ -71,5 +71,39 @@ describe RatcatcherApp do
     end
   end
 
+  def should_return_array(object, selector, rest)
+    object.should_receive(selector).and_return([rest])
+  end
+
+  it "should connect the tree's renderer's 'edited' signal to the app's rename_method method" do
+    mock_tree_view= mock(Gtk::TreeView)
+    mock_renderer= mock("renderer")
+    mock_column= mock("column")
+
+    should_return_array(mock_tree_view, :columns, mock_column)
+    should_return_array(mock_column, :cell_renderers, mock_renderer)
+
+    mock_renderer.
+      should_receive(:signal_connect).
+      with("edited")
+
+    @the_app.connect_edit_signal(mock_tree_view)
+  end
+
+#   it "should call modify_node on 'edited' events" do
+#     path= "here's the new path"
+#     new_text= "here's the new text"
+#     mock_tree_view= mock(Gtk::TreeView)
+
+#     mock_tree_view.
+#       should_receive(:signal_connect).
+#       with("edited").
+#       and_yield(path, new_test)
+
+#     @the_app.should_receive(:modify_node).with(path, new_text)
+
+#     @the_app.connect_edit_signal(mock_tree_view)
+#   end
+
 end
 
