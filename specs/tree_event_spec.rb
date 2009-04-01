@@ -72,8 +72,6 @@ describe RatcatcherApp do
   end
   
   def should_return_array(object, *selectors)
-    puts "should_return_array(#{object}, #{selectors})"
-
     return object if selectors.size <= 0
 
     new_mock= mock(selectors[0].to_s)
@@ -91,21 +89,6 @@ describe RatcatcherApp do
 
     @the_app.connect_edit_signal(mock_tree_view)
   end
-
-#   it "should call modify_node on 'edited' events" do
-#     path= "here's the new path"
-#     new_text= "here's the new text"
-#     mock_tree_view= mock(Gtk::TreeView)
-
-#     mock_tree_view.
-#       should_receive(:signal_connect).
-#       with("edited").
-#       and_yield(path, new_test)
-
-#     @the_app.should_receive(:modify_node).with(path, new_text)
-
-#     @the_app.connect_edit_signal(mock_tree_view)
-#   end
 
 end
 

@@ -45,9 +45,12 @@ class RatcatcherApp
   end
 
   def connect_edit_signal(a_tree_view)
-    a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |path, new_text|
-#      modify_node(path, new_text)
+    a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |renderer, path|
+      modify_node(renderer, path)
     end
+  end
+
+  def modify_node(renderer, path)
   end
 
   def initialize_context_menu
