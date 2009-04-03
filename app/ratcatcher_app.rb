@@ -45,19 +45,22 @@ class RatcatcherApp
   end
 
   def connect_edit_signal(a_tree_view)
-    a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |renderer, path|
-      modify_node(renderer, path)
+    a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |renderer, path, new_text|
+      rename_method(renderer, path, new_text)
     end
   end
 
-  def modify_node(renderer, path)
+  def rename_method(renderer, path, new_text)
+    store.set_text(path, new_text)
   end
 
   def initialize_context_menu
     new_context_menu= Gtk::Menu.new
     
     rename_method_item= Gtk::MenuItem.new("Rename Method")
-    rename_method_item.signal_connect("activate") {|w| rename_method }
+    rename_method_item.signal_connect("activate") do |w|
+      rename_method_menu_callback
+    end
     
     new_context_menu.append rename_method_item
     new_context_menu.show # This is here only to make specs pass; there
@@ -68,8 +71,7 @@ class RatcatcherApp
   end
 
   def args(argv)
-    store= RatCatcherStore.new(File.new(argv[0]).gets(nil))
-   
+    self.store= RatCatcherStore.new(File.new(argv[0]).gets(nil))
     tree_view.model= store
     tree_view.show
   end
@@ -86,7 +88,7 @@ class RatcatcherApp
     end
   end
 
-  def rename_method
+  def rename_method_menu_callback
     
   end
 end

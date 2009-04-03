@@ -39,11 +39,15 @@ class RatCatcherStore < Gtk::TreeStore
   end
 
   def text path
-    get_iter(path)[0]
+    get_iter(path)[TEXT]
+  end
+
+  def set_text path, new_value
+    get_iter(path)[TEXT]= new_value
   end
 
   def sexp path
-    get_iter(path)[1]
+    get_iter(path)[SEXP]
   end
 
   def load data, parent

@@ -99,7 +99,14 @@ end
 
 
 describe "calling the rename_method method" do
-  it "should have a rename_method" do
-    RatcatcherApp.new.methods.should include("rename_method")
+  it "it should change the text of the tree node" do
+    @app= RatcatcherApp.new
+    @store= RatCatcherStore.new '1+1'
+    @app.store= @store
+    @path= "0:0"
+    @new_text= "ferd"
+    @app.rename_method("junk_renderer", @path, @new_text)
+
+    @store.text(@path).should == @new_text
   end
 end

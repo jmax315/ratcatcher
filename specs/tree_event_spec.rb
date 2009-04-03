@@ -22,8 +22,8 @@ describe RatcatcherApp do
     @the_app.context_menu.item_text(0).should == "Rename Method"
   end
 
-  it "calls the app's rename_method method when 'rename method' is activated" do
-    @the_app.should_receive(:rename_method)
+  it "calls the app's rename_method_menu_callback method when 'rename method' is activated" do
+    @the_app.should_receive(:rename_method_menu_callback)
     @the_app.context_menu.children[0].activate
   end
 
