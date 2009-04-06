@@ -3,15 +3,13 @@ require 'app/rat_catcher_store.rb'
 
 class RatcatcherApp
 
-  attr_accessor :store,
-                :main_window,
+  attr_accessor :main_window,
                 :context_menu,
                 :current_node,
                 :tree_view
 
   def initialize
-    @store= RatCatcherStore.new
-    @tree_view= initialize_tree_view(store)
+    @tree_view= initialize_tree_view
     @context_menu= initialize_context_menu
     @main_window= initialize_main_window(tree_view)
   end
@@ -23,15 +21,14 @@ class RatcatcherApp
     new_main_window
   end
 
-  def initialize_tree_view(store)
+  def initialize_tree_view
     new_tree_view= Gtk::TreeView.new
     renderer= Gtk::CellRendererText.new
     renderer.editable= true
     new_tree_view.append_column(Gtk::TreeViewColumn.new("",
                                                         renderer,
                                                         :text => 0))
-    new_tree_view.model= store
-
+    new_tree_view.model= RatCatcherStore.new
     connect_popup_signal(new_tree_view)
     connect_edit_signal(new_tree_view)
 
@@ -71,8 +68,7 @@ class RatcatcherApp
   end
 
   def args(argv)
-    self.store= RatCatcherStore.new(File.new(argv[0]).gets(nil))
-    tree_view.model= store
+    tree_view.model= RatCatcherStore.new(File.new(argv[0]).gets(nil))
     tree_view.show
   end
 
@@ -86,6 +82,10 @@ class RatcatcherApp
       self.current_node= tree_view.get_path_at_pos(event.x, event.y)
       context_menu.popup(nil, nil, event.button, event.time)
     end
+  end
+
+  def store
+    tree_view.model
   end
 
   def rename_method_menu_callback

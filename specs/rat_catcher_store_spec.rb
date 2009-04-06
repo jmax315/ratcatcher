@@ -8,4 +8,10 @@ describe "RatCatcherStore comparing" do
     left.should == right
   end
 
+  it "should return false if one of the tree is empty and the other isn't" do
+    left= RatCatcherStore.new
+    right= RatCatcherStore.new('a+b')
+    left.should_not == right
+  end
+
 end

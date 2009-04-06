@@ -76,6 +76,12 @@ describe "loading a file" do
     @app.main_window.should be_visible
   end
 
+  it "should assign the new RatCatcherStore to both the app and the TreeView" do
+    puts @app.store.inspect
+    puts @app.tree_view.model.inspect
+    @app.store.should == @app.tree_view.model
+  end
+
 end
 
 
@@ -87,13 +93,13 @@ describe "initializing the tree view" do
   it "should connect the popup menu" do
     @app.should_receive(:connect_popup_signal)
 
-    @app.initialize_tree_view(nil)
+    @app.initialize_tree_view
   end
 
   it "should connect the edit signal" do
     @app.should_receive(:connect_edit_signal)
 
-    @app.initialize_tree_view(nil)
+    @app.initialize_tree_view
   end
 end
 
@@ -102,7 +108,7 @@ describe "calling the rename_method method" do
   it "it should change the text of the tree node" do
     @app= RatcatcherApp.new
     @store= RatCatcherStore.new '1+1'
-    @app.store= @store
+    @app.tree_view.model= @store
     @path= "0:0"
     @new_text= "ferd"
     @app.rename_method("junk_renderer", @path, @new_text)

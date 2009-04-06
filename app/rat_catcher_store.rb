@@ -19,12 +19,16 @@ class RatCatcherStore < Gtk::TreeStore
   end
 
   def compare_tree_iterators(left_it, right_it)
-    return true if left_it == nil  ||  right_it == nil
+    if left_it == nil  ||  right_it == nil
+      return left_it == right_it
+    end
 
     begin
-      return false if left_it[TEXT] != right_it[TEXT]
-      return false if left_it[SEXP] != right_it[SEXP]
-      return false if !compare_tree_iterators(left_it.first_child, right_it.first_child)
+      if (left_it[TEXT] != right_it[TEXT]  ||
+          left_it[SEXP] != right_it[SEXP]  ||
+          !compare_tree_iterators(left_it.first_child, right_it.first_child))
+        return false
+      end
 
       # *Caution* - The behavior of Gtk::TreeIter#next! is _highly_
       # counter-intuitive when reaching the end of the node list. Be
