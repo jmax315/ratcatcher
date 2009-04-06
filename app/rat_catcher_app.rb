@@ -1,7 +1,7 @@
 require 'gtk2'
 require 'app/rat_catcher_store.rb'
 
-class RatcatcherApp
+class RatCatcherApp
 
   attr_accessor :main_window,
                 :context_menu,

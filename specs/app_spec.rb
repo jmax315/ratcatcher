@@ -1,9 +1,9 @@
-require 'app/ratcatcher_app'
+require 'app/rat_catcher_app'
 
 describe 'ratcatcher application controller' do
 
   before :each do
-    @the_app= RatcatcherApp.new
+    @the_app= RatCatcherApp.new
   end
 
   it "should have a Gtk::TreeView" do
@@ -56,7 +56,7 @@ describe "loading a file" do
     file << @source
     file.close
 
-    @app= RatcatcherApp.new
+    @app= RatCatcherApp.new
     @app.args([@filename])
   end
 
@@ -77,8 +77,6 @@ describe "loading a file" do
   end
 
   it "should assign the new RatCatcherStore to both the app and the TreeView" do
-    puts @app.store.inspect
-    puts @app.tree_view.model.inspect
     @app.store.should == @app.tree_view.model
   end
 
@@ -87,7 +85,7 @@ end
 
 describe "initializing the tree view" do
   before :each do
-    @app= RatcatcherApp.new
+    @app= RatCatcherApp.new
   end
 
   it "should connect the popup menu" do
@@ -106,7 +104,7 @@ end
 
 describe "calling the rename_method method" do
   it "it should change the text of the tree node" do
-    @app= RatcatcherApp.new
+    @app= RatCatcherApp.new
     @store= RatCatcherStore.new '1+1'
     @app.tree_view.model= @store
     @path= "0:0"

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'app/ratcatcher_app'
+require 'app/rat_catcher_app'
 
-the_app= RatcatcherApp.new
+the_app= RatCatcherApp.new
 the_app.args(ARGV)
 the_app.run

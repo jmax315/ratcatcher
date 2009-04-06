@@ -1,4 +1,4 @@
-require 'app/ratcatcher_app'
+require 'app/rat_catcher_app'
 
 
 class Gtk::Menu
@@ -12,9 +12,9 @@ class Gtk::Menu
 end
 
 
-describe RatcatcherApp do
+describe RatCatcherApp do
   before :each do
-    @the_app= RatcatcherApp.new
+    @the_app= RatCatcherApp.new
   end
 
   it "has a context menu containing one entry: rename method" do
