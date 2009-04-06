@@ -103,14 +103,38 @@ end
 
 
 describe "calling the rename_method method" do
+  before :each do
+    @app= RatCatcherApp.new
+    @store= RatCatcherStore.new 'zed'
+    @app.tree_view.model= @store
+    @path= "0"
+    @new_text= "ferd"
+    @app.rename_method("junk_renderer", @path, @new_text)
+  end
+
   it "it should change the text of the tree node" do
+    @store.text(@path).should == @new_text
+  end
+
+  it "should change the Sexp of the tree node" do
+    @store.sexp(@path).should == s(:call, nil, @new_text.to_sym, s(:arglist))
+  end
+
+end
+
+
+describe "calling the rename_method method for a more complex method call" do
+  before :each do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.new '1+1'
     @app.tree_view.model= @store
-    @path= "0:0"
-    @new_text= "ferd"
+    @path= "0"
+    @new_text= "-"
     @app.rename_method("junk_renderer", @path, @new_text)
-
-    @store.text(@path).should == @new_text
   end
+
+  it "should change the Sexp of the tree node" do
+    @store.sexp(@path).should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
+  end
+
 end

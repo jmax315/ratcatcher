@@ -54,6 +54,10 @@ class RatCatcherStore < Gtk::TreeStore
     get_iter(path)[SEXP]
   end
 
+  def set_sexp path, new_value
+    get_iter(path)[SEXP]= new_value
+  end
+
   def load data, parent
     return if data == nil
 

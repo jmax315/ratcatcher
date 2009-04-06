@@ -49,6 +49,9 @@ class RatCatcherApp
 
   def rename_method(renderer, path, new_text)
     store.set_text(path, new_text)
+    old_sexp= store.sexp(path)
+    new_sexp= s(:call, old_sexp[1], new_text.to_sym, old_sexp[3])
+    store.set_sexp(path, new_sexp)
   end
 
   def initialize_context_menu
