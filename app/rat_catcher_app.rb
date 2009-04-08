@@ -1,6 +1,5 @@
 require 'gtk2'
 require 'app/rat_catcher_store.rb'
-require 'ruby2ruby'
 
 class RatCatcherApp
 
@@ -104,7 +103,7 @@ class RatCatcherApp
 
   def save
     File.open(@file_name, 'w') do | f |
-      f.write(Ruby2Ruby.new.process(store.sexp("0")))
+      f.write(store.to_s)
     end
   end
 

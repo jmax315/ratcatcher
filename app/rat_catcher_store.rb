@@ -1,5 +1,6 @@
 require 'gtk2'
 require 'ruby_parser'
+require 'ruby2ruby'
 
 
 class RatCatcherStore < Gtk::TreeStore
@@ -98,5 +99,11 @@ class RatCatcherStore < Gtk::TreeStore
     end
     new_node[1]= data
   end
+
+
+  def to_s
+    Ruby2Ruby.new.process(sexp("0"))
+  end
+
 end
 
