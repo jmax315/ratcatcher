@@ -1,12 +1,14 @@
 require 'gtk2'
 require 'app/rat_catcher_store.rb'
+require 'ruby2ruby'
 
 class RatCatcherApp
 
   attr_accessor :main_window,
                 :context_menu,
                 :current_node,
-                :tree_view
+                :tree_view,
+                :file_name
 
   def initialize
     @tree_view= initialize_tree_view
@@ -94,6 +96,16 @@ class RatCatcherApp
 
   def store
     tree_view.model
+  end
+
+  def store=(new_tree_store)
+    tree_view.model= new_tree_store
+  end
+
+  def save
+    File.open(@file_name, 'w') do | f |
+      f.write(Ruby2Ruby.new.process(store.sexp("0")))
+    end
   end
 
   def rename_method_menu_callback

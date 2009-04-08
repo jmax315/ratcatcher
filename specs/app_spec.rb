@@ -1,4 +1,5 @@
 require 'app/rat_catcher_app'
+require 'ftools'
 
 describe 'ratcatcher application controller' do
 
@@ -135,6 +136,43 @@ describe "calling the rename_method method for a more complex method call" do
 
   it "should change the Sexp of the tree node" do
     @store.sexp(@path).should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
+  end
+
+end
+
+
+describe "calling the save method" do
+
+  before :each do
+    @file_name= "test_file.rb"
+    File.rm_f(@file_name)
+
+    @app= RatCatcherApp.new
+    @app.file_name= @file_name
+  end
+
+  after :each do
+    File.rm_f(@file_name)
+  end
+
+  it "should save the correct Ruby code" do
+    code= '2+2-1'
+
+    @app.store= RatCatcherStore.new(code)
+    @app.save
+
+    results= File.new(@file_name).read
+    results.should == "((2 + 2) - 1)"
+  end
+
+  it "should save the other correct Ruby code" do
+    code= '2*3-1'
+
+    @app.store= RatCatcherStore.new(code)
+    @app.save
+
+    results= File.new(@file_name).read
+    results.should == "((2 * 3) - 1)"
   end
 
 end
