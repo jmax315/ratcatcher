@@ -70,8 +70,13 @@ class RatCatcherApp
     new_context_menu
   end
 
+  def load(file_name)
+    File.new(file_name).gets(nil)
+  end
+
   def args(argv)
-    tree_view.model= RatCatcherStore.new(File.new(argv[0]).gets(nil))
+    @data_file= argv[0]
+    tree_view.model= RatCatcherStore.new(load(@data_file))
     tree_view.show
   end
 
