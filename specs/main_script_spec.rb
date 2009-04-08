@@ -7,6 +7,7 @@ describe 'main script' do
     RatCatcherApp.should_receive(:new).and_return(mock_rat_catcher_app)
     mock_rat_catcher_app.should_receive(:args)
     mock_rat_catcher_app.should_receive(:run)
+    mock_rat_catcher_app.should_receive(:save)
     load('app/ratcatcher')
   end
 
