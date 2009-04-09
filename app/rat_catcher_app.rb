@@ -7,20 +7,54 @@ class RatCatcherApp
                 :context_menu,
                 :current_node,
                 :tree_view,
-                :data_file_name
+                :data_file_name,
+                :save_button
 
   def initialize
     @tree_view= initialize_tree_view
     @context_menu= initialize_context_menu
-    @main_window= initialize_main_window(tree_view)
+    @button_bar= initialize_button_bar
+    @main_window= initialize_main_window
+    connect_signals
   end
 
-  def initialize_main_window(tree_view)
+  def initialize_button_bar
+    button_box= Gtk::HButtonBox.new
+
+    @save_button= Gtk::Button.new("Save")
+    button_box.pack_start(@save_button)
+    button_box.show_all
+    button_box.show
+    button_box
+  end
+
+
+  def connect_signals
+    connect_popup_signal(@tree_view)
+    connect_edit_signal(@tree_view)
+    connect_clicked_signal(@save_button, method(:save))
+  end
+
+  def connect_clicked_signal(button, m)
+    button.signal_connect("clicked") do |widget|
+      m.call
+    end
+  end
+
+
+  def initialize_main_window
     new_main_window= Gtk::Window.new
-    new_main_window.add(tree_view)
+    top_box= Gtk::VBox.new
+    new_main_window.add(top_box)
+    top_box.show
+
+    top_box.pack_start(@button_bar)
+    top_box.pack_start(@tree_view)
+
     new_main_window.show
     new_main_window
   end
+
 
   def initialize_tree_view
     new_tree_view= Gtk::TreeView.new
@@ -30,9 +64,6 @@ class RatCatcherApp
                                                         renderer,
                                                         :text => 0))
     new_tree_view.model= RatCatcherStore.new
-    connect_popup_signal(new_tree_view)
-    connect_edit_signal(new_tree_view)
-
     new_tree_view
   end
 
@@ -51,7 +82,6 @@ class RatCatcherApp
   def rename_method(renderer, path, new_text)
     store.set_text(path, new_text)
     old_sexp= store.sexp(path)
-
     old_sexp[2]= new_text.to_sym
   end
 

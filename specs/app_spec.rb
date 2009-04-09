@@ -23,6 +23,18 @@ describe 'ratcatcher application controller' do
     @the_app.tree_view.should be_ancestor(@the_app.main_window)
   end
 
+  it "should have a Save button" do
+    @the_app.save_button.should be_kind_of(Gtk::Button)
+  end
+
+  it "should have the Save button inside the main window" do
+    @the_app.save_button.should be_ancestor(@the_app.main_window)
+  end
+
+  it "should have a Save button with the lable 'Save'" do
+    @the_app.save_button.label.should == "Save"
+  end
+
   it "should have a RatCatcherStore" do
     @the_app.store.should be_kind_of(RatCatcherStore)
   end
@@ -84,6 +96,18 @@ describe "loading a file" do
 end
 
 
+describe "initializing the button bar" do
+  it "should connect the save button" do
+    @app= RatCatcherApp.new
+    @app.initialize_button_bar
+
+    @app.should_receive(:connect_clicked_signal).with(@app.save_button, @app.method(:save))
+
+    @app.connect_signals
+  end
+end
+
+
 describe "initializing the tree view" do
   before :each do
     @app= RatCatcherApp.new
@@ -93,12 +117,14 @@ describe "initializing the tree view" do
     @app.should_receive(:connect_popup_signal)
 
     @app.initialize_tree_view
+    @app.connect_signals
   end
 
   it "should connect the edit signal" do
     @app.should_receive(:connect_edit_signal)
 
     @app.initialize_tree_view
+    @app.connect_signals
   end
 end
 
