@@ -141,6 +141,26 @@ describe "calling the rename_method method for a more complex method call" do
 end
 
 
+describe "calling the rename_method method for a non-root method call" do
+  before :each do
+    @app= RatCatcherApp.new
+    @store= RatCatcherStore.new '1+2+3'
+    @app.tree_view.model= @store
+    @path= "0:0"
+    @new_text= "-"
+    @app.rename_method("junk_renderer", @path, @new_text)
+  end
+
+  it "should change the Sexp of the tree node" do
+    @store.sexp("0").should == s(:call, 
+                                 s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2))),
+                                 :+,
+                                 s(:arglist, s(:lit, 3)))
+  end
+
+end
+
+
 describe "calling the save method" do
 
   before :each do
@@ -148,7 +168,7 @@ describe "calling the save method" do
     File.rm_f(@file_name)
 
     @app= RatCatcherApp.new
-    @app.file_name= @file_name
+    @app.data_file_name= @file_name
   end
 
   after :each do

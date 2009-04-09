@@ -5,4 +5,3 @@ require 'app/rat_catcher_app'
 the_app= RatCatcherApp.new
 the_app.args(ARGV)
 the_app.run
-the_app.save

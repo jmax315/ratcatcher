@@ -7,7 +7,7 @@ class RatCatcherApp
                 :context_menu,
                 :current_node,
                 :tree_view,
-                :file_name
+                :data_file_name
 
   def initialize
     @tree_view= initialize_tree_view
@@ -51,8 +51,8 @@ class RatCatcherApp
   def rename_method(renderer, path, new_text)
     store.set_text(path, new_text)
     old_sexp= store.sexp(path)
-    new_sexp= s(:call, old_sexp[1], new_text.to_sym, old_sexp[3])
-    store.set_sexp(path, new_sexp)
+
+    old_sexp[2]= new_text.to_sym
   end
 
   def initialize_context_menu
@@ -76,8 +76,8 @@ class RatCatcherApp
   end
 
   def args(argv)
-    @data_file= argv[0]
-    tree_view.model= RatCatcherStore.new(load(@data_file))
+    @data_file_name= argv[0]
+    tree_view.model= RatCatcherStore.new(load(@data_file_name))
     tree_view.show
   end
 
@@ -102,7 +102,7 @@ class RatCatcherApp
   end
 
   def save
-    File.open(@file_name, 'w') do | f |
+    File.open(@data_file_name, 'w') do | f |
       f.write(store.to_s)
     end
   end
