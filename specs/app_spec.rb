@@ -108,6 +108,31 @@ describe "initializing the button bar" do
 end
 
 
+describe "the connect_clicked_signal method" do
+  it "should call signal_connect('clicked') on the passed widget" do
+    mock_widget= mock("widget")
+    mock_widget.should_receive(:signal_connect).with("clicked")
+
+    app= RatCatcherApp.new
+    app.connect_clicked_signal(mock_widget, nil)
+  end
+
+  it "should invoke the passed proc when the button is clicked" do
+    proc_invoked= false
+    p= Proc.new do
+      proc_invoked= true
+    end
+
+    button= Gtk::Button.new
+
+    app= RatCatcherApp.new
+    app.connect_clicked_signal(button, p)
+    button.clicked
+
+    proc_invoked.should be_true
+  end
+end
+
 describe "initializing the tree view" do
   before :each do
     @app= RatCatcherApp.new
