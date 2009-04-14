@@ -8,7 +8,8 @@ class RatCatcherApp
                 :current_node,
                 :tree_view,
                 :data_file_name,
-                :save_button
+                :save_button,
+                :store
 
   def initialize
     @tree_view= initialize_tree_view
@@ -63,7 +64,8 @@ class RatCatcherApp
     new_tree_view.append_column(Gtk::TreeViewColumn.new("",
                                                         renderer,
                                                         :text => 0))
-    new_tree_view.model= RatCatcherStore.new
+    @store= RatCatcherStore.new
+    new_tree_view.model= @store.model
     new_tree_view
   end
 
@@ -107,7 +109,8 @@ class RatCatcherApp
 
   def args(argv)
     @data_file_name= argv[0]
-    tree_view.model= RatCatcherStore.new(load(@data_file_name))
+    @store= RatCatcherStore.new(load(@data_file_name))
+    tree_view.model= @store.model
     tree_view.show
   end
 
@@ -121,14 +124,6 @@ class RatCatcherApp
       self.current_node= tree_view.get_path_at_pos(event.x, event.y)
       context_menu.popup(nil, nil, event.button, event.time)
     end
-  end
-
-  def store
-    tree_view.model
-  end
-
-  def store=(new_tree_store)
-    tree_view.model= new_tree_store
   end
 
   def save

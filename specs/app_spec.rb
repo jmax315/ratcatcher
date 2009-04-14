@@ -40,7 +40,7 @@ describe 'ratcatcher application controller' do
   end
 
   it "should have the RatCatcherStore connected to the TreeView" do
-    @the_app.tree_view.model.should == @the_app.store
+    @the_app.tree_view.model.should == @the_app.store.model
   end
 
   it "should have a single Gtk::CellRendererText" do
@@ -158,7 +158,8 @@ describe "calling the rename_method method" do
   before :each do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.new 'zed'
-    @app.tree_view.model= @store
+    @app.store= @store
+    @app.tree_view.model= @store.model
     @path= "0"
     @new_text= "ferd"
     @app.rename_method("junk_renderer", @path, @new_text)
@@ -179,7 +180,8 @@ describe "calling the rename_method method for a more complex method call" do
   before :each do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.new '1+1'
-    @app.tree_view.model= @store
+    @app.store= @store
+    @app.tree_view.model= @store.model
     @path= "0"
     @new_text= "-"
     @app.rename_method("junk_renderer", @path, @new_text)
@@ -196,7 +198,8 @@ describe "calling the rename_method method for a non-root method call" do
   before :each do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.new '1+2+3'
-    @app.tree_view.model= @store
+    @app.store= @store
+    @app.tree_view.model= @store.model
     @path= "0:0"
     @new_text= "-"
     @app.rename_method("junk_renderer", @path, @new_text)

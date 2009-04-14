@@ -3,16 +3,32 @@ require 'ruby_parser'
 require 'ruby2ruby'
 
 
-class RatCatcherStore < Gtk::TreeStore
+class RatCatcherStore
   TEXT= 0
   SEXP= 1
 
-  def initialize source_code= ''
-    super String, Object
 
+  def initialize source_code= ''
+    @gtk_store= Gtk::TreeStore.new(String, Object)
     @parse_tree= RubyParser.new.process source_code
 
     load @parse_tree, nil
+  end
+
+  def iter_first
+    @gtk_store.iter_first
+  end
+
+  def append parent
+    @gtk_store.append parent
+  end
+
+  def get_iter path
+    @gtk_store.get_iter path
+  end
+
+  def model
+    @gtk_store
   end
 
   def ==(right)
