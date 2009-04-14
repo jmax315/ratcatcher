@@ -7,8 +7,16 @@ describe 'tree for no input' do
     @tree= RatCatcherStore.new
   end
 
-  it 'should have no nodes' do
-    @tree.iter_first.should be_nil
+  it 'should have '' for text' do
+    @tree.new_text.should == ""
+  end
+
+  it 'should have nil for sexp' do
+    @tree.new_sexp.should be_nil
+  end
+
+  it 'should have no children' do
+    @tree.children.should be_empty
   end
 end
 
@@ -17,8 +25,16 @@ describe 'tree for null (zero-length) input' do
     @tree= RatCatcherStore.new ''
   end
 
-  it 'should have no nodes' do
-    @tree.iter_first.should be_nil
+  it 'should have '' for text' do
+    @tree.new_text.should == ""
+  end
+
+  it 'should have nil for sexp' do
+    @tree.new_sexp.should be_nil
+  end
+
+  it 'should have no children' do
+    @tree.children.should be_empty
   end
 end
 
@@ -28,11 +44,11 @@ describe 'tree for the numeric literal 1' do
   end
 
   it 'should have one node containing 1 as display text' do
-    @tree.text('0').should == '1'
+    @tree.new_text.should == '1'
   end
 
   it 'should have one node containing s(:lit, 1) as its sexp' do
-    @tree.sexp('0').should be_a_tree_like(s(:lit, 1))
+    @tree.new_sexp.should be_a_tree_like(s(:lit, 1))
   end
 end
 
@@ -43,11 +59,11 @@ describe 'tree for the string literal "ferd"' do
    end
 
   it "should have one node containing 'ferd' as display text" do
-    @tree.text('0').should == '"ferd"'
+    @tree.new_text.should == '"ferd"'
   end
 
   it "should have one node containing s(:str, 'ferd') as its sexp" do
-    @tree.sexp('0').should be_a_tree_like(s(:str, "ferd"))
+    @tree.new_sexp.should be_a_tree_like(s(:str, "ferd"))
   end
 end
 
@@ -58,15 +74,15 @@ describe 'tree for the expression 1+2' do
   end
 
   it "should have one top-level node containing + as display text" do
-    @tree.text('0').should == '+'
+    @tree.new_text.should == '+'
   end
 
   it "should have a call node with 1 as the recipient and + as the method" do
-    @tree.sexp('0').should be_a_tree_like(s(:call, :_, :+, :_))
+    @tree.new_sexp.should be_a_tree_like(s(:call, :_, :+, :_))
   end
 
   it "should have a node at 0:0 containing '1' as display text" do
-    @tree.text('0:0').should == '1'
+    @tree.children[0].new_text.should == '1'
   end
 
   it "should have a node at 0:0 containing s(:lit, 1) as its sexp" do

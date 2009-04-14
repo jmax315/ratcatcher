@@ -90,7 +90,7 @@ describe "loading a file" do
   end
 
   it "should assign the new RatCatcherStore to both the app and the TreeView" do
-    @app.store.should == @app.tree_view.model
+    @app.store.model.should == @app.tree_view.model
   end
 
 end
