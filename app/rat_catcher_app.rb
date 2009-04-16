@@ -64,7 +64,7 @@ class RatCatcherApp
     new_tree_view.append_column(Gtk::TreeViewColumn.new("",
                                                         renderer,
                                                         :text => 0))
-    @store= RatCatcherStore.new
+    @store= RatCatcherStore.parse
     new_tree_view.model= @store.model
     new_tree_view
   end
@@ -82,9 +82,9 @@ class RatCatcherApp
   end
 
   def rename_method(renderer, path, new_text)
-    store.set_text(path, new_text)
-    old_sexp= store.sexp(path)
-    old_sexp[2]= new_text.to_sym
+    node= store.path_reference(path)
+    node.text= new_text
+    node.sexp[2]= new_text.to_sym
   end
 
   def initialize_context_menu
@@ -109,7 +109,7 @@ class RatCatcherApp
 
   def args(argv)
     @data_file_name= argv[0]
-    @store= RatCatcherStore.new(load(@data_file_name))
+    @store= RatCatcherStore.parse(load(@data_file_name))
     tree_view.model= @store.model
     tree_view.show
   end

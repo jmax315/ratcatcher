@@ -78,7 +78,7 @@ describe "loading a file" do
   end
 
   it "should load the file specified on the command line" do
-    @app.store.should == RatCatcherStore.new(@source)
+    @app.store.should == RatCatcherStore.parse(@source)
   end
 
   it "should show the Gtk::TreeView after loading the file" do
@@ -157,20 +157,19 @@ end
 describe "calling the rename_method method" do
   before :each do
     @app= RatCatcherApp.new
-    @store= RatCatcherStore.new 'zed'
+    @store= RatCatcherStore.parse 'zed'
     @app.store= @store
     @app.tree_view.model= @store.model
-    @path= "0"
     @new_text= "ferd"
-    @app.rename_method("junk_renderer", @path, @new_text)
+    @app.rename_method("junk_renderer", '', @new_text)
   end
 
   it "it should change the text of the tree node" do
-    @store.text(@path).should == @new_text
+    @store.text.should == @new_text
   end
 
   it "should change the Sexp of the tree node" do
-    @store.sexp(@path).should == s(:call, nil, @new_text.to_sym, s(:arglist))
+    @store.sexp.should == s(:call, nil, @new_text.to_sym, s(:arglist))
   end
 
 end
@@ -179,16 +178,15 @@ end
 describe "calling the rename_method method for a more complex method call" do
   before :each do
     @app= RatCatcherApp.new
-    @store= RatCatcherStore.new '1+1'
+    @store= RatCatcherStore.parse '1+1'
     @app.store= @store
     @app.tree_view.model= @store.model
-    @path= "0"
     @new_text= "-"
-    @app.rename_method("junk_renderer", @path, @new_text)
+    @app.rename_method("junk_renderer", '', @new_text)
   end
 
   it "should change the Sexp of the tree node" do
-    @store.sexp(@path).should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
+    @store.sexp.should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
   end
 
 end
@@ -197,19 +195,18 @@ end
 describe "calling the rename_method method for a non-root method call" do
   before :each do
     @app= RatCatcherApp.new
-    @store= RatCatcherStore.new '1+2+3'
+    @store= RatCatcherStore.parse '1+2+3'
     @app.store= @store
     @app.tree_view.model= @store.model
-    @path= "0:0"
     @new_text= "-"
-    @app.rename_method("junk_renderer", @path, @new_text)
+    @app.rename_method("junk_renderer", '0', @new_text)
   end
 
   it "should change the Sexp of the tree node" do
-    @store.sexp("0").should == s(:call, 
-                                 s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2))),
-                                 :+,
-                                 s(:arglist, s(:lit, 3)))
+    @store.sexp.should == s(:call, 
+                            s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2))),
+                            :+,
+                            s(:arglist, s(:lit, 3)))
   end
 
 end
@@ -232,7 +229,7 @@ describe "calling the save method" do
   it "should save the correct Ruby code" do
     code= '2+2-1'
 
-    @app.store= RatCatcherStore.new(code)
+    @app.store= RatCatcherStore.parse(code)
     @app.save
 
     results= File.new(@file_name).read
@@ -242,7 +239,7 @@ describe "calling the save method" do
   it "should save the other correct Ruby code" do
     code= '2*3-1'
 
-    @app.store= RatCatcherStore.new(code)
+    @app.store= RatCatcherStore.parse(code)
     @app.save
 
     results= File.new(@file_name).read
