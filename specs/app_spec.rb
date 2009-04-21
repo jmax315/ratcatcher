@@ -40,7 +40,7 @@ describe 'ratcatcher application controller' do
   end
 
   it "should have the RatCatcherStore connected to the TreeView" do
-    @the_app.tree_view.model.should == @the_app.store.model
+    @the_app.tree_view.model.rat_catcher_store.should == @the_app.store
   end
 
   it "should have a single Gtk::CellRendererText" do
@@ -90,7 +90,7 @@ describe "loading a file" do
   end
 
   it "should assign the new RatCatcherStore to both the app and the TreeView" do
-    @app.store.model.should == @app.tree_view.model
+    @app.tree_view.model.rat_catcher_store.should == @app.store
   end
 
 end
@@ -159,7 +159,7 @@ describe "calling the rename_method method" do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.parse 'zed'
     @app.store= @store
-    @app.tree_view.model= @store.model
+    @app.tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
     @new_text= "ferd"
     @app.rename_method("junk_renderer", '', @new_text)
   end
@@ -180,7 +180,7 @@ describe "calling the rename_method method for a more complex method call" do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.parse '1+1'
     @app.store= @store
-    @app.tree_view.model= @store.model
+    @app.tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
     @new_text= "-"
     @app.rename_method("junk_renderer", '', @new_text)
   end
@@ -197,7 +197,7 @@ describe "calling the rename_method method for a non-root method call" do
     @app= RatCatcherApp.new
     @store= RatCatcherStore.parse '1+2+3'
     @app.store= @store
-    @app.tree_view.model= @store.model
+    @app.tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
     @new_text= "-"
     @app.rename_method("junk_renderer", '0', @new_text)
   end

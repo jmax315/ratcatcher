@@ -1,5 +1,6 @@
 require 'gtk2'
 require 'app/rat_catcher_store.rb'
+require 'app/rat_catcher_store_gtk_wrapper.rb'
 
 class RatCatcherApp
 
@@ -65,7 +66,8 @@ class RatCatcherApp
                                                         renderer,
                                                         :text => 0))
     @store= RatCatcherStore.parse
-    new_tree_view.model= @store.model
+    new_tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
+
     new_tree_view
   end
 
@@ -110,7 +112,7 @@ class RatCatcherApp
   def args(argv)
     @data_file_name= argv[0]
     @store= RatCatcherStore.parse(load(@data_file_name))
-    tree_view.model= @store.model
+    tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
     tree_view.show
   end
 

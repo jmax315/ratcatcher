@@ -1,4 +1,3 @@
-require 'gtk2'
 require 'ruby_parser'
 require 'ruby2ruby'
 
@@ -7,7 +6,7 @@ class RatCatcherStore
   TEXT= 0
   SEXP= 1
 
-  attr_accessor :text, :sexp, :children, :model
+  attr_accessor :text, :sexp, :children
     
   def self.parse source_code= ''
     @parse_tree= RubyParser.new.process source_code
@@ -17,7 +16,6 @@ class RatCatcherStore
   def initialize sexp
     @text= ""
     @children= []
-    @model= Gtk::TreeStore.new(String, Object)
 
     return if sexp == nil
 
