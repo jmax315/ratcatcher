@@ -3,9 +3,6 @@ require 'ruby2ruby'
 
 
 class RatCatcherStore
-  TEXT= 0
-  SEXP= 1
-
   attr_accessor :text, :sexp, :children
     
   def self.parse source_code= ''
