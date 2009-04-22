@@ -1,4 +1,4 @@
-
+require 'app/rat_catcher_store_gtk_wrapper'
 
 describe "Populating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
 
