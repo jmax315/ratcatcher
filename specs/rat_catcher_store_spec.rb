@@ -1,5 +1,15 @@
 require 'app/rat_catcher_store'
 
+
+describe "the store text" do
+  it "should update the text when the sexp changes" do
+    @store= RatCatcherStore.parse('1')
+    @store.sexp= s(:lit, 2)
+    @store.text.should == '2'
+  end
+end
+
+
 describe "RatCatcherStore comparing" do
 
   it "should return true of the operands describe identical trees" do

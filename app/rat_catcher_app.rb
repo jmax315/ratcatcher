@@ -85,7 +85,6 @@ class RatCatcherApp
 
   def rename_method(renderer, path, new_text)
     node= store.path_reference(path)
-    node.text= new_text
     node.sexp[2]= new_text.to_sym
   end
 

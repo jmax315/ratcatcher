@@ -3,7 +3,8 @@ require 'ruby2ruby'
 
 
 class RatCatcherStore
-  attr_accessor :text, :sexp, :children
+  attr_accessor :children
+  attr_reader :listeners
     
   def self.parse source_code= ''
     @parse_tree= RubyParser.new.process source_code
@@ -11,23 +12,18 @@ class RatCatcherStore
   end
 
   def initialize sexp
-    @text= ""
+    @sexp= sexp
     @children= []
+    @listeners= []
 
     return if sexp == nil
 
-    @sexp= sexp
-
     case sexp[0]
     when :str
-      @text= sexp[1].inspect
 
     when :lit
-      @text= sexp[1].inspect
 
     when :call
-      @text= (sexp[2] == :-@)? '-': sexp[2].to_s
-
       if sexp[1]
         @children << RatCatcherStore.new(sexp[1])
       end
@@ -37,26 +33,63 @@ class RatCatcherStore
       end
 
     when :if
-      @text= '?:'
       @children= [RatCatcherStore.new(sexp[1]),
                   RatCatcherStore.new(sexp[2]),
                   RatCatcherStore.new(sexp[3])]
 
     when :defn
-      @text= "def #{sexp[1].to_s}"
       block_node = sexp[3][1]
-      
       block_node[1..-1].each do |node|
         @children << RatCatcherStore.new(node)
       end
 
     when :yield
-      @text= "yield"
 
     else
       raise "Unhandled sexp: #{sexp.inspect}"
 
     end
+  end
+
+  def sexp
+    @sexp
+  end
+
+  def sexp= new_value
+    @sexp= new_value
+    @listeners.each {|listener| listener.sexp_changed(self) }
+  end
+
+  def add_listener(new_listener)
+    @listeners << new_listener
+  end
+
+  def text
+    if @sexp == nil
+      return ""
+    end
+    
+    case @sexp[0]
+    when :str
+      return @sexp[1].inspect
+      
+    when :lit
+      return @sexp[1].inspect
+
+    when :call
+      return (@sexp[2] == :-@)? '-': @sexp[2].to_s
+
+    when :if
+      return '?:'
+
+    when :defn
+      return "def #{@sexp[1].to_s}"
+
+    when :yield
+      return"yield"
+    end
+
+    raise "RatCatcharStore#text: Unhandled @sexp: #{@sexp.inspect}"
   end
 
   def ==(right)

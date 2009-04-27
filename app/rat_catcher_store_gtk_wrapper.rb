@@ -5,8 +5,9 @@ class RatCatcherStoreGtkWrapper < Gtk::TreeStore
   attr_accessor :rat_catcher_store
 
   def initialize store
-    super(String)
+    super(String, Object)
     @rat_catcher_store= store
+    store.add_listener(self)
     update store, nil
   end
 
@@ -16,6 +17,11 @@ class RatCatcherStoreGtkWrapper < Gtk::TreeStore
     store.children.each do |child|
       update child, iter
     end
+  end
+
+  def sexp_changed(updated_node)
+    get_iter("0")[0]= updated_node.text
+    get_iter("0")[1]= updated_node.sexp
   end
 
 end
