@@ -105,7 +105,10 @@ class RatCatcherApp
   end
 
   def load(file_name)
-    File.new(file_name).gets(nil)
+    sourcefile = File.new(file_name)
+    sourcecode = sourcefile.gets(nil)
+    sourcefile.close
+    sourcecode
   end
 
   def args(argv)
