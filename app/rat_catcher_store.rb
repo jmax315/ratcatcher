@@ -57,7 +57,7 @@ class RatCatcherStore
 
   def sexp= new_value
     @sexp= new_value
-    @listeners.each {|listener| listener.sexp_changed(self) }
+    @listeners.each {|listener| listener.store_changed(self) }
   end
 
   def add_listener(new_listener)

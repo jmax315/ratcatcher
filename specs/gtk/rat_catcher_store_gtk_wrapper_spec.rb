@@ -23,7 +23,7 @@ describe "Populating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
     @store.sexp= s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 1)))
 
     @wrapper.get_iter("0")[0].should == '-'
-    @wrapper.get_iter("0")[1].should be_a_tree_like(s(:call, :_, :-, :_))
+    @wrapper.get_iter("0")[1].should == @store
   end
 
 end
@@ -33,14 +33,16 @@ describe "Updating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
   before :each do
     @store= RatCatcherStore.parse('2+4*6')
     @wrapper= RatCatcherStoreGtkWrapper.new(@store)
-    @wrapper.sexp_changed(RatCatcherStore.parse('1-1'))
+    @new_store= RatCatcherStore.parse('1-1')
+    @wrapper.store_changed(@new_store)
   end
 
-  it "should update the sexp when the sexp_changed method is called" do
-    @wrapper.get_iter("0")[1].should be_a_tree_like(s(:call, :_, :-, :_))
-  end
-
-  it "should update the text when the sexp_changed method is called" do
+  it "should update the text when the store_changed method is called" do
     @wrapper.get_iter("0")[0].should == '-'
   end
+
+  it "should update the store back pointer when the store_changed method is called" do
+    @wrapper.get_iter("0")[1].should == @new_store
+  end
+
 end

@@ -14,14 +14,15 @@ class RatCatcherStoreGtkWrapper < Gtk::TreeStore
   def update store, parent
     iter= append parent
     iter[0]= store.text
+    iter[1]= store
     store.children.each do |child|
       update child, iter
     end
   end
 
-  def sexp_changed(updated_node)
+  def store_changed(updated_node)
     get_iter("0")[0]= updated_node.text
-    get_iter("0")[1]= updated_node.sexp
+    get_iter("0")[1]= updated_node
   end
 
 end
