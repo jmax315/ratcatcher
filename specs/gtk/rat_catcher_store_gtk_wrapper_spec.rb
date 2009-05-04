@@ -1,6 +1,6 @@
 require 'app/rat_catcher_store_gtk_wrapper'
 
-describe "Populating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
+describe "Populating the RatCatcherStoreGtkWrapper from a RatCatcherStore" do
 
   before :each do
     @store= RatCatcherStore.parse('2+4*6')
@@ -29,12 +29,12 @@ describe "Populating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
 end
 
 
-describe "Updating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
+describe "Updating the RatCatcherStoreGtkWrapper from a RatCatcherStore" do
   before :each do
-    @store= RatCatcherStore.parse('2+4*6')
+    @store= RatCatcherStore.parse('3+6*9')
     @wrapper= RatCatcherStoreGtkWrapper.new(@store)
     @new_store= RatCatcherStore.parse('1-1')
-    @wrapper.store_changed(@new_store)
+    @store.sexp= @new_store.sexp
   end
 
   it "should update the text when the store_changed method is called" do
@@ -42,7 +42,24 @@ describe "Updating the RatCatcharStoreGtkWrapper from a RatCatcherStore" do
   end
 
   it "should update the store back pointer when the store_changed method is called" do
-    @wrapper.get_iter("0")[1].should == @new_store
+    @wrapper.get_iter("0")[1].should == @store
+  end
+end
+
+
+describe "Updating the RatCatcherStoreGtkWrapper from a RatCatcherStore non-root node" do
+  before :each do
+    @store= RatCatcherStore.parse('5+10*15')
+    @wrapper= RatCatcherStoreGtkWrapper.new(@store)
+
+    @store[1][1].sexp= s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 1)))
   end
 
+  it "should update the text when the store_changed method is called" do
+    @wrapper.get_iter("0:1:1")[0].should == '-'
+  end
+
+  it "should update the store back pointer when the store_changed method is called" do
+    @wrapper.get_iter("0:1:1")[1].should == @store[1][1]
+  end
 end

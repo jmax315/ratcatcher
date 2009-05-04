@@ -4,7 +4,7 @@ require 'specs/tree_like_matcher'
 
 describe 'tree for no input' do
   before :each do
-    @tree= RatCatcherStore.parse
+    @tree= RatCatcherStore.parse ''
   end
 
   it 'should have '' for text' do

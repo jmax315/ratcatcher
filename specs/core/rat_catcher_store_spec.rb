@@ -19,7 +19,7 @@ describe "RatCatcherStore comparing" do
   end
 
   it "should return false if one of the tree is empty and the other isn't" do
-    left= RatCatcherStore.parse
+    left= RatCatcherStore.parse('')
     right= RatCatcherStore.parse('a+b')
     left.should_not == right
   end

@@ -6,12 +6,11 @@ class RatCatcherStore
   attr_accessor :children
   attr_reader :listeners
     
-  def self.parse source_code= ''
-    @parse_tree= RubyParser.new.process source_code
-    RatCatcherStore.new @parse_tree
+  def self.parse source_code
+    RatCatcherStore.new(RubyParser.new.process(source_code))
   end
 
-  def initialize sexp
+  def initialize sexp= nil
     @sexp= sexp
     @children= []
     @listeners= []
@@ -99,6 +98,7 @@ class RatCatcherStore
   def to_s
     Ruby2Ruby.new.process(@sexp)
   end
+
 
   def [](index)
     @children[index]

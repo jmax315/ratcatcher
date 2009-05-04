@@ -65,7 +65,7 @@ class RatCatcherApp
     new_tree_view.append_column(Gtk::TreeViewColumn.new("",
                                                         renderer,
                                                         :text => 0))
-    @store= RatCatcherStore.parse
+    @store= RatCatcherStore.new
     new_tree_view.model= RatCatcherStoreGtkWrapper.new(@store)
 
     new_tree_view
