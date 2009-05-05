@@ -105,7 +105,7 @@ describe "Updating the RatCatcherStoreGtkWrapper from a RatCatcherStore interior
     @store[1][1].sexp= @new_store.sexp
   end
 
-#  it "should make the developers continue here"
+  it "should make the developers continue here"
 
 #   it "should parse the new expression correctly" do
 #     @new_store.sexp.should == s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2)))
