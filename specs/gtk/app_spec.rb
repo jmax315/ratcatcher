@@ -36,11 +36,11 @@ describe 'ratcatcher application controller' do
   end
 
   it "should have a RatCatcherStore" do
-    @the_app.store.should be_kind_of(RatCatcherStore)
+    @the_app.store.should be_nil
   end
 
   it "should have the RatCatcherStore connected to the TreeView" do
-    @the_app.tree_view.model.rat_catcher_store.should == @the_app.store
+    @the_app.tree_view.model.should be_nil
   end
 
   it "should have a single Gtk::CellRendererText" do

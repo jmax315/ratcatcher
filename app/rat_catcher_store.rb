@@ -10,34 +10,37 @@ class RatCatcherStore
     RatCatcherStore.new(RubyParser.new.process(source_code))
   end
 
-  def initialize sexp= nil
-    @sexp= sexp
+  def initialize new_sexp
+    @sexp= new_sexp
     @children= []
     @listeners= []
+    update_children
+  end
 
-    return if sexp == nil
+  def update_children
+    return if @sexp == nil
 
-    case sexp[0]
+    case @sexp[0]
     when :str
 
     when :lit
 
     when :call
-      if sexp[1]
-        @children << RatCatcherStore.new(sexp[1])
+      if @sexp[1]
+        @children << RatCatcherStore.new(@sexp[1])
       end
 
-      sexp[3][1..-1].each do |arg|
+      @sexp[3][1..-1].each do |arg|
         @children << RatCatcherStore.new(arg)
       end
 
     when :if
-      @children= [RatCatcherStore.new(sexp[1]),
-                  RatCatcherStore.new(sexp[2]),
-                  RatCatcherStore.new(sexp[3])]
+      @children= [RatCatcherStore.new(@sexp[1]),
+                  RatCatcherStore.new(@sexp[2]),
+                  RatCatcherStore.new(@sexp[3])]
 
     when :defn
-      block_node = sexp[3][1]
+      block_node = @sexp[3][1]
       block_node[1..-1].each do |node|
         @children << RatCatcherStore.new(node)
       end
@@ -45,7 +48,7 @@ class RatCatcherStore
     when :yield
 
     else
-      raise "Unhandled sexp: #{sexp.inspect}"
+      raise "Unhandled sexp: #{@sexp.inspect}"
 
     end
   end
@@ -56,6 +59,8 @@ class RatCatcherStore
 
   def sexp= new_value
     @sexp= new_value
+    @children= []
+    update_children
     @listeners.each {|listener| listener.store_changed(self) }
   end
 
