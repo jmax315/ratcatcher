@@ -99,51 +99,53 @@ end
 
 describe "Updating the RatCatcherStoreGtkWrapper from a RatCatcherStore interior node" do
   before :each do
-    @store= RatCatcherStore.parse('5+10*15')
+    @store= RatCatcherStore.parse('5+7*11')
     @wrapper= RatCatcherStoreGtkWrapper.new(@store)
-    @new_store= RatCatcherStore.parse('1-2')
-    @store[1][1].sexp= @new_store.sexp
+    @new_store= RatCatcherStore.parse('13-17')
+    @store[1].sexp= @new_store.sexp
   end
 
-  it "should make the developers continue here"
+  it "should parse the new expression correctly" do
+    @new_store.sexp.should == s(:call, s(:lit, 13), :-, s(:arglist, s(:lit, 17)))
+  end
 
-#   it "should parse the new expression correctly" do
-#     @new_store.sexp.should == s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2)))
-#   end
+  it "should copy the new expression correctly" do
+    @store[1].sexp.should == s(:call, s(:lit, 13), :-, s(:arglist, s(:lit, 17)))
+  end
 
-#   it "should copy the new expression correctly" do
-#     @store[1][1].sexp.should == s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2)))
-#   end
+  it "should have the new expression in node[1]" do
+    @store[1].sexp.should == s(:call, s(:lit, 13), :-, s(:arglist, s(:lit, 17)))
+  end
 
-#   it "should have a '1' in the first child's text" do
-#     @new_store[0].sexp.should == s(:lit, 1)
-#   end
+  it "should have a '-' in node 1's text" do
+    @store[1].text.should == '-'
+  end
 
-#   it "should have a '1' in the first child's text" do
-#     @store[1][1][0].sexp.should == s(:lit, 1)
-#   end
+  it "should update the text when the store_changed method is called" do
+    @wrapper.get_iter("0:1")[0].should == '-'
+  end
 
-#   it "should update the text when the store_changed method is called" do
-#     @wrapper.get_iter("0:1:1")[0].should == '-'
-#   end
+  it "should update the store back pointer when the store_changed method is called" do
+    @wrapper.get_iter("0:1")[1].should == @store[1]
+  end
 
-#   it "should update the store back pointer when the store_changed method is called" do
-#     @wrapper.get_iter("0:1:1")[1].should == @store[1][1]
-#   end
+  it "shouldn't have any extra children" do
+    @wrapper.get_iter("0:1").n_children.should == 2
+  end
 
-#   it "should create a new left child node to match the sexp" do
-#     @wrapper.get_iter("0:1:1:0")[0].should == '1'
-#   end
+  it "should update the text for the left child" do
+    @wrapper.get_iter("0:1:0")[0].should == '13'
+  end
 
-#   it "should create a new left child node to match the sexp" do
-#     @wrapper.get_iter("0:1:1:0")[1].should == @store[1][1][0]
-#   end
+  it "should update the back poiner for the left child" do
+    @wrapper.get_iter("0:1:0")[1].should == @store[1][0]
+  end
 
-#   it "should create a new left child node to match the sexp" do
-#     @wrapper.get_iter("0:1:1:1")[0].should == '2'
-#   end
+  it "should update the text for the right child" do
+    @wrapper.get_iter("0:1:1")[0].should == '17'
+  end
 
-#   it "should create a new left child node to match the sexp" do
-#     @wrapper.get_iter("0:1:1:1")[1].should == @store[1][1][1]
-#   end
+  it "should update the back poiner for the right child" do
+     @wrapper.get_iter("0:1:1")[1].should == @store[1][1]
+  end
 end

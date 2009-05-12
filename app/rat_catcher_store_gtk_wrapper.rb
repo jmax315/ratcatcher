@@ -33,9 +33,10 @@ class RatCatcherStoreGtkWrapper < Gtk::TreeStore
     if new_store.object_id == iter[1].object_id
       iter[0]= new_store.text
 
-#       child= iter.first_child
-#       while child.remove do
-#       end
+      child= iter.first_child
+      while iter.has_child? do
+        remove(child)
+      end
 
       new_store.children.each do |child_store|
         update(child_store, iter)
