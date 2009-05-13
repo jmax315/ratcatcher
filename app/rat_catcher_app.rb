@@ -79,13 +79,16 @@ class RatCatcherApp
 
   def connect_edit_signal(a_tree_view)
     a_tree_view.columns[0].cell_renderers[0].signal_connect("edited") do |renderer, path, new_text|
-      rename_method(renderer, path, new_text)
+      rename_method(renderer,
+                    path[2..-1],
+                    new_text)
     end
   end
 
   def rename_method(renderer, path, new_text)
     node= store.path_reference(path)
-    node.sexp[2]= new_text.to_sym
+    new_sexp= s(:call, node.sexp[1], new_text.to_sym, node.sexp[3])
+    node.sexp= new_sexp
   end
 
   def initialize_context_menu
