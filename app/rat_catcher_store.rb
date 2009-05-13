@@ -48,7 +48,7 @@ class RatCatcherStore
     when :yield
 
     else
-      raise "Unhandled sexp: #{@sexp.inspect}"
+      raise "Unhandled sexp: #{@sexp[0]} #{@sexp.inspect}"
 
     end
   end
