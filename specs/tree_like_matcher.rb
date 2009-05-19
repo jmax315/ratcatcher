@@ -6,10 +6,11 @@ class TreeLikeMatcher
   def match_helper(expected, target)
     if expected == :_
       true
-    elsif !target.kind_of?(Sexp) || !expected.kind_of?(Sexp)
-      target == expected
+    elsif !expected.kind_of?(Sexp) || !target.kind_of?(Sexp)
+      expected == target
     else
-      expected.zip(target).all? { |pair| match_helper(pair[0], pair[1]) }
+      expected.size == target.size &&
+        expected.zip(target).all? { |pair| match_helper(pair[0], pair[1]) }
     end
   end
 
