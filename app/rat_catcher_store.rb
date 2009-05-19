@@ -45,6 +45,8 @@ class RatCatcherStore
         @children << RatCatcherStore.new(node)
       end
 
+    when :lasgn
+
     when :yield
 
     else
@@ -72,28 +74,34 @@ class RatCatcherStore
     if @sexp == nil
       return ""
     end
-    
-    case @sexp[0]
+    return node_text(@sexp)
+  end
+
+  def node_text(this_sexp_array)
+    case this_sexp_array[0]
     when :str
-      return @sexp[1].inspect
+      return this_sexp_array[1].inspect
       
     when :lit
-      return @sexp[1].inspect
+      return this_sexp_array[1].inspect
 
     when :call
-      return (@sexp[2] == :-@)? '-': @sexp[2].to_s
+      return (this_sexp_array[2] == :-@)? '-': this_sexp_array[2].to_s
 
     when :if
       return '?:'
 
     when :defn
-      return "def #{@sexp[1].to_s}"
+      return "def #{this_sexp_array[1].to_s}"
+
+    when :lasgn
+      return this_sexp_array[1].to_s + ' = ' + node_text(this_sexp_array[2])
 
     when :yield
       return"yield"
     end
 
-    raise "RatCatcharStore#text: Unhandled @sexp: #{@sexp.inspect}"
+    raise "RatCatcharStore#text: Unhandled this_sexp_array: #{this_sexp_array.inspect}"
   end
 
   def ==(right)
