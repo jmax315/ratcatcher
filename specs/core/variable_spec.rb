@@ -13,9 +13,11 @@ describe 'tree for variable assignment' do
   it 'should regenerate the source code' do
     @tree.text.should == 'a_variable = 5'
   end
+end
 
-  it 'should generate a displayable tree' do
-    pending
+describe 'app for variable assignment' do
+  it 'should be possible to rename a_variable' do
+    pending 'until RatCatcherApp is free from GTK'
   end
 end
 
