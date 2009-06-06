@@ -11,24 +11,44 @@ class RatCatcherStore
   end
 
   def self.from_sexp new_sexp
-    OldRatCatcherStore.new(new_sexp)
+    if new_sexp == nil
+      return NilStore.new
+    end
+    
+    OldStore.new(new_sexp)
+  end
+
+  def initialize
+    @children= []
+    @listeners= []
+    @text= ''
+  end
+
+end
+
+
+class NilStore < RatCatcherStore
+  def initialize
+    super
+  end
+
+  def sexp
+    nil
   end
 end
 
 
-class OldRatCatcherStore < RatCatcherStore
+class OldStore < RatCatcherStore
 
   def initialize new_sexp
+    super()
     @sexp= new_sexp
-    @type= (new_sexp == nil) ? :nil : new_sexp[0]
-    @listeners= []
+    @type= new_sexp[0]
     update_children
     set_text
   end
 
   def update_children
-    @children= []
-
     case @type
     when :str
 
@@ -70,9 +90,6 @@ class OldRatCatcherStore < RatCatcherStore
 
   def sexp
     case @type
-    when :nil
-      nil
-
     when :call
       case @children.size
       when 0
