@@ -12,26 +12,27 @@ class RatCatcherStore
 
   def initialize new_sexp
     @sexp= new_sexp
-    @children= []
+    @type= (new_sexp == nil) ? :nil : new_sexp[0]
     @listeners= []
     update_children
+    set_text
   end
 
   def update_children
-    return if @sexp == nil
+    @children= []
 
-    case @sexp[0]
+    case @type
     when :str
 
     when :lit
 
     when :call
-      if @sexp[1]
-        @children << RatCatcherStore.new(@sexp[1])
-      end
+      @children << RatCatcherStore.new(@sexp[1])
 
-      @sexp[3][1..-1].each do |arg|
-        @children << RatCatcherStore.new(arg)
+      if @sexp[3].size > 1
+        @sexp[3][1..-1].each do |arg|
+          @children << RatCatcherStore.new(arg)
+        end
       end
 
     when :if
@@ -47,20 +48,50 @@ class RatCatcherStore
 
     when :yield
 
-    else
-      raise "Unhandled sexp: #{@sexp[0]} #{@sexp.inspect}"
-
     end
   end
 
+  def replace_node(path, new_text)
+    node= path_reference(path)
+    new_sexp= s(:call, node.sexp[1], new_text.to_sym, node.sexp[3])
+    node.sexp= new_sexp
+    self
+  end
+
   def sexp
-    @sexp
+    case @type
+    when :nil
+      nil
+
+    when :call
+      case @children.size
+      when 0
+        s(:call, nil, text.to_sym, s(:arglist))
+      when 1
+        if text == "-"
+          s(:call, @children[0].sexp, :-@, s(:arglist))
+        else
+          s(:call, @children[0].sexp, text.to_sym, s(:arglist))
+        end
+      when 2
+        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp))
+      when 3
+        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp))
+      when 4
+        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp, @children[3].sexp))
+      else
+        @sexp
+      end
+    else
+      @sexp
+    end
   end
 
   def sexp= new_value
     @sexp= new_value
-    @children= []
+    @type= (new_value == nil) ? :nil : new_value[0]
     update_children
+    set_text
     @listeners.each {|listener| listener.store_changed(self) }
   end
 
@@ -69,31 +100,32 @@ class RatCatcherStore
   end
 
   def text
-    if @sexp == nil
-      return ""
-    end
-    
-    case @sexp[0]
+    @text
+  end
+
+  def set_text
+    @text= ''
+      
+    case @type
     when :str
-      return @sexp[1].inspect
+      @text= @sexp[1].inspect
       
     when :lit
-      return @sexp[1].inspect
+      @text= @sexp[1].inspect
 
     when :call
-      return (@sexp[2] == :-@)? '-': @sexp[2].to_s
+      @text= (@sexp[2] == :-@)? '-': @sexp[2].to_s
 
     when :if
-      return '?:'
+      @text= '?:'
 
     when :defn
-      return "def #{@sexp[1].to_s}"
+      @text= "def #{@sexp[1].to_s}"
 
     when :yield
-      return"yield"
+      @text="yield"
     end
 
-    raise "RatCatcharStore#text: Unhandled @sexp: #{@sexp.inspect}"
   end
 
   def ==(right)
