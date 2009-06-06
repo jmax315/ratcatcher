@@ -60,10 +60,12 @@ class OldRatCatcherStore < RatCatcherStore
   end
 
   def replace_node(path, new_text)
-    node= path_reference(path)
-    new_sexp= s(:call, node.sexp[1], new_text.to_sym, node.sexp[3])
-    node.sexp= new_sexp
-    self
+    if path.size == 0
+      RatCatcherStore.from_sexp(s(:call, sexp[1], new_text.to_sym, sexp[3]))
+    else
+      @children[path[0]]= @children[path[0]].replace_node(path[1..-1], new_text)
+      self
+    end
   end
 
   def sexp
@@ -93,14 +95,6 @@ class OldRatCatcherStore < RatCatcherStore
     else
       @sexp
     end
-  end
-
-  def sexp= new_value
-    @sexp= new_value
-    @type= (new_value == nil) ? :nil : new_value[0]
-    update_children
-    set_text
-    @listeners.each {|listener| listener.store_changed(self) }
   end
 
   def add_listener(new_listener)

@@ -22,14 +22,13 @@ end
 describe "calling the rename_method method for a more complex method call" do
   before :each do
     @app= RatCatcherApp.new
-    @store= RatCatcherStore.parse '1+1'
-    @app.store= @store
+    @app.store= RatCatcherStore.parse '1+1'
     @new_text= "-"
     @app.replace_node([], @new_text)
   end
   
   it "should change the Sexp of the tree node" do
-    @store.sexp.should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
+    @app.store.sexp.should == s(:call, s(:lit, 1), @new_text.to_sym, s(:arglist, s(:lit, 1)))
   end
 
 end
@@ -38,17 +37,16 @@ end
 describe "calling the replace_node method for a non-root method call" do
   before :each do
     @app= RatCatcherApp.new
-    @store= RatCatcherStore.parse '1+2+3'
-    @app.store= @store
+    @app.store= RatCatcherStore.parse '1+2+3'
     @new_text= "-"
     @app.replace_node([0], @new_text)
   end
 
   it "should change the Sexp of the tree node" do
-    @store.sexp.should == s(:call, 
-                            s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2))),
-                            :+,
-                            s(:arglist, s(:lit, 3)))
+    @app.store.sexp.should == s(:call, 
+                                s(:call, s(:lit, 1), :-, s(:arglist, s(:lit, 2))),
+                                :+,
+                                s(:arglist, s(:lit, 3)))
    end
   
 end
