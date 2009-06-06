@@ -5,10 +5,18 @@ require 'ruby2ruby'
 class RatCatcherStore
   attr_accessor :children
   attr_reader :listeners
-    
+
   def self.parse source_code
-    RatCatcherStore.new(RubyParser.new.process(source_code))
+    RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
   end
+
+  def self.from_sexp new_sexp
+    OldRatCatcherStore.new(new_sexp)
+  end
+end
+
+
+class OldRatCatcherStore < RatCatcherStore
 
   def initialize new_sexp
     @sexp= new_sexp
@@ -27,23 +35,23 @@ class RatCatcherStore
     when :lit
 
     when :call
-      @children << RatCatcherStore.new(@sexp[1])
+      @children << RatCatcherStore.from_sexp(@sexp[1])
 
       if @sexp[3].size > 1
         @sexp[3][1..-1].each do |arg|
-          @children << RatCatcherStore.new(arg)
+          @children << RatCatcherStore.from_sexp(arg)
         end
       end
 
     when :if
-      @children= [RatCatcherStore.new(@sexp[1]),
-                  RatCatcherStore.new(@sexp[2]),
-                  RatCatcherStore.new(@sexp[3])]
+      @children= [RatCatcherStore.from_sexp(@sexp[1]),
+                  RatCatcherStore.from_sexp(@sexp[2]),
+                  RatCatcherStore.from_sexp(@sexp[3])]
 
     when :defn
       block_node = @sexp[3][1]
       block_node[1..-1].each do |node|
-        @children << RatCatcherStore.new(node)
+        @children << RatCatcherStore.from_sexp(node)
       end
 
     when :yield
@@ -148,4 +156,6 @@ class RatCatcherStore
   end
 
 end
+
+
 
