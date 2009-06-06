@@ -4,7 +4,7 @@ require 'ruby2ruby'
 
 class RatCatcherStore
   attr_accessor :children
-  attr_reader :listeners
+  attr_reader :listeners, :text
 
   def self.parse source_code
     RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
@@ -105,10 +105,6 @@ class OldRatCatcherStore < RatCatcherStore
 
   def add_listener(new_listener)
     @listeners << new_listener
-  end
-
-  def text
-    @text
   end
 
   def set_text
