@@ -5,7 +5,7 @@ describe "calling the replace_node method" do
     @app= RatCatcherApp.new
     @app.store= RatCatcherStore.parse 'zed'
     @new_text= 'ferd'
-    @app.replace_node('', @new_text)
+    @app.replace_node([], @new_text)
   end
 
   it "it should change the text of the tree node" do
@@ -25,7 +25,7 @@ describe "calling the rename_method method for a more complex method call" do
     @store= RatCatcherStore.parse '1+1'
     @app.store= @store
     @new_text= "-"
-    @app.replace_node('', @new_text)
+    @app.replace_node([], @new_text)
   end
   
   it "should change the Sexp of the tree node" do
@@ -41,7 +41,7 @@ describe "calling the replace_node method for a non-root method call" do
     @store= RatCatcherStore.parse '1+2+3'
     @app.store= @store
     @new_text= "-"
-    @app.replace_node('0', @new_text)
+    @app.replace_node([0], @new_text)
   end
 
   it "should change the Sexp of the tree node" do

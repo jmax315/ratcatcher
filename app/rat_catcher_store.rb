@@ -146,8 +146,8 @@ class OldRatCatcherStore < RatCatcherStore
   end
 
   def path_reference(path)
-    path.split(':').inject(self) do |value, index|
-      value= value[index.to_i]
+    path.inject(self) do |value, index|
+      value= value[index]
     end
   end
 
