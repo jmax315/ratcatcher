@@ -11,9 +11,7 @@ class RatCatcherApp
   end
 
   def replace_node(path, new_text)
-    node= store.path_reference(path)
-    new_sexp= s(:call, node.sexp[1], new_text.to_sym, node.sexp[3])
-    node.sexp= new_sexp
+    @store= @store.replace_node(path, new_text)
   end
 
   def load(file_name)
