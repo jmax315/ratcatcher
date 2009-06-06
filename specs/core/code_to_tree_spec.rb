@@ -273,20 +273,20 @@ describe 'tree for the expression f(2,3)' do
      @tree.sexp.should be_a_tree_like(s(:call, nil, :f, :_))
   end
 
-  it "should have a node at 0:0 containing '2' as display text" do
-    @tree[0].text.should == '2'
+  it "should have a node at 1 containing '2' as display text" do
+    @tree[1].text.should == '2'
   end
 
-  it "should have a node at 0:0 containing" do
-    @tree[0].sexp.should be_a_tree_like(s(:lit, 2))
+  it "should have a node at 1 containing a literal 2" do
+    @tree[1].sexp.should be_a_tree_like(s(:lit, 2))
   end
 
-  it "should have a node at 0:1 containing '3' as display text" do
-    @tree[1].text.should == '3'
+  it "should have a node at 2 containing '3' as display text" do
+    @tree[2].text.should == '3'
   end
 
-  it "should have a node at 0:1 containing s(:lit, 3) as its sexp" do
-    @tree[1].sexp.should be_a_tree_like(s(:lit, 3))
+  it "should have a node at 2 containing the literal 3" do
+    @tree[2].sexp.should be_a_tree_like(s(:lit, 3))
   end
 end
 
@@ -304,12 +304,12 @@ describe 'tree for the expression f(7)' do
     @tree.sexp.should be_a_tree_like(s(:call, nil, :f, :_))
   end
 
-  it "should have a node at 0:0 containing '7' as display text" do
-    @tree[0].text.should == '7'
+  it "should have a node at 1 containing '7' as display text" do
+    @tree[1].text.should == '7'
   end
 
-  it "should have a literal node for the value 7 at 0:0" do
-    @tree[0].sexp.should be_a_tree_like(s(:lit, 7))
+  it "should have a node at 1 containing the literal 7" do
+    @tree[1].sexp.should be_a_tree_like(s(:lit, 7))
   end
 end
 
@@ -327,28 +327,28 @@ describe 'tree for the expression f(3,6,9)' do
      @tree.sexp.should be_a_tree_like(s(:call, nil, :f, :_))
   end
 
-  it "should have a node at 0:0 containing '3' as display text" do
-    @tree[0].text.should == '3'
+  it "should have a node at 1 containing '3' as display text" do
+    @tree[1].text.should == '3'
   end
 
   it "should have a node at 0:0 containing" do
-    @tree[0].sexp.should be_a_tree_like(s(:lit, 3))
+    @tree[1].sexp.should be_a_tree_like(s(:lit, 3))
   end
 
   it "should have a node at 0:1 containing '6' as display text" do
-    @tree[1].text.should == '6'
+    @tree[2].text.should == '6'
   end
 
   it "should have a node at 0:1 containing s(:lit, 6) as its sexp" do
-    @tree[1].sexp.should be_a_tree_like(s(:lit, 6))
+    @tree[2].sexp.should be_a_tree_like(s(:lit, 6))
   end
 
   it "should have a node at 0:2 containing '9' as display text" do
-    @tree[2].text.should == '9'
+    @tree[3].text.should == '9'
   end
 
   it "should have a node at 0:2 containing s(:lit, 9) as its sexp" do
-    @tree[2].sexp.should be_a_tree_like(s(:lit, 9))
+    @tree[3].sexp.should be_a_tree_like(s(:lit, 9))
   end
 end
 
