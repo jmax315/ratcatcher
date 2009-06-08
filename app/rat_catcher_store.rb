@@ -15,37 +15,19 @@ class RatCatcherStore
       return NilStore.new
     end
     
-    OldStore.new(new_sexp)
+    RatCatcherStore.new(new_sexp)
   end
 
-  def initialize
+  def initialize new_sexp
     @children= []
     @listeners= []
     @text= ''
-  end
-
-end
-
-
-class NilStore < RatCatcherStore
-  def initialize
-    super
-  end
-
-  def sexp
-    nil
-  end
-end
-
-
-class OldStore < RatCatcherStore
-
-  def initialize new_sexp
-    super()
     @sexp= new_sexp
-    @type= new_sexp[0]
-    update_children
-    set_text
+    if new_sexp != nil
+      @type= new_sexp[0]
+      update_children
+      set_text
+    end
   end
 
   def update_children
@@ -166,3 +148,12 @@ end
 
 
 
+class NilStore < RatCatcherStore
+  def initialize
+    super(nil)
+  end
+
+  def sexp
+    nil
+  end
+end
