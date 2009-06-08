@@ -56,6 +56,8 @@ class RatCatcherStore
         @children << RatCatcherStore.from_sexp(node)
       end
 
+    when :lasgn
+
     when :yield
 
     end
@@ -121,6 +123,9 @@ class RatCatcherStore
 
     when :yield
       @text="yield"
+
+    when :lasgn
+      @text= "#{@sexp[1].to_s} = #{@sexp[2][1]}"
     end
 
   end
