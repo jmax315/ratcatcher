@@ -499,3 +499,10 @@ describe 'yield statement' do
   end
 end
 
+describe 'to_s method' do
+  it "should return same text it parsed" do
+    @tree= RatCatcherStore.parse %q{yield}
+    s = @tree.to_s
+    s == 'yield'
+  end
+end
