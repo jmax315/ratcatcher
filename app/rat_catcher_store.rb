@@ -76,10 +76,6 @@ class RatCatcherStore
       @sexp
   end
 
-  def add_listener(new_listener)
-    @listeners << new_listener
-  end
-
   def set_text
     @text= ''
       
