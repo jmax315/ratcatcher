@@ -15,8 +15,15 @@ class RatCatcherStore
       return NilStore.new
     end
     
-    RatCatcherStore.new(new_sexp)
+    case new_sexp[0]
+    when :call
+      CallStore.new(new_sexp)
+    else
+      RatCatcherStore.new(new_sexp)
+    end
   end
+  
+  private
 
   def initialize new_sexp
     @children= []
@@ -30,20 +37,13 @@ class RatCatcherStore
     end
   end
 
+  public
+
   def update_children
     case @type
     when :str
 
     when :lit
-
-    when :call
-      @children << RatCatcherStore.from_sexp(@sexp[1])
-
-      if @sexp[3].size > 1
-        @sexp[3][1..-1].each do |arg|
-          @children << RatCatcherStore.from_sexp(arg)
-        end
-      end
 
     when :if
       @children= [RatCatcherStore.from_sexp(@sexp[1]),
@@ -73,30 +73,7 @@ class RatCatcherStore
   end
 
   def sexp
-    case @type
-    when :call
-      # handles 0-4 arguments for method calls.
-      case @children.size
-      when 0 
-        s(:call, nil, text.to_sym, s(:arglist))
-      when 1
-        if text == "-"
-          s(:call, @children[0].sexp, :-@, s(:arglist))
-        else
-          s(:call, @children[0].sexp, text.to_sym, s(:arglist))
-        end
-      when 2
-        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp))
-      when 3
-        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp))
-      when 4
-        s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp, @children[3].sexp))
-      else
-        @sexp
-      end
-    else
       @sexp
-    end
   end
 
   def set_text
@@ -109,9 +86,6 @@ class RatCatcherStore
     when :lit
       @text= @sexp[1].inspect
 
-    when :call
-      @text= (@sexp[2] == :-@)? '-': @sexp[2].to_s
-
     when :if
       @text= '?:'
 
@@ -119,7 +93,7 @@ class RatCatcherStore
       @text= "def #{@sexp[1].to_s}"
 
     when :yield
-      @text="yield"
+      @text= "yield"
 
     when :lasgn
       @text= "#{@sexp[1].to_s} = #{@sexp[2][1]}"
@@ -159,3 +133,43 @@ class NilStore < RatCatcherStore
     nil
   end
 end
+
+
+class CallStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+
+    @children << RatCatcherStore.from_sexp(new_sexp[1])
+    
+    if new_sexp[3].size > 1
+      new_sexp[3][1..-1].each do |arg|
+        @children << RatCatcherStore.from_sexp(arg)
+      end
+    end
+
+    @text= (new_sexp[2] == :-@)? '-': new_sexp[2].to_s
+  end
+
+
+  def sexp
+    case @children.size
+    when 0
+      s(:call, nil, text.to_sym, s(:arglist))
+    when 1
+      if text == "-"
+        s(:call, @children[0].sexp, :-@, s(:arglist))
+      else
+        s(:call, @children[0].sexp, text.to_sym, s(:arglist))
+      end
+    else
+      s(
+        :call,
+        @children[0].sexp,
+        text.to_sym,
+        s(:arglist, *@children[1..-1].map {|child| child.sexp} )
+       )
+    end
+  end
+end
+  
