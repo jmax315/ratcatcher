@@ -166,12 +166,13 @@ class CallStore < RatCatcherStore
       else
         s(:call, @children[0].sexp, text.to_sym, s(:arglist))
       end
-    when 2
-      s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp))
-    when 3
-      s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp))
-    when 4
-      s(:call, @children[0].sexp, text.to_sym, s(:arglist, @children[1].sexp, @children[2].sexp, @children[3].sexp))
+    else
+      s(
+        :call,
+        @children[0].sexp,
+        text.to_sym,
+        s(:arglist, *@children[1..-1].map {|child| child.sexp} )
+       )
     end
   end
 end
