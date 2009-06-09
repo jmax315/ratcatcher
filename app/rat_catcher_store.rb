@@ -90,9 +90,6 @@ class RatCatcherStore
     when :lit
       @text= @sexp[1].inspect
 
-    when :call
-      @text= (@sexp[2] == :-@)? '-': @sexp[2].to_s
-
     when :if
       @text= '?:'
 
@@ -154,7 +151,10 @@ class CallStore < RatCatcherStore
         @children << RatCatcherStore.from_sexp(arg)
       end
     end
+
+    @text= (new_sexp[2] == :-@)? '-': new_sexp[2].to_s
   end
+
 
   def sexp
     case @children.size
