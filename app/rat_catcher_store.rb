@@ -75,8 +75,9 @@ class RatCatcherStore
   def sexp
     case @type
     when :call
+      # handles 0-4 arguments for method calls.
       case @children.size
-      when 0
+      when 0 
         s(:call, nil, text.to_sym, s(:arglist))
       when 1
         if text == "-"
@@ -96,10 +97,6 @@ class RatCatcherStore
     else
       @sexp
     end
-  end
-
-  def add_listener(new_listener)
-    @listeners << new_listener
   end
 
   def set_text
