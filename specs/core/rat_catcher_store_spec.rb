@@ -1,15 +1,6 @@
 require 'app/rat_catcher_store'
 
 
-describe "the store text" do
-  it "should update the text when the sexp changes" do
-    @store= RatCatcherStore.parse('1')
-    @store.sexp= s(:lit, 2)
-    @store.text.should == '2'
-  end
-end
-
-
 describe "RatCatcherStore comparing" do
 
   it "should return true of the operands describe identical trees" do
@@ -40,31 +31,31 @@ describe "the path_reference method" do
   end
 
   it "should find the root node" do
-    @tree.path_reference('').should == @tree
+    @tree.path_reference([]).should == @tree
   end
 
   it "should find the 0 node" do
-    @tree.path_reference('0').should == @tree[0]
+    @tree.path_reference([0]).should == @tree[0]
   end
 
   it "should find the 1 node" do
-    @tree.path_reference('1').should == @tree[1]
+    @tree.path_reference([1]).should == @tree[1]
   end
 
   it "should find the 0:0 node" do
-    @tree.path_reference('0:0').should == @tree[0][0]
+    @tree.path_reference([0, 0]).should == @tree[0][0]
   end
 
   it "should find the 0:0:0 node" do
-    @tree.path_reference('0:0:0').should == @tree[0][0][0]
+    @tree.path_reference([0, 0, 0]).should == @tree[0][0][0]
   end
 
   it "should find the 0:1 node" do
-    @tree.path_reference('0:1').should == @tree[0][1]
+    @tree.path_reference([0, 1]).should == @tree[0][1]
   end
 
   it "should find the 0:0:1 node" do
-    @tree.path_reference('0:0:1').should == @tree[0][0][1]
+    @tree.path_reference([0, 0, 1]).should == @tree[0][0][1]
   end
 
 end

@@ -4,104 +4,101 @@ require 'ruby2ruby'
 
 class RatCatcherStore
   attr_accessor :children
-  attr_reader :listeners
-    
+  attr_reader :listeners, :text
+
   def self.parse source_code
-    RatCatcherStore.new(RubyParser.new.process(source_code))
+    RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
   end
+
+  def self.from_sexp new_sexp
+    if new_sexp == nil
+      return NilStore.new
+    end
+    
+    case new_sexp[0]
+    when :call
+      CallStore.new(new_sexp)
+    else
+      RatCatcherStore.new(new_sexp)
+    end
+  end
+  
+  private
 
   def initialize new_sexp
-    @sexp= new_sexp
     @children= []
     @listeners= []
-    update_children
+    @text= ''
+    @sexp= new_sexp
+    if new_sexp != nil
+      @type= new_sexp[0]
+      update_children
+      set_text
+    end
   end
 
-  def update_children
-    return if @sexp == nil
+  public
 
-    case @sexp[0]
+  def update_children
+    case @type
     when :str
 
     when :lit
 
-    when :call
-      if @sexp[1]
-        @children << RatCatcherStore.new(@sexp[1])
-      end
-
-      @sexp[3][1..-1].each do |arg|
-        @children << RatCatcherStore.new(arg)
-      end
-
     when :if
-      @children= [RatCatcherStore.new(@sexp[1]),
-                  RatCatcherStore.new(@sexp[2]),
-                  RatCatcherStore.new(@sexp[3])]
+      @children= [RatCatcherStore.from_sexp(@sexp[1]),
+                  RatCatcherStore.from_sexp(@sexp[2]),
+                  RatCatcherStore.from_sexp(@sexp[3])]
 
     when :defn
       block_node = @sexp[3][1]
       block_node[1..-1].each do |node|
-        @children << RatCatcherStore.new(node)
+        @children << RatCatcherStore.from_sexp(node)
       end
 
     when :lasgn
 
     when :yield
 
-    else
-      raise "Unhandled sexp: #{@sexp.inspect}"
+    end
+  end
 
+  def replace_node(path, new_text)
+    if path.size == 0
+      RatCatcherStore.from_sexp(s(:call, sexp[1], new_text.to_sym, sexp[3]))
+    else
+      @children[path[0]]= @children[path[0]].replace_node(path[1..-1], new_text)
+      self
     end
   end
 
   def sexp
-    @sexp
+      @sexp
   end
 
-  def sexp= new_value
-    @sexp= new_value
-    @children= []
-    update_children
-    @listeners.each {|listener| listener.store_changed(self) }
-  end
-
-  def add_listener(new_listener)
-    @listeners << new_listener
-  end
-
-  def text
-    if @sexp == nil
-      return ""
-    end
-    return node_text(@sexp)
-  end
-
-  def node_text(this_sexp_array)
-    case this_sexp_array[0]
+  def set_text
+    @text= ''
+      
+    case @type
     when :str
-      return this_sexp_array[1].inspect
+      @text= @sexp[1].inspect
       
     when :lit
-      return this_sexp_array[1].inspect
-
-    when :call
-      return (this_sexp_array[2] == :-@)? '-': this_sexp_array[2].to_s
+      @text= @sexp[1].inspect
 
     when :if
-      return '?:'
+      @text= '?:'
 
     when :defn
-      return "def #{this_sexp_array[1].to_s}"
-
-    when :lasgn
-      return this_sexp_array[1].to_s + ' = ' + node_text(this_sexp_array[2])
+      @text= "def #{@sexp[1].to_s}"
 
     when :yield
-      return"yield"
+      @text= "yield"
+
+    when :lasgn
+      @text= "#{@sexp[1].to_s} = #{@sexp[2][1]}"
     end
 
-    raise "RatCatcharStore#text: Unhandled this_sexp_array: #{this_sexp_array.inspect}"
   end
 
   def ==(right)
@@ -118,10 +115,61 @@ class RatCatcherStore
   end
 
   def path_reference(path)
-    path.split(':').inject(self) do |value, index|
-      value= value[index.to_i]
+    path.inject(self) do |value, index|
+      value= value[index]
     end
   end
 
 end
 
+
+
+class NilStore < RatCatcherStore
+  def initialize
+    super(nil)
+  end
+
+  def sexp
+    nil
+  end
+end
+
+
+class CallStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+
+    @children << RatCatcherStore.from_sexp(new_sexp[1])
+    
+    if new_sexp[3].size > 1
+      new_sexp[3][1..-1].each do |arg|
+        @children << RatCatcherStore.from_sexp(arg)
+      end
+    end
+
+    @text= (new_sexp[2] == :-@)? '-': new_sexp[2].to_s
+  end
+
+
+  def sexp
+    case @children.size
+    when 0
+      s(:call, nil, text.to_sym, s(:arglist))
+    when 1
+      if text == "-"
+        s(:call, @children[0].sexp, :-@, s(:arglist))
+      else
+        s(:call, @children[0].sexp, text.to_sym, s(:arglist))
+      end
+    else
+      s(
+        :call,
+        @children[0].sexp,
+        text.to_sym,
+        s(:arglist, *@children[1..-1].map {|child| child.sexp} )
+       )
+    end
+  end
+end
+  
