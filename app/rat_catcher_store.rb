@@ -18,13 +18,15 @@ class RatCatcherStore
     case new_sexp[0]
     when :call
       CallStore.new(new_sexp)
+    when :if
+      IfStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
   end
-  
-  private
 
+  private
+  
   def initialize new_sexp
     @children= []
     @listeners= []
@@ -44,11 +46,6 @@ class RatCatcherStore
     when :str
 
     when :lit
-
-    when :if
-      @children= [RatCatcherStore.from_sexp(@sexp[1]),
-                  RatCatcherStore.from_sexp(@sexp[2]),
-                  RatCatcherStore.from_sexp(@sexp[3])]
 
     when :defn
       block_node = @sexp[3][1]
@@ -85,9 +82,6 @@ class RatCatcherStore
       
     when :lit
       @text= @sexp[1].inspect
-
-    when :if
-      @text= '?:'
 
     when :defn
       @text= "def #{@sexp[1].to_s}"
@@ -173,3 +167,19 @@ class CallStore < RatCatcherStore
   end
 end
   
+
+class IfStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    @children= [RatCatcherStore.from_sexp(new_sexp[1]),
+                RatCatcherStore.from_sexp(new_sexp[2]),
+                RatCatcherStore.from_sexp(new_sexp[3])]
+    @text= '?:'
+  end
+
+  def sexp
+    s(:if, @children[0].sexp, @children[1].sexp, @children[2].sexp)
+  end
+
+end
