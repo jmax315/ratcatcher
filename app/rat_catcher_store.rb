@@ -20,6 +20,8 @@ class RatCatcherStore
       CallStore.new(new_sexp)
     when :if
       IfStore.new(new_sexp)
+    when :defn
+      DefineStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -46,12 +48,6 @@ class RatCatcherStore
     when :str
 
     when :lit
-
-    when :defn
-      block_node = @sexp[3][1]
-      block_node[1..-1].each do |node|
-        @children << RatCatcherStore.from_sexp(node)
-      end
 
     when :lasgn
 
@@ -82,9 +78,6 @@ class RatCatcherStore
       
     when :lit
       @text= @sexp[1].inspect
-
-    when :defn
-      @text= "def #{@sexp[1].to_s}"
 
     when :yield
       @text= "yield"
@@ -180,6 +173,21 @@ class IfStore < RatCatcherStore
 
   def sexp
     s(:if, @children[0].sexp, @children[1].sexp, @children[2].sexp)
+  end
+
+end
+
+
+class DefineStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    block_node = @sexp[3][1]
+    block_node[1..-1].each do |node|
+      @children << RatCatcherStore.from_sexp(node)
+      @text= "def #{@sexp[1].to_s}"
+   end
+
   end
 
 end
