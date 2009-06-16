@@ -42,10 +42,6 @@ class RatCatcherStore
     @listeners= []
     @text= ''
     @sexp= new_sexp
-    if new_sexp != nil
-      @type= new_sexp[0]
-      set_text
-    end
   end
 
   public
@@ -61,10 +57,6 @@ class RatCatcherStore
 
   def sexp
       @sexp
-  end
-
-  def set_text
-    @text= ''
   end
 
   def ==(right)
@@ -161,10 +153,10 @@ class DefineStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    block_node = @sexp[3][1]
+    block_node = new_sexp[3][1]
     block_node[1..-1].each do |node|
       @children << RatCatcherStore.from_sexp(node)
-      @text= "def #{@sexp[1].to_s}"
+      @text= "def #{new_sexp[1].to_s}"
    end
 
   end
@@ -204,6 +196,6 @@ class LeftAssignStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    @text= "#{@sexp[1].to_s} = #{@sexp[2][1]}"
+    @text= "#{new_sexp[1].to_s} = #{new_sexp[2][1]}"
   end
 end
