@@ -24,6 +24,8 @@ class RatCatcherStore
       DefineStore.new(new_sexp)
     when :str
       StringStore.new(new_sexp)
+    when :lit
+      LiteralStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -62,9 +64,6 @@ class RatCatcherStore
       
     case @type
       
-    when :lit
-      @text= @sexp[1].inspect
-
     when :yield
       @text= "yield"
 
@@ -183,7 +182,17 @@ class StringStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    @text= @sexp[1].inspect
+    @text= new_sexp[1].inspect
+  end
+
+end
+
+
+class LiteralStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    @text= new_sexp[1].inspect
   end
 
 end
