@@ -1,7 +1,7 @@
 require 'app/rat_catcher_store'
 require 'specs/tree_like_matcher'
 
-describe 'tree for variable assignment' do
+describe 'variable assignment parse tree' do
   before :each do
     @tree= RatCatcherStore.parse 'a_variable = 5'
   end
@@ -15,8 +15,8 @@ describe 'tree for variable assignment' do
   end
 end
 
-describe 'app for variable assignment' do
-  it 'should be possible to rename a_variable' do
+describe 'variable assignment API' do
+  it 'should support renaming a_variable' do
     pending 'until RatCatcherApp is free from GTK'
   end
 end
