@@ -36,25 +36,11 @@ class RatCatcherStore
     @sexp= new_sexp
     if new_sexp != nil
       @type= new_sexp[0]
-      update_children
       set_text
     end
   end
 
   public
-
-  def update_children
-    case @type
-    when :str
-
-    when :lit
-
-    when :lasgn
-
-    when :yield
-
-    end
-  end
 
   def replace_node(path, new_text)
     if path.size == 0
