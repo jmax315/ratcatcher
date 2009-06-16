@@ -20,6 +20,8 @@ class RatCatcherStore
       CallStore.new(new_sexp)
     when :if
       IfStore.new(new_sexp)
+    when :defn
+      DefineStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -34,31 +36,11 @@ class RatCatcherStore
     @sexp= new_sexp
     if new_sexp != nil
       @type= new_sexp[0]
-      update_children
       set_text
     end
   end
 
   public
-
-  def update_children
-    case @type
-    when :str
-
-    when :lit
-
-    when :defn
-      block_node = @sexp[3][1]
-      block_node[1..-1].each do |node|
-        @children << RatCatcherStore.from_sexp(node)
-      end
-
-    when :lasgn
-
-    when :yield
-
-    end
-  end
 
   def replace_node(path, new_text)
     if path.size == 0
@@ -82,9 +64,6 @@ class RatCatcherStore
       
     when :lit
       @text= @sexp[1].inspect
-
-    when :defn
-      @text= "def #{@sexp[1].to_s}"
 
     when :yield
       @text= "yield"
@@ -180,6 +159,21 @@ class IfStore < RatCatcherStore
 
   def sexp
     s(:if, @children[0].sexp, @children[1].sexp, @children[2].sexp)
+  end
+
+end
+
+
+class DefineStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    block_node = @sexp[3][1]
+    block_node[1..-1].each do |node|
+      @children << RatCatcherStore.from_sexp(node)
+      @text= "def #{@sexp[1].to_s}"
+   end
+
   end
 
 end
