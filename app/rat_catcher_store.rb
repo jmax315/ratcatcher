@@ -26,6 +26,8 @@ class RatCatcherStore
       StringStore.new(new_sexp)
     when :lit
       LiteralStore.new(new_sexp)
+    when :yield
+      YieldStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -64,9 +66,6 @@ class RatCatcherStore
       
     case @type
       
-    when :yield
-      @text= "yield"
-
     when :lasgn
       @text= "#{@sexp[1].to_s} = #{@sexp[2][1]}"
     end
@@ -193,6 +192,14 @@ class LiteralStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].inspect
+  end
+end
+
+class YieldStore < RatCatcherStore
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    @text= "yield"
   end
 
 end
