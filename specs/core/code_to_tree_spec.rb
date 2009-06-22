@@ -428,7 +428,7 @@ describe 'method definition with one statement' do
   end
 
   it "has a node" do
-    @tree.text.should == 'def amethod'
+    @tree.text.should == 'amethod'
   end
 
   it "has an sexp" do

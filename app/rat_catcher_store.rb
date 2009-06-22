@@ -155,7 +155,7 @@ class DefineStore < RatCatcherStore
     block_node = new_sexp[3][1]
     block_node[1..-1].each do |node|
       @children << RatCatcherStore.from_sexp(node)
-      @text= "def #{new_sexp[1].to_s}"
+      @text= new_sexp[1].to_s
    end
 
   end
