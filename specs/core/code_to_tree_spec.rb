@@ -418,7 +418,7 @@ describe 'tree for the expression 75? 0: 2' do
 
 end
 
-describe 'method definition with one statement' do
+describe 'method definition with no arguments and one statement' do
   before :each do
     @tree= RatCatcherStore.parse %q{
       def amethod
@@ -431,47 +431,55 @@ describe 'method definition with one statement' do
     @tree.text.should == 'amethod'
   end
 
-  it "has an sexp" do
-    @tree.sexp.should be_a_tree_like(s(:defn, :amethod, :_, :_))
+  it "has two children" do
+    @tree.size.should == 2
   end
 
-  it "has the statement text" do
-    @tree[0].text.should == "5"
-  end
+  it "has a first child which is an empty args node"
 
-  it "has the statement sexp" do
-    @tree[0].sexp.should be_a_tree_like(s(:lit, 5))
-  end
+  it "has a second child which is a body node"
+
+#   it "has an sexp" do
+#     @tree.sexp.should be_a_tree_like(s(:defn, :amethod, :_, :_))
+#   end
+
+#   it "has the statement text" do
+#     @tree[0].text.should == "5"
+#   end
+
+#   it "has the statement sexp" do
+#     @tree[0].sexp.should be_a_tree_like(s(:lit, 5))
+#   end
 
 end
 
-describe 'method definition with two statements' do
-  before :each do
-    @tree= RatCatcherStore.parse %q{
-      def amethod
-        puts "one"
-        p "two"
-      end
-    }
-  end
+# describe 'method definition with two statements' do
+#   before :each do
+#     @tree= RatCatcherStore.parse %q{
+#       def amethod
+#         puts "one"
+#         p "two"
+#       end
+#     }
+#   end
 
-  it "has first statement of puts" do
-    @tree[0].text.should == "puts"
-  end
+#   it "has first statement of puts" do
+#     @tree[0].text.should == "puts"
+#   end
 
-  it 'has second statement of p' do
-    @tree[1].text.should == "p"
-  end
+#   it 'has second statement of p' do
+#     @tree[1].text.should == "p"
+#   end
 
-  it "has first statement sexp" do
-    @tree[0].sexp.should be_a_tree_like(s(:call, nil, :puts, :_))
-  end
+#   it "has first statement sexp" do
+#     @tree[0].sexp.should be_a_tree_like(s(:call, nil, :puts, :_))
+#   end
 
-  it "has second statement sexp" do
-    @tree[1].sexp.should be_a_tree_like(s(:call, nil, :p, :_))
-  end
+#   it "has second statement sexp" do
+#     @tree[1].sexp.should be_a_tree_like(s(:call, nil, :p, :_))
+#   end
 
-end
+# end
 
 describe 'method definition with arguments' do
   before :each do
@@ -486,23 +494,87 @@ describe 'method definition with arguments' do
     @tree.sexp.should be_a_tree_like(
       s(:defn, :amethod, s(:args, :a, :b, :'*c', :'&d'), :_))
   end
-
 end
 
-describe 'yield statement' do
+
+describe "the result of parsing an empty method argument list" do
   before :each do
-    @tree= RatCatcherStore.parse %q{yield}
+    @tree= RatCatcherStore.from_sexp(s(:args))
   end
 
-  it "makes a sexp" do
-    @tree.sexp.should be_a_tree_like(s(:yield))
+  it "should have no children" do
+    @tree.size.should == 0
+  end
+
+  it "should have an empty argument names list" do
+    @tree.argument_names.should have(0).arguments
   end
 end
 
-describe 'to_s method' do
+
+describe "the result of parsing a one-argument method argument list" do
+  before :each do
+    @tree= RatCatcherStore.from_sexp(s(:args, :arg_1))
+  end
+    
+  it "should have one child" do
+    @tree.argument_names.should have(1).argument
+  end
+
+  it "should have :arg_1 as the first argument" do
+    @tree.argument_names[0].should == :arg_1
+  end
+end
+
+
+describe "the result of parsing a two-argument method argument list" do
+  before :each do
+    @tree= RatCatcherStore.from_sexp(s(:args, :arg_1, :arg_2))
+  end
+    
+  it "should have two children" do
+    @tree.argument_names.should have(2).argument
+  end
+
+  it "should have :arg_1 as the first argument" do
+    @tree.argument_names[0].should == :arg_1
+  end
+
+  it "should have :arg_2 as the second argument" do
+    @tree.argument_names[1].should == :arg_2
+  end
+end
+
+
+describe "the result of parsing a splat method argument list" do
+  it ""
+end
+
+
+describe "the result of parsing a hash method argument list" do
+  it ""
+end
+
+describe "the result of parsing a method argument list that has default values" do
+  it ""
+end
+
+
+describe "to_s method" do
   it "should return same text it parsed" do
     @tree= RatCatcherStore.parse %q{yield}
     s = @tree.to_s
     s == 'yield'
+  end
+end
+                                     
+                                     
+describe "the yield statement" do
+  before :each do
+    @tree= RatCatcherStore.parse %q{yield}
+  end
+                             
+  it "makes a sexp" do
+    @tree.sexp.should be_a_tree_like(s(:yield))
   end
 end

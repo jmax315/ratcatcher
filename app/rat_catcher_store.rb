@@ -30,6 +30,8 @@ class RatCatcherStore
       YieldStore.new(new_sexp)
     when :lasgn
       LeftAssignStore.new(new_sexp)
+    when :args
+      ArgListStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -66,6 +68,9 @@ class RatCatcherStore
     Ruby2Ruby.new.process(@sexp)
   end
 
+  def size
+    @children.size
+  end
 
   def [](index)
     @children[index]
@@ -152,12 +157,9 @@ class DefineStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    block_node = new_sexp[3][1]
-    block_node[1..-1].each do |node|
-      @children << RatCatcherStore.from_sexp(node)
-      @text= new_sexp[1].to_s
-   end
-
+    @text= new_sexp[1].to_s
+    @children << RatCatcherStore.from_sexp(new_sexp[2])
+    @children << RatCatcherStore.from_sexp(new_sexp[3])
   end
 
 end
@@ -196,5 +198,15 @@ class LeftAssignStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @text= "#{new_sexp[1].to_s} = #{new_sexp[2][1]}"
+  end
+end
+
+
+class ArgListStore < RatCatcherStore
+  attr_accessor :argument_names
+
+  def initialize(new_sexp)
+    super(new_sexp)
+    @argument_names= new_sexp[1..-1]
   end
 end
