@@ -435,7 +435,9 @@ describe 'method definition with no arguments and one statement' do
     @tree.size.should == 2
   end
 
-  it "has a first child which is an empty args node"
+  it "has a first child which is an empty args node" do
+    @tree[0].argument_names.should have(0).arguments
+  end
 
   it "has a second child which is a body node"
 
@@ -484,15 +486,13 @@ end
 describe 'method definition with arguments' do
   before :each do
     @tree= RatCatcherStore.parse %q{
-      def amethod(a, b, *c, &d)
-        77
+      def amethod(a, b)
       end
     }
   end
 
-  it "has an sexp" do
-    @tree.sexp.should be_a_tree_like(
-      s(:defn, :amethod, s(:args, :a, :b, :'*c', :'&d'), :_))
+  it "has a first child which is an args node with the right two arguments" do
+    @tree[0].argument_names.should == [:a, :b]
   end
 end
 
@@ -532,8 +532,8 @@ describe "the result of parsing a two-argument method argument list" do
     @tree= RatCatcherStore.from_sexp(s(:args, :arg_1, :arg_2))
   end
     
-  it "should have two children" do
-    @tree.argument_names.should have(2).argument
+  it "should have two arguments" do
+    @tree.argument_names.should have(2).arguments
   end
 
   it "should have :arg_1 as the first argument" do
@@ -546,14 +546,35 @@ describe "the result of parsing a two-argument method argument list" do
 end
 
 
-describe "the result of parsing a splat method argument list" do
-  it ""
+describe "the result of parsing a splat method argument" do
+  before :each do
+    @tree= RatCatcherStore.from_sexp(s(:args, :"*splat_arg"))
+  end
+  
+  it "should have one argument" do
+    @tree.argument_names.should have(1).argument
+  end
+
+  it "should have :'*splat_arg' for the first argument" do
+    @tree.argument_names[0].should == :"*splat_arg"
+  end
 end
 
 
-describe "the result of parsing a hash method argument list" do
-  it ""
+describe "the result of parsing a block method argument" do
+  before :each do
+    @tree= RatCatcherStore.from_sexp(s(:args, :"&block_arg"))
+  end
+  
+  it "should have one argument" do
+    @tree.argument_names.should have(1).argument
+  end
+
+  it "should have :'&block_arg' for the first argument" do
+    @tree.argument_names[0].should == :"&block_arg"
+  end
 end
+
 
 describe "the result of parsing a method argument list that has default values" do
   it ""

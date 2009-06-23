@@ -158,8 +158,8 @@ class DefineStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].to_s
-    @children << RatCatcherStore.from_sexp(new_sexp[2])
-    @children << RatCatcherStore.from_sexp(new_sexp[3])
+    @children= [RatCatcherStore.from_sexp(new_sexp[2]), nil]
+#    @children << RatCatcherStore.from_sexp(new_sexp[3])
   end
 
 end
@@ -207,6 +207,6 @@ class ArgListStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    @argument_names= new_sexp[1..-1]
+    @argument_names= new_sexp[1..-1].to_a
   end
 end
