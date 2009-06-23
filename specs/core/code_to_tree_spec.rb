@@ -439,7 +439,11 @@ describe 'method definition with no arguments and one statement' do
     @tree[0].argument_names.should have(0).arguments
   end
 
-  it "has a second child which is a body node"
+  it "has a second child with one child" do
+    @tree[1].size.should == 1
+  end
+
+  it "has a second child which actually contains the right code"
 
 #   it "has an sexp" do
 #     @tree.sexp.should be_a_tree_like(s(:defn, :amethod, :_, :_))

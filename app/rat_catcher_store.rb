@@ -32,6 +32,8 @@ class RatCatcherStore
       LeftAssignStore.new(new_sexp)
     when :args
       ArgListStore.new(new_sexp)
+    when :scope
+      BlockStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -158,8 +160,8 @@ class DefineStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].to_s
-    @children= [RatCatcherStore.from_sexp(new_sexp[2]), nil]
-#    @children << RatCatcherStore.from_sexp(new_sexp[3])
+    @children= [RatCatcherStore.from_sexp(new_sexp[2]),
+                RatCatcherStore.from_sexp(new_sexp[3])]
   end
 
 end
@@ -208,5 +210,13 @@ class ArgListStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @argument_names= new_sexp[1..-1].to_a
+  end
+end
+
+
+class BlockStore < RatCatcherStore
+  def initialize(new_sexp)
+    super(new_sexp)
+    @children= [:junk]
   end
 end
