@@ -30,10 +30,14 @@ class RatCatcherStore
       YieldStore.new(new_sexp)
     when :lasgn
       LeftAssignStore.new(new_sexp)
+    when :masgn
+      MultipleAssignStore.new(new_sexp)     
     when :args
       ArgListStore.new(new_sexp)
     when :scope
       BlockStore.new(new_sexp)
+    when :array
+      ArrayStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -82,6 +86,10 @@ class RatCatcherStore
     path.inject(self) do |value, index|
       value= value[index]
     end
+  end
+  
+  def to_ruby
+    @text
   end
 
 end
@@ -156,24 +164,19 @@ end
 
 
 class DefineStore < RatCatcherStore
-
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].to_s
     @children= [RatCatcherStore.from_sexp(new_sexp[2]),
                 RatCatcherStore.from_sexp(new_sexp[3])]
   end
-
 end
 
-
 class StringStore < RatCatcherStore
-
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].inspect
   end
-
 end
 
 
@@ -203,20 +206,44 @@ class LeftAssignStore < RatCatcherStore
   end
 end
 
+class MultipleAssignStore < RatCatcherStore
+  def initialize(new_sexp)
+    super(new_sexp)
+    vars = new_sexp[1][1..-1].map {|v| v[1].to_s}.join(',')
+    # TODO: Refactor this method...
+    
+    # Create children here....
+    
+    # Use them to create the @text value...
+    if new_sexp[2][0] == :to_ary
+      vals = new_sexp[2][1][1..-1].map {|v| v[1].to_s}.join(',')      
+      @text= "#{vars} = [#{vals}]"
+    else
+      vals = new_sexp[2][1..-1].map {|v| v[1].to_s}.join(',')
+      @text= "#{vars} = #{vals}"
+    end
+  end
+end
 
 class ArgListStore < RatCatcherStore
   attr_accessor :argument_names
-
   def initialize(new_sexp)
     super(new_sexp)
     @argument_names= new_sexp[1..-1].to_a
   end
 end
 
-
 class BlockStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @children= [:junk]
+  end
+end
+
+class ArrayStore < RatCatcherStore
+  def initialize(new_sexp)
+    super(new_sexp)
+    vars = new_sexp[1..-1].map {|v| v[1].to_s}.join(',')
+    @text = "[#{vars}]"
   end
 end
