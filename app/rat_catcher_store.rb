@@ -38,6 +38,8 @@ class RatCatcherStore
       BlockStore.new(new_sexp)
     when :array
       ArrayStore.new(new_sexp)
+    when :block
+      BlockStore.new(new_sexp)
     else
       RatCatcherStore.new(new_sexp)
     end
@@ -49,6 +51,10 @@ class RatCatcherStore
     @children= []
     @text= ''
     @sexp= new_sexp
+  end
+
+  def sexplist_from_children
+    @children[0..-1].map {|child| child.sexp}
   end
 
   public
@@ -139,7 +145,7 @@ class CallStore < RatCatcherStore
         :call,
         @children[0].sexp,
         text.to_sym,
-        s(:arglist, *@children[1..-1].map {|child| child.sexp} )
+	s(:arglist, *sexplist_from_children[1..-1] )
        )
     end
   end
@@ -169,6 +175,10 @@ class DefineStore < RatCatcherStore
     @text= new_sexp[1].to_s
     @children= [RatCatcherStore.from_sexp(new_sexp[2]),
                 RatCatcherStore.from_sexp(new_sexp[3])]
+  end
+
+  def init_block
+    @children[0].init_block
   end
 end
 
@@ -226,9 +236,15 @@ class MultipleAssignStore < RatCatcherStore
 end
 
 class ArgListStore < RatCatcherStore
-  attr_accessor :argument_names
+  attr_accessor :argument_names, :init_block
+
   def initialize(new_sexp)
     super(new_sexp)
+    @init_block= nil
+    if (!new_sexp[-1].is_a?(Symbol)) then
+      @init_block= RatCatcherStore.from_sexp(new_sexp[-1])
+      new_sexp= new_sexp[0..-2]
+    end
     @argument_names= new_sexp[1..-1].to_a
   end
 end
@@ -236,7 +252,13 @@ end
 class BlockStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
-    @children= [:junk]
+    @children= new_sexp[1..-1].map do |node|
+      RatCatcherStore.from_sexp(node)
+    end
+  end
+
+  def sexp
+    s(:block, *sexplist_from_children )
   end
 end
 
