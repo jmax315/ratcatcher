@@ -59,7 +59,7 @@ describe 'tree for the string literal "ferd"' do
    end
 
   it "should have one node containing 'ferd' as display text" do
-    @tree.text.should == '"ferd"'
+    @tree.text.should == 'ferd'
   end
 
   it "should have one node containing s(:str, 'ferd') as its sexp" do
