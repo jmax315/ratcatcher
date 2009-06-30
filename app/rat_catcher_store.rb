@@ -173,6 +173,8 @@ class DefineStore < RatCatcherStore
   def init_block
     @children[0].init_block
   end
+
+  #TODO sexp
 end
 
 
@@ -180,9 +182,12 @@ class StringStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    @text= new_sexp[1].inspect
+    @text= new_sexp[1]
   end
 
+  def sexp
+    s(:str, @text)
+  end
 end
 
 
@@ -192,6 +197,8 @@ class LiteralStore < RatCatcherStore
     super(new_sexp)
     @text= new_sexp[1].inspect
   end
+
+  #TODO sexp
 end
 
 class YieldStore < RatCatcherStore
@@ -201,6 +208,7 @@ class YieldStore < RatCatcherStore
     @text= "yield"
   end
 
+  #TODO sexp
 end
 
 
@@ -210,6 +218,8 @@ class LeftAssignStore < RatCatcherStore
     super(new_sexp)
     @text= "#{new_sexp[1].to_s} = #{new_sexp[2][1]}"
   end
+
+  #TODO sexp
 end
 
 
@@ -225,6 +235,8 @@ class ArgListStore < RatCatcherStore
     end
     @argument_names= new_sexp[1..-1].to_a
   end
+
+  #TODO sexp
 end
 
 
