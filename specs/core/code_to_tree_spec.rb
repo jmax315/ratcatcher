@@ -581,7 +581,18 @@ end
 
 
 describe "the result of parsing a method argument list that has default values" do
-  it ""
+  before :each do
+    @tree= RatCatcherStore.parse %q{
+      def amethod(a_parm=3)
+      end
+    }
+  end
+
+  it "should have an init block" do
+    @tree.init_block.sexp.should be_a_tree_like(
+      s(:block, s(:lasgn, :a_parm, s(:lit, 3)))
+    )
+  end
 end
 
 
