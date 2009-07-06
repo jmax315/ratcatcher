@@ -40,8 +40,10 @@ class RatCatcherStore
       ArrayStore.new(new_sexp)
     when :block
       BlockStore.new(new_sexp)
+    when :nil
+      NilStore.new
     else
-      RatCatcherStore.new(new_sexp)
+      raise "RatCatcherStore#from sexp: unknown sort of sexp: #{new_sexp}"
     end
   end
 
