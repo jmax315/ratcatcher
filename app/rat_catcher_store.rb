@@ -78,7 +78,7 @@ class RatCatcherStore
     sexp == right.sexp
   end
 
-  def to_s
+  def to_ruby
     Ruby2Ruby.new.process(@sexp)
   end
 
@@ -95,11 +95,6 @@ class RatCatcherStore
       value= value[index]
     end
   end
-  
-  def to_ruby
-    @text
-  end
-
 end
 
 
@@ -132,24 +127,20 @@ class CallStore < RatCatcherStore
   end
 
 
+  def method_selector
+    (@children.size == 1  &&  text == '-') ? :-@ :  text.to_sym
+  end
+
+  def arguments
+    s(:arglist, *sexplist_from_children[1..-1] )
+  end
+
+  def receiver
+    @children[0].sexp
+  end
+
   def sexp
-    case @children.size
-    when 0
-      s(:call, nil, text.to_sym, s(:arglist))
-    when 1
-      if text == "-"
-        s(:call, @children[0].sexp, :-@, s(:arglist))
-      else
-        s(:call, @children[0].sexp, text.to_sym, s(:arglist))
-      end
-    else
-      s(
-        :call,
-        @children[0].sexp,
-        text.to_sym,
-	s(:arglist, *sexplist_from_children[1..-1] )
-       )
-    end
+    s(:call, receiver, method_selector, arguments)
   end
 end
   
@@ -280,6 +271,7 @@ end
 class ArrayStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
+    @children= new_sexp[1..-1].map { | child | RatCatcherStore.from_sexp(child) }
     vars = new_sexp[1..-1].map {|v| v[1].to_s}.join(',')
     @text = "[#{vars}]"
   end

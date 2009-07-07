@@ -25,7 +25,7 @@ describe 'simple multiple variable assignment parse tree' do
   end  
   
   it 'should regenerate the source code' do
-    @tree.to_ruby.should == 'a_var,b_var = 1,2'
+    @tree.to_ruby.should == 'a_var, b_var = 1, 2'
   end
 end
 
@@ -39,7 +39,7 @@ describe 'multiple variable assignment parse tree' do
   end  
   
   it 'should regenerate the source code' do
-    @tree.to_ruby.should == 'a_var,b_var = [1,2]'
+    @tree.to_ruby.should == 'a_var, b_var = [1, 2]'
   end
 end
 

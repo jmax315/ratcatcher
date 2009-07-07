@@ -68,6 +68,21 @@ describe 'tree for the string literal "ferd"' do
 end
 
 
+describe 'tree for the symbol literal :foo' do
+   before :each do
+     @tree= RatCatcherStore.parse ':foo'
+   end
+
+  it "should have one node containing ':foo' as display text" do
+    @tree.text.should == ':foo'
+  end
+
+  it "should have one node containing s(:lit, :foo) as its sexp" do
+    @tree.sexp.should be_a_tree_like(s(:lit, :foo))
+  end
+end
+
+
 describe 'tree for the expression 1+2' do
   before :each do
     @tree= RatCatcherStore.parse '1+2'
@@ -417,6 +432,30 @@ describe 'tree for the expression 75? 0: 2' do
   end
 
 end
+
+
+describe "a literal array" do
+  before(:each) do
+    @the_array= RatCatcherStore.parse('[:one, :two, :three]')
+  end
+
+  it "should have three children" do
+    @the_array.size.should == 3
+  end
+
+  it "should have :one for the first child" do
+    @the_array[0].text.should == ":one"
+  end
+
+  it "should have :two for the second child" do
+    @the_array[1].text.should == ":two"
+  end
+
+  it "should have :three for the third child" do
+    @the_array[2].text.should == ":three"
+  end
+end
+
 
 describe 'method definition with no arguments and one statement' do
   before :each do
