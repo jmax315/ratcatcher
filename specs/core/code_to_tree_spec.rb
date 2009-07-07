@@ -653,3 +653,10 @@ describe "the yield statement" do
     @tree.sexp.should be_a_tree_like(s(:yield))
   end
 end
+
+
+describe "failing on bogus sexps" do
+  it "should fail" do
+    lambda {RatCatcherStore.from_sexp(s(:totally_bogus))}.should raise_error
+  end
+end
