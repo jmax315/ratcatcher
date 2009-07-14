@@ -174,7 +174,9 @@ class DefineStore < RatCatcherStore
     @children[0].init_block
   end
 
-  #TODO sexp
+  def sexp
+    s(:defn, @text.to_sym, s(:args), @children[1].sexp)
+  end
 end
 
 class StringStore < RatCatcherStore
