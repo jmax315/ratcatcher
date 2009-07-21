@@ -1,6 +1,6 @@
 require 'ruby_parser'
 require 'ruby2ruby'
-require 'app/define_store.rb'
+
 
 
 class RatCatcherStore
@@ -11,18 +11,50 @@ class RatCatcherStore
     RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
   end
 
+  def self.camel_case(s)
+    s.split(/_/).map {|component| component.capitalize}.join('')
+  end
+
+  def self.un_camel_case(s)
+    rv= s.gsub(/[A-Z]/, '_\0')
+    rv= rv.gsub(/^_/, '')
+    rv.downcase
+  end
+
+  def self.const_missing(name)
+    app_directory= File.dirname(__FILE__)
+    file_name= "#{app_directory}/#{un_camel_case(name.to_s)}.rb"
+    
+    if !File.exists?(file_name)
+      raise NameError, "Can't find file to load for: #{name}"
+    end
+    
+    load(file_name)
+    const_get(name)
+  end
+
+  def self.class_for_sexp_type(sexp_type)
+    const_get("#{camel_case(sexp_type.to_s)}Store")
+  end
+
   def self.from_sexp new_sexp
     if new_sexp == nil
       return NilStore.new
     end
     
+    # ToDo: get rid of the begin/rescue as soon as everything's moved
+    # out to seperate files.
+    begin
+      subclass= class_for_sexp_type(new_sexp[0])
+      return subclass.new(new_sexp)
+    rescue
+    end
+
     case new_sexp[0]
     when :call
       CallStore.new(new_sexp)
     when :if
       IfStore.new(new_sexp)
-    when :defn
-      DefineStore.new(new_sexp)
     when :str
       StringStore.new(new_sexp)
     when :lit
