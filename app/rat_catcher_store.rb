@@ -23,7 +23,8 @@ class RatCatcherStore
 
   def self.const_missing(name)
     app_directory= File.dirname(__FILE__)
-    file_name= "#{app_directory}/#{un_camel_case(name.to_s)}.rb"
+    subclass_subdir= "store_nodes"
+    file_name= "#{app_directory}/#{subclass_subdir}/#{un_camel_case(name.to_s)}.rb"
     
     if !File.exists?(file_name)
       raise NameError, "Can't find file to load for: #{name}"
