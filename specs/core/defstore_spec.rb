@@ -7,7 +7,7 @@ describe 'method definition with no arguments and one statement' do
     }
   end
 
-  it "has a node" do
+  it "has a node with text 'amethod'" do
     @tree.text.should == 'amethod'
   end
 
@@ -23,20 +23,18 @@ describe 'method definition with no arguments and one statement' do
     @tree[1].size.should == 1
   end
 
-  it "has a second child which actually contains the right code"
-
   it "has an sexp" do
     @tree.sexp.should be_a_tree_like(s(:defn, :amethod, :_, :_))
   end
 
-  it "has the statement text from the block body" 
-#    p @tree.children
-#    @tree.children[1].text.should == "5"
-#  end
+  it "has a second child which actually contains the right code" do
+    @tree.children[1].sexp.should be_a_tree_like(s(:scope, s(:block, s(:lit, 5))))
+  end
 
-#   it "has the statement sexp" do
-#     @tree[0].sexp.should be_a_tree_like(s(:lit, 5))
-#   end
+  it "has the statement text from the block body" do
+    # TODO This is an ugly way to access the method contents
+    @tree.children[1].children[0].children[0].text.should == "5"
+  end
 
 end
 
@@ -50,21 +48,13 @@ end
      }
    end
 
-   it "has first statement of puts"
-#     @tree[0].text.should == "puts"
-#   end
+   it "has first statement of puts" do
+     @tree.children[1].children[0].children[0].text.should == "puts"
+   end
 
-   it 'has second statement of p'
-#     @tree[1].text.should == "p"
-#   end
-
-  it "has first statement sexp"
-#    @tree[0].sexp.should be_a_tree_like(s(:call, nil, :puts, :_))
-#  end
-
-   it "has second statement sexp"
-#     @tree[1].sexp.should be_a_tree_like(s(:call, nil, :p, :_))
-#   end
+   it 'has second statement of p' do
+     @tree.children[1].children[0].children[1].text.should == "p"
+   end
 
 end
 
