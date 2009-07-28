@@ -1,9 +1,3 @@
-require 'app/rat_catcher_store'
-
-class RatCatcherStore
-end
-
-
 class DefnStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)

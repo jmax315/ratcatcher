@@ -1,10 +1,4 @@
-
-#TODO Remove this hack
-class RatCatcherStore
-end
-
-
-class LiteralStore < RatCatcherStore
+class LitStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
