@@ -5,4 +5,6 @@ class ArrayStore < RatCatcherStore
     vars = new_sexp[1..-1].map {|v| v[1].to_s}.join(',')
     @text = "[#{vars}]"
   end
+
+  #TODO sexp
 end
