@@ -79,7 +79,7 @@ class RatCatcherStore
   end
 
   def to_ruby
-    Ruby2Ruby.new.process(@sexp)
+    Ruby2Ruby.new.process(sexp)
   end
 
   def size
@@ -94,5 +94,9 @@ class RatCatcherStore
     path.inject(self) do |value, index|
       value= value[index]
     end
+  end
+
+  def apply(refactoring)
+    refactoring.apply(self)
   end
 end

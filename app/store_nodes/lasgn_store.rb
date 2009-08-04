@@ -9,4 +9,12 @@ class LasgnStore < RatCatcherStore
   def sexp
     s(:lasgn, @text.to_sym, *sexplist_from_children )
   end
+
+  def name
+    @text
+  end
+
+  def rename(new_name)
+    @text= new_name
+  end
 end
