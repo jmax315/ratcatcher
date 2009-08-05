@@ -5,9 +5,7 @@ class VariableRename
   end
 
   def apply(tree_store)
-    if tree_store.name==@old_name
-      tree_store.rename(@new_name)
-    end
+    tree_store.rename_variable(@old_name, @new_name)
     tree_store.children.each { |child| apply(child) }
   end
 end

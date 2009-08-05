@@ -100,10 +100,6 @@ class RatCatcherStore
     refactoring.apply(self)
   end
 
-  def name
-    ''
-  end
-
-  def rename(new_name)
+  def rename_variable(old_name, new_name)
   end
 end

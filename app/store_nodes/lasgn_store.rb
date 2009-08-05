@@ -10,11 +10,9 @@ class LasgnStore < RatCatcherStore
     s(:lasgn, @text.to_sym, *sexplist_from_children )
   end
 
-  def name
-    @text
-  end
-
-  def rename(new_name)
-    @text= new_name
+  def rename_variable(old_name, new_name)
+    if @text == old_name
+      @text= new_name
+    end
   end
 end

@@ -9,11 +9,9 @@ class LvarStore < RatCatcherStore
     s(:lvar, @text.to_sym )
   end
 
-  def name
-    @text
-  end
-
-  def rename(new_name)
-    @text= new_name
+  def rename_variable(old_name, new_name)
+    if @text == old_name
+      @text= new_name
+    end
   end
 end
