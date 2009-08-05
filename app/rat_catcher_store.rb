@@ -99,4 +99,11 @@ class RatCatcherStore
   def apply(refactoring)
     refactoring.apply(self)
   end
+
+  def name
+    ''
+  end
+
+  def rename(new_name)
+  end
 end

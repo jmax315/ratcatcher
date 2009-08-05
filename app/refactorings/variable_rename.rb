@@ -8,5 +8,6 @@ class VariableRename
     if tree_store.name==@old_name
       tree_store.rename(@new_name)
     end
+    tree_store.children.each { |child| apply(child) }
   end
 end

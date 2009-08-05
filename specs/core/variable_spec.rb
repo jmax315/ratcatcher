@@ -46,7 +46,7 @@ describe 'variable assignment using variable reference' do
   end
 
   it 'should generate Ruby code with the new variable name' do
-    @tree.to_ruby.should == "new_name = new_name + 5"
+    @tree.to_ruby.should == "new_name = (new_name + 5)"
   end
 end
 
