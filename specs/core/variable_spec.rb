@@ -2,7 +2,7 @@ require 'app/rat_catcher_store'
 require 'app/refactorings/variable_rename'
 require 'specs/tree_like_matcher'
 
-describe 'variable assignment parse tree' do
+describe 'variable assignment' do
   def variable_should_be(name)
     @tree.sexp.should be_a_tree_like(s(:lasgn, name.to_sym, :_))
     @tree.to_ruby.should == "#{name} = 5"
@@ -28,6 +28,25 @@ describe 'variable assignment parse tree' do
   it 'should not rename the_wrong_variable' do
     @tree.apply(VariableRename.new('the_wrong_variable', 'new_name'))
     variable_should_be('a_variable')
+  end
+end
+
+describe 'variable assignment using variable reference' do
+  before :each do
+    @tree= RatCatcherStore.parse 'a_variable = a_variable + 5'
+    @tree.apply(VariableRename.new('a_variable', 'new_name'))
+  end
+
+  it 'should rename a_variable in the tree on the left of the =' do
+    @tree.sexp.should be_a_tree_like(s(:lasgn, :new_name, :_))
+  end
+
+  it 'should rename a_variable in the tree on the right side of the =' do
+    @tree.sexp.should be_a_tree_like(s(:_, :_, s(:_, s(:lvar, :new_name), :+, :_)))
+  end
+
+  it 'should generate Ruby code with the new variable name' do
+    @tree.to_ruby.should == "new_name = new_name + 5"
   end
 end
 
