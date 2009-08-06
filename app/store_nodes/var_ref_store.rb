@@ -9,4 +9,9 @@ class VarRefStore < RatCatcherStore
       @text= new_name
     end
   end
+
+  def sexp
+    s(:lasgn, @text.to_sym, *sexplist_from_children )
+  end
+
 end

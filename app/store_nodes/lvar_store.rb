@@ -7,6 +7,6 @@ class LvarStore < VarRefStore
   end
 
   def sexp
-    s(:lvar, @text.to_sym )
+    s(:lvar, @text.to_sym)
   end
 end
