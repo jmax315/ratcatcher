@@ -1,5 +1,6 @@
-require 'app/rat_catcher_store'
-require 'specs/tree_like_matcher'
+current_dir= File.expand_path(File.dirname(__FILE__))
+require current_dir + '/../../app/rat_catcher_store'
+require current_dir + '/../../specs/tree_like_matcher'
 
 
 describe 'tree for no input' do

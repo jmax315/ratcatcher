@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'app/rat_catcher_app'
+require File.expand_path(File.dirname(__FILE__)) + '/app/rat_catcher_app'
 
 the_app= RatCatcherApp.new
 the_app.args(ARGV)

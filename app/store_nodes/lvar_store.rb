@@ -1,4 +1,4 @@
-require 'app/store_nodes/var_ref_store'
+require File.expand_path(File.dirname(__FILE__)) + '/var_ref_store'
 
 class LvarStore < VarRefStore
 

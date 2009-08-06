@@ -1,6 +1,8 @@
-require 'app/rat_catcher_store'
-require 'app/refactorings/variable_rename'
-require 'specs/tree_like_matcher'
+cur_dir= File.expand_path(File.dirname(__FILE__))
+require cur_dir + '/../../app/rat_catcher_store'
+require cur_dir + '/../../app/refactorings/variable_rename'
+require cur_dir + '/../tree_like_matcher'
+
 
 describe 'variable assignment' do
   def variable_should_be(name)

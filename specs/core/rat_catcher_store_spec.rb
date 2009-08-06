@@ -1,4 +1,4 @@
-require 'app/rat_catcher_store'
+require File.expand_path(File.dirname(__FILE__)) + '/../../app/rat_catcher_store'
 
 
 describe "RatCatcherStore comparing" do

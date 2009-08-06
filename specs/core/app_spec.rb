@@ -1,4 +1,4 @@
-require 'app/rat_catcher_app'
+require File.expand_path(File.dirname(__FILE__)) + '/../../app/rat_catcher_app'
 
 describe "calling the replace_node method" do
   before :each do

@@ -1,4 +1,4 @@
-require 'app/rat_catcher_store.rb'
+require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store.rb'
 
 
 class RatCatcherApp
