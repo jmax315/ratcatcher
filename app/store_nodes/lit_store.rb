@@ -2,8 +2,11 @@ class LitStore < RatCatcherStore
 
   def initialize(new_sexp)
     super(new_sexp)
-    @text= new_sexp[1].inspect
+    @value= new_sexp[1]
+    @text= @value.inspect
   end
 
-  #TODO sexp
+  def sexp
+    s(:lit, @value)
+  end
 end

@@ -52,7 +52,6 @@ class RatCatcherStore
   def initialize new_sexp
     @children= []
     @text= ''
-    @sexp= new_sexp
   end
 
   def sexplist_from_children
@@ -68,10 +67,6 @@ class RatCatcherStore
       @children[path[0]]= @children[path[0]].replace_node(path[1..-1], new_text)
       self
     end
-  end
-
-  def sexp
-      @sexp
   end
 
   def ==(right)
