@@ -6,5 +6,7 @@ class ArrayStore < RatCatcherStore
     @text = "[#{vars}]"
   end
 
-  #TODO sexp
+  def sexp
+    s(:array, *sexplist_from_children)
+  end
 end
