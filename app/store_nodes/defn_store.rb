@@ -3,8 +3,7 @@ class DefnStore < RatCatcherStore
     super(new_sexp)
 
     @text= new_sexp[1].to_s
-    @children= [RatCatcherStore.from_sexp(new_sexp[2]),
-                RatCatcherStore.from_sexp(new_sexp[3])]
+    children_from_subexpressions(new_sexp[2..3])
   end
 
   def init_block

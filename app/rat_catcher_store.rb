@@ -58,6 +58,10 @@ class RatCatcherStore
     @children[0..-1].map {|child| child.sexp}
   end
 
+  def children_from_subexpressions(subexpressions)
+    @children= subexpressions.map { | child | RatCatcherStore.from_sexp(child) }
+  end
+
   public
 
   def replace_node(path, new_text)
