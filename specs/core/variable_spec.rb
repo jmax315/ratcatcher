@@ -68,7 +68,6 @@ end
 
 describe 'multiple variable assignment parse tree' do
   before :each do
-    pending("multiple assignment w/ array")
     @tree= RatCatcherStore.parse 'a_var,b_var = [1,2]'
   end
   
