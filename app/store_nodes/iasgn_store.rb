@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__)) + '/var_ref_store'
 
-class LasgnStore < VarRefStore
+class IasgnStore < VarRefStore
   def store_type
-    :lasgn
+    :iasgn
   end
 end

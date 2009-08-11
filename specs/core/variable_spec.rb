@@ -42,10 +42,18 @@ describe 'variable passed to a method' do
   it 'variable should change' do
     @tree.to_ruby.should == "the_go = 11\nthing.go_method(the_go)\n"
   end
-  
 end
 
-
+describe 'instance variable' do
+  before :each do
+    @tree = RatCatcherStore.parse('@the_stop = 1')
+    @tree.apply(VariableRename.new('@the_stop','@the_go'))
+  end
+  
+  it 'variable should change' do
+    @tree.to_ruby.should == "@the_go = 1"
+  end
+end
 
 describe 'variable assignment using variable reference' do
   before :each do
