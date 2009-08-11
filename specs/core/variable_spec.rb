@@ -33,6 +33,20 @@ describe 'variable assignment' do
   end
 end
 
+describe 'variable passed to a method' do
+  before :each do
+    @tree = RatCatcherStore.parse('the_stop=11; thing.go_method(the_stop)')
+    @tree.apply(VariableRename.new('the_stop','the_go'))
+  end
+  
+  it 'variable should change' do
+    @tree.to_ruby.should == "the_go = 11\nthing.go_method(the_go)\n"
+  end
+  
+end
+
+
+
 describe 'variable assignment using variable reference' do
   before :each do
     @tree= RatCatcherStore.parse 'a_variable = a_variable + 5'
