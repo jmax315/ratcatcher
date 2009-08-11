@@ -2,7 +2,9 @@ class VarRefStore < RatCatcherStore
   def initialize(new_sexp)
     super(new_sexp)
     @text= new_sexp[1].to_s
-    @children << RatCatcherStore.from_sexp(new_sexp[2])
+    if new_sexp[2]
+      @children << RatCatcherStore.from_sexp(new_sexp[2])
+    end
   end
 
   def rename_variable(old_name, new_name)
