@@ -1,6 +1,7 @@
-class ToAryStore < ArrayStore
+class ToAryStore < RatCatcherStore 
   def initialize(new_sexp)
     super(new_sexp)
+    @children= new_sexp[1..-1].map { | child | RatCatcherStore.from_sexp(child) }
   end
 
   def sexp
