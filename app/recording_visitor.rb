@@ -1,7 +1,7 @@
 
 class RecordingVisitor < Hash
-  def apply(key, value)
-    self[key]= value
+  def apply(item)
+    self[item.name]= item.code
   end
 end
 

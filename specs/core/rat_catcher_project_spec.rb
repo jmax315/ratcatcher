@@ -28,5 +28,19 @@ describe 'loading one code chunk' do
     @output_visitor['first chunk'].should == 'contents'
   end
 
-  it 'should allow application of a refactoring'
 end
+
+
+describe 'applying a rename-variable refactoring' do
+  it "should rename the variable" do
+    pending "pick up work here"
+    project= RatCatcherProject.new
+    project["first chunk"]= "old_name"
+    project.apply(VariableRename.new("old_name", "new_name"))
+
+    project["first_chunk"].should == "new_name"
+  end
+
+  it "should rename a variable across two items"
+end
+

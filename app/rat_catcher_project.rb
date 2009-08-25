@@ -1,13 +1,16 @@
+base_directory= File.expand_path(File.dirname(__FILE__))
+require base_directory + '/rat_catcher_project_item'
+
 class RatCatcherProject
   def initialize
-    @chunks= {}
+    @items= []
   end
 
   def apply(visitor)
-    @chunks.each {|key, value| visitor.apply(key, value)}
+    @items.each {|i| visitor.apply(i)}
   end
 
   def []= (key, value)
-    @chunks[key]= value
+    @items << RatCatcherProjectItem.new(key, value)
   end
 end
