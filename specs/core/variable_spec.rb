@@ -1,6 +1,5 @@
 cur_dir= File.expand_path(File.dirname(__FILE__))
 require cur_dir + '/../../app/rat_catcher_store'
-require cur_dir + '/../../app/refactorings/variable_rename'
 require cur_dir + '/../tree_like_matcher'
 
 
