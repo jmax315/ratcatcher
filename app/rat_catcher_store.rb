@@ -95,10 +95,10 @@ class RatCatcherStore
     end
   end
 
-  def apply(refactoring)
-    refactoring.apply(self)
-  end
-
-  def rename_variable(old_name, new_name)
+  def apply(refactoring, *args)
+    if (respond_to?(refactoring))
+      send(refactoring, *args)
+    end
+    children.each { |child| child.apply(refactoring, *args) }
   end
 end

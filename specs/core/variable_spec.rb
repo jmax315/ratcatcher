@@ -23,12 +23,12 @@ describe 'variable assignment' do
   end
 
   it 'should rename a_variable' do
-    @tree.apply(VariableRename.new('a_variable', 'new_name'))
+    @tree.apply(:rename_variable, 'a_variable', 'new_name')
     variable_should_be('new_name')
   end
 
   it 'should not rename the_wrong_variable' do
-    @tree.apply(VariableRename.new('the_wrong_variable', 'new_name'))
+    @tree.apply(:rename_variable, 'the_wrong_variable', 'new_name')
     variable_should_be('a_variable')
   end
 end
@@ -36,7 +36,7 @@ end
 describe 'variable passed to a method' do
   before :each do
     @tree = RatCatcherStore.parse('the_stop=11; thing.go_method(the_stop)')
-    @tree.apply(VariableRename.new('the_stop','the_go'))
+    @tree.apply(:rename_variable, 'the_stop','the_go')
   end
   
   it 'variable should change' do
@@ -47,7 +47,7 @@ end
 describe 'instance variable' do
   before :each do
     @tree = RatCatcherStore.parse('@the_stop = 1')
-    @tree.apply(VariableRename.new('@the_stop','@the_go'))
+    @tree.apply(:rename_variable, '@the_stop','@the_go')
   end
   
   it 'variable should change' do
@@ -58,7 +58,7 @@ end
 describe 'variable assignment using variable reference' do
   before :each do
     @tree= RatCatcherStore.parse 'a_variable = a_variable + 5'
-    @tree.apply(VariableRename.new('a_variable', 'new_name'))
+    @tree.apply(:rename_variable, 'a_variable', 'new_name')
   end
 
   it 'should rename a_variable in the tree on the left of the =' do
