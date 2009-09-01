@@ -3,14 +3,22 @@ require base_directory + '/rat_catcher_project_item'
 
 class RatCatcherProject
   def initialize
-    @items= []
+    @items= {}
   end
 
-  def apply(visitor)
-    @items.each {|i| visitor.apply(i)}
+  def apply(refactoring, *args)
+    @items.values.each {|item| item.apply(refactoring, *args)}
+  end
+
+  def size
+    @items.size
   end
 
   def []= (key, value)
-    @items << RatCatcherProjectItem.new(key, value)
+    @items[key]= RatCatcherProjectItem.new(value)
+  end
+
+  def [] (key)
+    @items[key].to_ruby
   end
 end
