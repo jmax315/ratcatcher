@@ -69,4 +69,8 @@ describe 'method definition with arguments' do
   it "has a first child which is an args node with the right two arguments" do
     @tree[0].argument_names.should == [:a, :b]
   end
+
+  it "generates the correct Ruby code" do
+    @tree.to_ruby.should == "def amethod(a, b)\n  # do nothing\nend"
+  end
 end

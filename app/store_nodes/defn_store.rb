@@ -11,6 +11,9 @@ class DefnStore < RatCatcherStore
   end
 
   def sexp
-    s(:defn, @text.to_sym, s(:args), @children[1].sexp)
+    s(:defn,
+      @text.to_sym,
+      s(:args) + @children[0].argument_names,
+      @children[1].sexp)
   end
 end
