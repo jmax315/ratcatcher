@@ -1,5 +1,5 @@
 base_directory= File.expand_path(File.dirname(__FILE__))
-require base_directory + '/rat_catcher_project_item'
+require base_directory + '/rat_catcher_store'
 
 class RatCatcherProject
   def initialize
@@ -15,7 +15,7 @@ class RatCatcherProject
   end
 
   def []= (key, value)
-    @items[key]= RatCatcherProjectItem.new(value)
+    @items[key]= RatCatcherStore.parse(value)
   end
 
   def [] (key)

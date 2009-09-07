@@ -52,8 +52,3 @@ describe 'applying a rename-variable refactoring to a two-item project' do
     @project["second chunk"].should == "new_name = 5"
   end
 end
-
-describe "pending specs" do
-  it "clean up project by delegating to hash"
-  it "get rid of project item"
-end
