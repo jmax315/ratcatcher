@@ -103,10 +103,19 @@ end
 
 describe "handling a variable name introduced as a method parameter" do
   it 'should rename the variable in the parameter list and the code body' do
-    pending
     src_code= 'def a_method(a_param); puts a_param; end'
     store= RatCatcherStore.parse(src_code)
     store.apply(:rename_variable, 'a_param', 'new_name')
     store.to_ruby.should == "def a_method(new_name)\n  puts(new_name)\nend"
+  end
+end
+
+
+describe "handling a variable name referenced as a method parameter" do
+  it 'should rename the variable in the parameter list' do
+    src_code= 'v= 1; a_method(v)'
+    store= RatCatcherStore.parse(src_code)
+    store.apply(:rename_variable, 'v', 'new_v')
+    store.to_ruby.should == "new_v = 1\na_method(new_v)\n"
   end
 end

@@ -11,5 +11,14 @@ class ArgsStore < RatCatcherStore
     @argument_names= new_sexp[1..-1].to_a
   end
 
+  def rename_variable(old_name, new_name)
+    @argument_names= @argument_names.map do |variable|
+      if variable.to_s == old_name
+        new_name.to_sym
+      else
+        variable
+      end
+    end
+  end
   #TODO sexp
 end
