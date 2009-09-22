@@ -16,4 +16,8 @@ class DefnStore < RatCatcherStore
       s(:args) + @children[0].argument_names,
       @children[1].sexp)
   end
+
+  def name
+    @test
+  end
 end

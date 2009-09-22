@@ -94,28 +94,34 @@ class RatCatcherStore
       return self
     end
 
-    name, rest_of_path = path.split("/", 2)
+    first_path_element, rest_of_path = path.split("/", 2)
 
-    if name == "."
+    if first_path_element == "."
       return find(rest_of_path)
     end
 
+    find_child_match(first_path_element, rest_of_path)
+  end
+
+  def find_child_match(first_path_element, rest_of_path)
     @children.each do |kid|
-      kid_match= kid.matches(name, rest_of_path)
+      kid_match= kid.matches(first_path_element, rest_of_path)
       return kid_match if kid_match
     end
     nil
   end
 
-  def matches(name, rest_of_path)
-    if name != @text
-      return nil
-    end
-
-    if rest_of_path
-      find(rest_of_path)
+  def matches(first_path_element, rest_of_path)
+    if respond_to?(:name)
+      if first_path_element != @text
+        nil
+      elsif rest_of_path
+        find(rest_of_path)
+      else
+        self
+      end
     else
-      self
+      find_child_match(first_path_element, rest_of_path)
     end
   end
 
