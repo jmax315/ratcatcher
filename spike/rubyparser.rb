@@ -3,7 +3,11 @@
 require 'ruby_parser'
 require 'ruby2ruby'
 
-toy_source= ARGV[0]
+toy_source= if (ARGV[0])
+              ARGV[0]
+            else
+              $stdin.read
+            end
 
 print "toy_source: ", toy_source, "\n\n"
 

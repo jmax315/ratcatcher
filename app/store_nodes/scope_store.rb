@@ -9,4 +9,8 @@ class ScopeStore < BlockStore
   def sexp
     s(:scope, *sexplist_from_children )
   end
+
+  def matches(name, rest_of_path)
+    @children.find {|kid| kid.matches(name, rest_of_path)}
+  end
 end

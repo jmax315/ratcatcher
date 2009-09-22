@@ -89,12 +89,42 @@ class RatCatcherStore
     @children[index]
   end
 
+  def find(path)
+    if !path
+      return self
+    end
+
+    name, rest_of_path = path.split("/", 2)
+
+    if name == "."
+      return find(rest_of_path)
+    end
+
+    @children.each do |kid|
+      kid_match= kid.matches(name, rest_of_path)
+      return kid_match if kid_match
+    end
+    nil
+  end
+
+  def matches(name, rest_of_path)
+    if name != @text
+      return nil
+    end
+
+    if rest_of_path
+      find(rest_of_path)
+    else
+      self
+    end
+  end
+
   def path_reference(path)
     path.inject(self) do |value, index|
       value= value[index]
     end
   end
-
+  
   def apply(refactoring, *args)
     if (respond_to?(refactoring))
       send(refactoring, *args)
