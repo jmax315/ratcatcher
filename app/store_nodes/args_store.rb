@@ -22,5 +22,6 @@ class ArgsStore < RatCatcherStore
   end
 
   def sexp
+    s(:args, *argument_names)
   end
 end
