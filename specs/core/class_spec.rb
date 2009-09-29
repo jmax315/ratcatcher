@@ -24,6 +24,12 @@ describe 'a class definition with no superclass' do
     it 'has a scope' do
       @tree.body.should be_instance_of(ScopeStore)
     end
+
+    it "has a sexp of the correct form" do
+      @tree.sexp.should be_a_tree_like(
+            s(:class, :MyClass, nil, s(:scope))
+            )
+    end
 end
 
 
@@ -53,5 +59,11 @@ describe 'a class definition with a superclass' do
 
     it 'has a scope' do
       @tree.body.should be_instance_of(ScopeStore)
+    end
+
+    it "has a sexp of the correct form" do
+      @tree.sexp.should be_a_tree_like(
+            s(:class, :MyClass, s(:const, :Ferd), s(:scope))
+            )
     end
 end

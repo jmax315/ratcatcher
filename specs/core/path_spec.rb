@@ -14,7 +14,7 @@ describe "Searching inside a class definition" do
   end
 
   it "should find the class definition" do
-    @store.find(".").text.should == "AClass"
+    @store.find(".").should == @store
   end
 
   it "should find the method definition" do
@@ -49,7 +49,7 @@ describe "Searching for a class definition when there are several of them" do
 
   it "should do something sane when handed a '.'" do
     pending
-    @store.find(".").text.should == "AClass"
+    @store.find(".").text.should == @store
   end
 
   it "should find the AClass class definition" do

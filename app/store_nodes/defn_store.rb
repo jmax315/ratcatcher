@@ -17,7 +17,7 @@ class DefnStore < RatCatcherStore
       @children[1].sexp)
   end
 
-  def name
-    @test
-  end
+   def name
+     @text
+   end
 end

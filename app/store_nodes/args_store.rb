@@ -20,5 +20,7 @@ class ArgsStore < RatCatcherStore
       end
     end
   end
-  #TODO sexp
+
+  def sexp
+  end
 end

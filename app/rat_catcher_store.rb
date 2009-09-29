@@ -22,20 +22,27 @@ class RatCatcherStore
   end
 
   def self.const_missing(name)
-    app_directory= File.dirname(__FILE__)
-    subclass_subdir= "store_nodes"
-    file_name= "#{app_directory}/#{subclass_subdir}/#{un_camel_case(name.to_s)}.rb"
-    
-    if !File.exists?(file_name)
+    if !File.exists?(file_name_for_class(name))
       raise NameError, "Can't find file to load for: #{name}"
     end
     
-    load(file_name)
+    load(file_name_for_class(name))
     const_get(name)
+  end
+
+  def self.file_name_for_class(class_name)
+    app_directory= File.dirname(__FILE__)
+    subclass_subdir= "store_nodes"
+    
+    "#{app_directory}/#{subclass_subdir}/#{un_camel_case(class_name.to_s)}.rb"
   end
 
   def self.class_for_sexp_type(sexp_type)
     const_get("#{camel_case(sexp_type.to_s)}Store")
+  end
+
+  def self.class_for_file_name(file_name)
+    const_get(camel_case(File.basename(file_name, ".rb")))
   end
 
   def self.from_sexp new_sexp
@@ -113,7 +120,7 @@ class RatCatcherStore
 
   def matches(first_path_element, rest_of_path)
     if respond_to?(:name)
-      if first_path_element != @text
+      if first_path_element != name
         nil
       elsif rest_of_path
         find(rest_of_path)
