@@ -15,10 +15,15 @@ class RatCatcherProject
   end
 
   def []= (key, value)
-    @items[key]= RatCatcherStore.parse(value)
+    @items[key]= ProjectItemStore.new(key,
+                                      RatCatcherStore.parse(value))
   end
 
   def [] (key)
     @items[key].to_ruby
+  end
+
+  def find(path)
+    @items[path]
   end
 end

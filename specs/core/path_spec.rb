@@ -1,5 +1,7 @@
 current_dir= File.expand_path(File.dirname(__FILE__))
 require current_dir + '/../../app/rat_catcher_store'
+require current_dir + '/path_spec_helpers'
+
 
 describe "Searching inside a class definition" do
   before :each do
@@ -24,11 +26,32 @@ describe "Searching inside a class definition" do
   it "should find the method definition" do
       @store.find("a_method").text.should == "a_method"
   end
-    
-  it "should find the right class when more than one class is present."
-
 end
 
+
+
+
+describe "When more than one class is present" do
+    before :each do
+    src_code= <<-SRC_CODE
+      class AClass
+        def a_method
+          "ferd"
+        end
+      end
+      
+      class AnotherClass
+        def another_method
+          "foo"
+        end
+      end
+      SRC_CODE
+      @store= RatCatcherStore.parse(src_code)
+    end
+    
+    should_find_the_right_store 'AClass', 'ClassStore', 'AClass'
+    should_find_the_right_store 'AnotherClass', 'ClassStore', 'AnotherClass'
+end
 
 describe "Searching for a class definition when there are several of them" do
   before :each do
