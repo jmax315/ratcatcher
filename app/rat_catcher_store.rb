@@ -9,6 +9,7 @@ class RatCatcherStore
 
   def self.parse source_code
     RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
+    rescue ParseError
   end
 
   def self.camel_case(s)

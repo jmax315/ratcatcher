@@ -15,10 +15,6 @@ describe "Searching inside a class definition" do
       @store= RatCatcherStore.parse(src_code)
   end
 
-  it "should find the class definition" do
-    @store.find(".").should == @store
-  end
-
   it "should find the method definition" do
       @store.find("a_method").class.should == DefnStore
   end
@@ -68,11 +64,6 @@ describe "Searching for a class definition when there are several of them" do
       end
       SRC_CODE
       @store= RatCatcherStore.parse(src_code)
-  end
-
-  it "should do something sane when handed a '.'" do
-    pending
-    @store.find(".").text.should == @store
   end
 
   it "should find the AClass class definition" do
