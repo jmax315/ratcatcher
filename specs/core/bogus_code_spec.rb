@@ -17,8 +17,7 @@ describe "handling attempts to parse bogus code" do
   end
 
   it "should not catch non parse exceptions" do
-    pending
-    RatCatcherStore.stub!(:from_sexp).and_raise("not a parse")
+    RubyParser.should_receive(:new).and_raise("not a parse")
     lambda{RatCatcherStore.parse(@code)}.should raise_error("not a parse")
   end
 end
