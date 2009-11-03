@@ -19,7 +19,7 @@ describe 'parsing and then re-generating a class' do
   end
 
   it 'should give back the original code' do
-    @parse_tree.to_ruby.gsub(/\s+/, ' ').gsub(/^ /, '').gsub(/ $/, '').should == @src.gsub(/\s+/, ' ').gsub(/^ /, '').gsub(/ $/, '')
+    @parse_tree.to_ruby.should be_code_like(@src)
   end
 end
 
