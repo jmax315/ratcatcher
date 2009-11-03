@@ -1,6 +1,29 @@
 current_dir= File.expand_path(File.dirname(__FILE__))
 require current_dir + '/../../app/rat_catcher_store'
 
+
+describe 'parsing and then re-generating a class' do
+  before :each do
+    @src= <<-EOF
+        class AClass
+          def a_method
+            "Oh no!"
+          end
+        end
+        EOF
+    @parse_tree= RatCatcherStore.parse(@src)
+  end
+
+  it 'should give the correct sexp' do
+    @parse_tree.sexp.should == s(:class, :AClass, nil, s(:scope, s(:defn, :a_method, s(:args), s(:scope, s(:block, s(:str, "Oh no!"))))))
+  end
+
+  it 'should give back the original code' do
+    @parse_tree.to_ruby.gsub(/\s+/, ' ').gsub(/^ /, '').gsub(/ $/, '').should == @src.gsub(/\s+/, ' ').gsub(/^ /, '').gsub(/ $/, '')
+  end
+end
+
+
 describe 'a class definition with no superclass' do
   before :each do
     @tree= RatCatcherStore.parse %q{

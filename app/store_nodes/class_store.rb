@@ -19,7 +19,7 @@ class ClassStore < RatCatcherStore
   end
 
   def sexp
-    s(:class, name.to_sym, superclass.sexp, s(:scope))
+    s(:class, name.to_sym, superclass.sexp, @children[1].sexp)
   end
 
 end

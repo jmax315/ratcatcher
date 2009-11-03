@@ -63,7 +63,7 @@ class RatCatcherStore
   end
 
   def sexplist_from_children
-    @children[0..-1].map {|child| child.sexp}
+    @children.map {|child| child.sexp}
   end
 
   def children_from_subexpressions(subexpressions)
