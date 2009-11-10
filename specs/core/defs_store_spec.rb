@@ -39,7 +39,6 @@ describe 'static method definition with no arguments and one statement' do
      # TODO This is an ugly way to access the method contents
      @tree.children[2].children[0].children[0].text.should == "5"
    end
-
  end
 
  describe 'method definition with two statements' do
@@ -78,3 +77,18 @@ describe 'method definition with arguments' do
     @tree.to_ruby.should == "def self.amethod(a, b)\n  # do nothing\nend"
   end
 end
+
+
+describe 'static method definition on a different class with no arguments and one statement' do
+  before :each do
+    @tree= RatCatcherStore.parse %q{
+       def String.amethod
+         5
+       end
+     }
+   end
+
+   it "has a first child which is a reference to String" do
+     @tree.sexp.should be_a_tree_like(s(:defs, s(:const, :String), :_, :_, :_))
+   end
+ end
