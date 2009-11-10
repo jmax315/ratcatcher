@@ -5,14 +5,14 @@ require current_dir + '/path_spec_helpers'
 
 describe "Searching inside a class definition" do
   before :each do
-    src_code= <<-SRC_CODE
+    src_code= %q{
       class AClass
         def a_method
           "ferd"
         end
       end
-      SRC_CODE
-      @store= RatCatcherStore.parse(src_code)
+    }
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should find the method definition" do
@@ -28,8 +28,8 @@ end
 
 
 describe "When more than one class is present" do
-    before :each do
-    src_code= <<-SRC_CODE
+  before :each do
+    src_code= %q{
       class AClass
         def a_method
           "ferd"
@@ -41,17 +41,17 @@ describe "When more than one class is present" do
           "foo"
         end
       end
-      SRC_CODE
-      @store= RatCatcherStore.parse(src_code)
-    end
+    }
+    @store= RatCatcherStore.parse(src_code)
+  end
     
-    should_find_the_right_store 'AClass', 'ClassStore', 'AClass'
-    should_find_the_right_store 'AnotherClass', 'ClassStore', 'AnotherClass'
+  should_find_the_right_store 'AClass', 'ClassStore', 'AClass'
+  should_find_the_right_store 'AnotherClass', 'ClassStore', 'AnotherClass'
 end
 
 describe "Searching for a class definition when there are several of them" do
   before :each do
-    src_code= <<-SRC_CODE
+    src_code= %q{
       class AClass
         def a_method
           "ferd"
@@ -62,8 +62,8 @@ describe "Searching for a class definition when there are several of them" do
           "foo"
         end
       end
-      SRC_CODE
-      @store= RatCatcherStore.parse(src_code)
+    }
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should find the AClass class definition" do
@@ -118,7 +118,7 @@ end
 
 describe "Searching for a class definition when there are several of them" do
   before :each do
-    src_code= <<-SRC_CODE
+    src_code= %q{
       class BClass
         if wamo
           def b_method
@@ -130,7 +130,7 @@ describe "Searching for a class definition when there are several of them" do
           end
         end
       end
-      SRC_CODE
+    }
     @store= RatCatcherStore.parse(src_code)
   end
 
