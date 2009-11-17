@@ -6,12 +6,12 @@ class ProjectItemStore
     @name= name
   end
 
-  def sexp
-    @store.sexp
-  end
-
   def to_ruby
     @store.to_ruby
+  end
+
+  def sexp
+    @store.sexp
   end
 
   def apply(refactoring, *args)

@@ -98,10 +98,10 @@ class RatCatcherStore
   end
 
   def find(path)
-    if !path
+    if !path || path == ""
       return self
     end
-
+    
     first_path_element, rest_of_path = path.split("/", 2)
 
     if first_path_element == "."

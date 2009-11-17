@@ -102,11 +102,14 @@ describe 'multiple variable assignment parse tree' do
 end
 
 describe "handling a variable name introduced as a method parameter" do
+  before :each do
+    src_code= 'def a_method(a_param, a_different_param); puts a_param; end'
+    @store= RatCatcherStore.parse(src_code)
+    @store.apply(:rename_variable, 'a_param', 'new_name')
+  end
+
   it 'should rename the variable in the parameter list and the code body' do
-    src_code= 'def a_method(a_param); puts a_param; end'
-    store= RatCatcherStore.parse(src_code)
-    store.apply(:rename_variable, 'a_param', 'new_name')
-    store.to_ruby.should == "def a_method(new_name)\n  puts(new_name)\nend"
+    @store.to_ruby.should == "def a_method(new_name, a_different_param)\n  puts(new_name)\nend"
   end
 end
 
