@@ -14,6 +14,10 @@ class ProjectItemStore
     @store.sexp
   end
 
+  def find(path)
+    @store.find(path)
+  end
+
   def apply(refactoring, *args)
     @store.apply(refactoring, *args)
   end
