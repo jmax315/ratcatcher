@@ -15,6 +15,10 @@ describe "Searching inside a class definition" do
     @store= RatCatcherStore.parse(src_code)
   end
 
+  it "should return nil if we pass a path that doesn't exist" do
+    @store.find("Wombat").should == nil
+  end
+
   it "should find the store itself if the path is nil" do
     @store.find(nil).should == @store
   end

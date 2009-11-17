@@ -5,5 +5,5 @@ describe "specs we don't want to forget" do
   it "shouldn't depend on an instance variable name to use should_find_the_right_store"
   it "convert here-doc source code over to %q (makes emacs happier)"
   it "handle rescue"
-  it "handle finds that shouldn't find anything"
+  it "add complex find specs to rat_catcher_project"
 end
