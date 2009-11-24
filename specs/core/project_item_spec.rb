@@ -3,7 +3,7 @@ current_dir= File.expand_path(File.dirname(__FILE__))
 #require current_dir + '/path_spec_helpers'
 
 
-describe "A RatCatcherProjectItemSpec" do
+describe "A RatCatcherProjectItemStore" do
   before :each do
     @store= RatCatcherStore.parse 'a_var= 4'
     @project_item= ProjectItemStore.new("J. Project Item Store", @store)

@@ -19,9 +19,9 @@ describe "Searching inside a class definition" do
     @store.find("Wombat").should == nil
   end
 
-  it "should find the store itself if the path is nil" do
-    @store.find(nil).should == @store
-  end
+ it "should find the store itself if the path is nil" do
+   @store.find(nil).should == @store
+ end
 
   it "should find the store itself if the path is empty" do
     @store.find("").should == @store
@@ -33,6 +33,10 @@ describe "Searching inside a class definition" do
 
   it "should find the method definition" do
       @store.find("a_method").class.should == DefnStore
+  end
+
+  it "should find the method definition even with a redundant ./ in the path" do
+      @store.find("./a_method").class.should == DefnStore
   end
 
   it "should find the method definition" do

@@ -98,7 +98,7 @@ class RatCatcherStore
   end
 
   def find(path)
-    if !path || path == ""
+    if !path  || path == ''
       return self
     end
     

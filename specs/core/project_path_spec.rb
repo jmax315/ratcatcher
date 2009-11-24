@@ -10,7 +10,5 @@ describe "A RatCatcherProject" do
   end
 
   should_find_the_right_store 'first_chunk.rb', 'ProjectItemStore', 'first_chunk.rb'
-
-  it "should do the next commented out line properly (and it don't)"
-#  should_find_the_right_store 'first_chunk.rb/Zed', 'ClassStore', 'Zed'
+  should_find_the_right_store 'first_chunk.rb/Zed', 'ClassStore', 'Zed'
 end 
