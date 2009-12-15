@@ -1,58 +1,55 @@
 require 'ruby_parser'
 require 'ruby2ruby'
 
+#Todo: make this an absolute path
+require 'app/rename_variable'
 
 
 class RatCatcherStore
   attr_accessor :children
-  attr_reader :text
+  attr_reader :text, :sexp
 
   def self.parse source_code
     RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
     rescue ParseError
   end
 
-  def self.camel_case(s)
-    s.split(/_/).map {|component| component.capitalize}.join('')
-  end
+#   def self.camel_case(s)
+#     s.split(/_/).map {|component| component.capitalize}.join('')
+#   end
 
-  def self.un_camel_case(s)
-    rv= s.gsub(/[A-Z]/, '_\0')
-    rv= rv.gsub(/^_/, '')
-    rv.downcase
-  end
+#   def self.un_camel_case(s)
+#     rv= s.gsub(/[A-Z]/, '_\0')
+#     rv= rv.gsub(/^_/, '')
+#     rv.downcase
+#   end
 
-  def self.const_missing(name)
-    if !File.exists?(file_name_for_class(name))
-      raise NameError, "Can't find file to load for: #{name}"
-    end
+#   def self.const_missing(name)
+#     if !File.exists?(file_name_for_class(name))
+#       raise NameError, "Can't find file to load for: #{name}"
+#     end
     
-    load(file_name_for_class(name))
-    const_get(name)
-  end
+#     load(file_name_for_class(name))
+#     const_get(name)
+#   end
 
-  def self.file_name_for_class(class_name)
-    app_directory= File.dirname(__FILE__)
-    subclass_subdir= "store_nodes"
+#   def self.file_name_for_class(class_name)
+#     app_directory= File.dirname(__FILE__)
+#     subclass_subdir= "store_nodes"
     
-    "#{app_directory}/#{subclass_subdir}/#{un_camel_case(class_name.to_s)}.rb"
-  end
+#     "#{app_directory}/#{subclass_subdir}/#{un_camel_case(class_name.to_s)}.rb"
+#   end
 
-  def self.class_for_sexp_type(sexp_type)
-    const_get("#{camel_case(sexp_type.to_s)}Store")
-  end
+#   def self.class_for_sexp_type(sexp_type)
+#     const_get("#{camel_case(sexp_type.to_s)}Store")
+#   end
 
-  def self.class_for_file_name(file_name)
-    const_get(camel_case(File.basename(file_name, ".rb")))
-  end
+#   def self.class_for_file_name(file_name)
+#     const_get(camel_case(File.basename(file_name, ".rb")))
+#   end
 
   def self.from_sexp new_sexp
-    if new_sexp == nil
-      return NilStore.new(nil)
-    end
-    
-    subclass= class_for_sexp_type(new_sexp[0])
-    subclass.new(new_sexp)
+    RatCatcherStore.new(new_sexp)
   end
 
   private
@@ -60,15 +57,16 @@ class RatCatcherStore
   def initialize new_sexp
     @children= []
     @text= ''
+    @sexp= new_sexp
   end
 
-  def sexplist_from_children
-    @children.map {|child| child.sexp}
-  end
+#   def sexplist_from_children
+#     @children.map {|child| child.sexp}
+#   end
 
-  def children_from_subexpressions(subexpressions)
-    @children= subexpressions.map { | child | RatCatcherStore.from_sexp(child) }
-  end
+#   def children_from_subexpressions(subexpressions)
+#     @children= subexpressions.map { | child | RatCatcherStore.from_sexp(child) }
+#   end
 
   public
 
@@ -140,9 +138,7 @@ class RatCatcherStore
   end
   
   def apply(refactoring, *args)
-    if (respond_to?(refactoring))
-      send(refactoring, *args)
-    end
-    children.each { |child| child.apply(refactoring, *args) }
+    the_refactoring= RenameVariable.new(args[0], args[1])
+    @sexp= the_refactoring.process(@sexp)
   end
 end
