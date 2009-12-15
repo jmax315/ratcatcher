@@ -13,14 +13,6 @@ describe 'variable assignment' do
     @tree= RatCatcherStore.parse 'a_variable = 5'
   end
 
-  it 'should contain a tree with the variable assignment' do
-    @tree.sexp.should be_a_tree_like(s(:lasgn, :a_variable, :_))
-  end
-
-  it 'should regenerate the source code' do
-    @tree.to_ruby.should == 'a_variable = 5'
-  end
-
   it 'should rename a_variable' do
     @tree.apply(:rename_variable, 'a_variable', 'new_name')
     variable_should_be('new_name')
@@ -70,34 +62,6 @@ describe 'variable assignment using variable reference' do
 
   it 'should generate Ruby code with the new variable name' do
     @tree.to_ruby.should == "new_name = (new_name + 5)"
-  end
-end
-
-describe 'simple multiple variable assignment parse tree' do
-  before :each do
-    @tree= RatCatcherStore.parse 'a_var,b_var = 1,2'
-  end
-  
-  it 'should contain a tree with the variable assignment' do
-    @tree.sexp.should be_a_tree_like(s(:masgn, s(:array, s(:lasgn, :a_var), s(:lasgn, :b_var)), s(:array, s(:lit, 1), s(:lit, 2))))
-  end  
-  
-  it 'should regenerate the source code' do
-    @tree.to_ruby.should == 'a_var, b_var = 1, 2'
-  end
-end
-
-describe 'multiple variable assignment parse tree' do
-  before :each do
-    @tree= RatCatcherStore.parse 'a_var,b_var = [1,2]'
-  end
-  
-  it 'should contain a tree with the variable assignment' do
-    @tree.sexp.should be_a_tree_like(s(:masgn, s(:array, s(:lasgn, :a_var), s(:lasgn, :b_var)), s(:to_ary, s(:array, s(:lit, 1), s(:lit, 2)))))
-  end  
-  
-  it 'should regenerate the source code' do
-    @tree.to_ruby.should == 'a_var, b_var = [1, 2]'
   end
 end
 
