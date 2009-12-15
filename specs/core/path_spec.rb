@@ -13,6 +13,16 @@ describe "Searching inside a class definition" do
       end
     }
     @store= RatCatcherStore.parse(src_code)
+    @duplicate_store= RatCatcherStore.parse(src_code)
+  end
+
+  it "should parse the same twice" do
+    @store.should == @duplicate_store
+  end
+
+  it "should contain an equivelant sexp after a find" do
+    @store.find(nil)
+    @store.should == @duplicate_store
   end
 
   it "should return nil if we pass a path that doesn't exist" do
@@ -20,22 +30,19 @@ describe "Searching inside a class definition" do
   end
 
  it "should find the store itself if the path is nil" do
-    pending
-    @store.find(nil).should == @store
+    @store.find(nil).should == @duplicate_store
  end
 
   it "should find the store itself if the path is empty" do
-    pending
-    @store.find("").should == @store
+    @store.find("").should == @duplicate_store
   end
 
   it "should find the store itself if the path is '.'" do
-    pending
-    @store.find(".").should == @store
+    @store.find(".").should == @duplicate_store
   end
 
   it "should find the method definition" do
-    pending
+    pending "Start here"
     @store.find("a_method").should be_a_tree_like(s(:defn))
   end
 
