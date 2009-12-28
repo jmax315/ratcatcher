@@ -1,6 +1,6 @@
 current_dir= File.expand_path(File.dirname(__FILE__))
-require current_dir + '/../../app/rat_catcher_store'
-require current_dir + '/../../app/store_nodes/project_item_store'
+require current_dir + '/../app/rat_catcher_store'
+require current_dir + '/../app/store_nodes/project_item_store'
 
 
 describe "A RatCatcherProjectItem" do

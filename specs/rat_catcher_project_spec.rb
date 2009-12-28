@@ -1,5 +1,5 @@
 cur_dir= File.expand_path(File.dirname(__FILE__))
-require cur_dir + '/../../app/rat_catcher_project'
+require cur_dir + '/../app/rat_catcher_project'
 
 
 describe 'not loading any code chunks' do
