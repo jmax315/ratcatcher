@@ -46,7 +46,7 @@ class RatCatcherStore
     @children[index]
   end
 
-  def mk_path_matcher(path)
+  def mk_node_matcher(path)
     if !path  || path == '' || path == '.'
       return AlwaysMatcher.new
     end
@@ -57,14 +57,14 @@ class RatCatcherStore
       path= rest_of_path
     end
 
-    TreeLikeMatcher.new(s(:defn, path.to_sym, :_, :_))
+    TreeLikeMatcher.new(s(:_, path.to_sym, :*))
   end
 
   def find(what)
     if what.respond_to?(:matches?)
       matcher= what
     else
-      matcher= mk_path_matcher(what)
+      matcher= mk_node_matcher(what)
     end
 
     match_sexp= walk(@sexp, matcher)
