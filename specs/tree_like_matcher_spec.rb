@@ -1,5 +1,5 @@
 require 'ruby_parser'
-require File.expand_path(File.dirname(__FILE__)) + '/tree_like_matcher'
+require File.expand_path(File.dirname(__FILE__)) + '/../app/tree_like_matcher'
 
 describe 'tree_like_matcher' do
   it 'should match two equal sexp' do

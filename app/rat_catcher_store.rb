@@ -3,7 +3,8 @@ require 'ruby2ruby'
 
 #Todo: make these absolute paths
 require 'app/rename_variable'
-require 'app/find_processor'
+require 'app/always_matcher'
+require 'app/tree_like_matcher'
 
 
 class RatCatcherStore
@@ -30,7 +31,7 @@ class RatCatcherStore
   public
 
   def ==(right)
-    sexp == right.sexp
+    right.nil? ? false : @sexp == right.sexp
   end
 
   def to_ruby
@@ -45,21 +46,44 @@ class RatCatcherStore
     @children[index]
   end
 
-  def find(path)
+  def mk_path_matcher(path)
     if !path  || path == '' || path == '.'
+      return AlwaysMatcher.new
+    end
+
+    first_path_element, rest_of_path = path.split("/", 2)
+
+    if first_path_element == '.'
+      path= rest_of_path
+    end
+
+    TreeLikeMatcher.new(s(:defn, path.to_sym, :_, :_))
+  end
+
+  def find(what)
+    if what.respond_to?(:matches?)
+      matcher= what
+    else
+      matcher= mk_path_matcher(what)
+    end
+
+    if matcher.matches?(@sexp)
       return self
     end
-    
-    the_find_processor= FindProcessor.new(path)
-    @sexp= the_find_processor.process(@sexp)
-    if (the_find_processor.results == nil) 
-      nil
-    else
-      RatCatcherStore.from_sexp(the_find_processor.results)
-    end
-end
 
-#     first_path_element, rest_of_path = path.split("/", 2)
+    @sexp.each do |child|
+      if child.is_a?(Sexp)
+        child_match= RatCatcherStore.from_sexp(child).find(matcher)
+        if child_match
+          return child_match
+        end
+      end
+    end
+    nil
+  end
+
+
+
 
 #     if first_path_element == "."
 #       return find(rest_of_path)
