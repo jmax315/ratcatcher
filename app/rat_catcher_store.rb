@@ -67,23 +67,23 @@ class RatCatcherStore
       matcher= mk_path_matcher(what)
     end
 
-    if matcher.matches?(@sexp)
-      return self
+    match_sexp= walk(@sexp, matcher)
+    return RatCatcherStore.from_sexp(match_sexp) if match_sexp
+  end
+
+  def walk(sexp, matcher)
+    if matcher.matches?(sexp)
+      return sexp
     end
 
-    @sexp.each do |child|
+    sexp.each do |child|
       if child.is_a?(Sexp)
-        child_match= RatCatcherStore.from_sexp(child).find(matcher)
-        if child_match
-          return child_match
-        end
+        child_match= walk(child, matcher)
+        return child_match if child_match
       end
     end
     nil
   end
-
-
-
 
 #     if first_path_element == "."
 #       return find(rest_of_path)
