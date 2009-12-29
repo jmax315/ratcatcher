@@ -16,5 +16,16 @@ describe 'tree_like_matcher' do
     target = s(:lasgn, :a_variable, :another_var)
     target.should_not be_a_tree_like(s(:lasgn, :a_variable))
   end
+
+  it 'should match with a wildcard in the node type' do
+    target = s(:lasgn, :a_variable, :another_var)
+    target.should_be_a_tree_like(s(:_, :a_variable, :another_var))
+  end
+
+  it 'should match two sexp with a repeated wildcard' do
+    target = s(:lasgn, :a_variable, :another_var)
+    target.should be_a_tree_like(s(:lasgn, :*))
+  end
+
 end
 
