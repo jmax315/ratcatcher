@@ -63,11 +63,6 @@ describe "Searching inside a class definition" do
                                                       :_))
   end
 
-  it "should find the method definition" do
-    pending
-    @store.find("a_method").text.should == be_a_tree_like(s(:defn))
-  end
-
   def find_sexp(path)
     temp= @store.find(path)
     if temp
