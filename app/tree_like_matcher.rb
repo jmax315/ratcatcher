@@ -8,9 +8,14 @@ class TreeLikeMatcher
       true
     elsif !expected.kind_of?(Sexp) || !target.kind_of?(Sexp)
       expected == target
-    else
-      expected.size == target.size &&
-        expected.zip(target).all? { |pair| match_helper(pair[0], pair[1]) }
+    elsif expected[-1] == :*
+      expected[0..-2].zip(target).all? do |pair|
+        match_helper(pair[0], pair[1])
+      end
+    elsif expected.size == target.size
+      expected.zip(target).all? do |pair|
+        match_helper(pair[0], pair[1])
+      end
     end
   end
 
@@ -27,7 +32,6 @@ class TreeLikeMatcher
     "expected #{@target.inspect} not to be in Zone #{@expected}"
   end
 end
-
 
 def be_a_tree_like(expected)
   TreeLikeMatcher.new(expected)
