@@ -3,6 +3,10 @@ class TreeLikeMatcher
     @expected = expected
   end
 
+  def to_s
+    "#<TreeLikeMatcher @expected= #{@expected.inspect}>"
+  end
+
   def match_helper(expected, target)
     if expected == :_
       true

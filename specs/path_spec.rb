@@ -48,14 +48,6 @@ describe "Searching inside a class definition" do
                                                     :_))
   end
 
-  it "should find the method definition using a matcher" do
-    matcher= TreeLikeMatcher.new(s(:defn, :a_method, :_, :_))
-    @store.find(matcher).sexp.should be_a_tree_like(s(:defn,
-                                                      :a_method,
-                                                      :_,
-                                                      :_))
-  end
-
   it "should find the method definition even with a redundant ./ in the path" do
     find_sexp("./a_method").should be_a_tree_like(s(:defn,
                                                       :a_method,
@@ -116,23 +108,11 @@ describe "Searching for a class definition when there are several of them" do
   end
 
   it "should find the AClass class definition" do
-    pending
-    @store.find("AClass").class.should == ClassStore
-  end
-
-  it "should find the AClass class definition" do
-    pending
-    @store.find("AClass").text.should == "AClass"
+    @store.find("AClass").sexp.should be_a_tree_like(s(:class, :AClass, :*))
   end
 
   it "should find the method definition" do
-    pending
-    @store.find("AClass/a_method").class.should == DefnStore
-  end
-
-  it "should find the method definition" do
-    pending
-    @store.find("AClass/a_method").text.should == "a_method"
+    @store.find("AClass/a_method").sexp.should be_a_tree_like(s(:defn, :a_method, :*))
   end
 
   it "should find the AClass class definition" do

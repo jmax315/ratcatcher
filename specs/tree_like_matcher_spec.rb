@@ -27,5 +27,9 @@ describe 'tree_like_matcher' do
     target.should be_a_tree_like(s(:lasgn, :*))
   end
 
+  it 'should not match a :* wildcard that is not at the end' do
+    target = s(:lasgn, :a, :b, :c)
+    target.should_not be_a_tree_like(s(:lasgn, :*, :c))
+  end
 end
 

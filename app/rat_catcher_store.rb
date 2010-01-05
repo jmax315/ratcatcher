@@ -9,7 +9,7 @@ require 'app/tree_like_matcher'
 
 class RatCatcherStore
   attr_accessor :children
-  attr_reader :text, :sexp
+  attr_reader :sexp
 
   def self.parse source_code
     RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
@@ -24,7 +24,6 @@ class RatCatcherStore
   
   def initialize new_sexp
     @children= []
-    @text= ''
     @sexp= new_sexp
   end
 
@@ -46,44 +45,49 @@ class RatCatcherStore
     @children[index]
   end
 
-  def mk_node_matcher(path)
-    if !path  || path == '' || path == '.'
-      return AlwaysMatcher.new
+  def find(path)
+    if !path || path == '' || path == '.'
+      return self
     end
-
-    first_path_element, rest_of_path = path.split("/", 2)
-
-    if first_path_element == '.'
-      path= rest_of_path
-    end
-
-    TreeLikeMatcher.new(s(:_, path.to_sym, :*))
+    path_components= path.split('/')
+    walk(path_components)
   end
 
-  def find(what)
-    if what.respond_to?(:matches?)
-      matcher= what
-    else
-      matcher= mk_node_matcher(what)
+  def walk(path_components)
+    if path_components.size < 1
+      return nil
     end
 
-    match_sexp= walk(@sexp, matcher)
-    return RatCatcherStore.from_sexp(match_sexp) if match_sexp
-  end
-
-  def walk(sexp, matcher)
-    if matcher.matches?(sexp)
-      return sexp
-    end
-
-    sexp.each do |child|
-      if child.is_a?(Sexp)
-        child_match= walk(child, matcher)
-        return child_match if child_match
+    if path_components[0] == '.'  ||
+        TreeLikeMatcher.new(s(:_, path_components[0].to_sym, :*)).matches?(self.sexp)
+      if path_components.size < 2
+        return self
       end
+
+      sub_components= path_components[1..-1]
+      @sexp[2..-1].each do |sub_expression|
+        if sub_expression.kind_of?(Sexp)
+          sub_store= RatCatcherStore.from_sexp(sub_expression)
+          sub_match= sub_store.walk(sub_components)
+          if sub_match
+            return sub_match
+          end
+        end
+      end
+    else
+      @sexp[1..-1].each do |sub_expression|
+        if sub_expression.kind_of?(Sexp)
+          sub_store= RatCatcherStore.from_sexp(sub_expression)
+          sub_match= sub_store.walk(path_components)
+          if sub_match
+            return sub_match
+          end
+        end
+      end
+      nil
     end
-    nil
   end
+
 
 #     if first_path_element == "."
 #       return find(rest_of_path)
