@@ -41,6 +41,10 @@ describe "Searching inside a class definition" do
     @store.find(".").should == @duplicate_store
   end
 
+  it "should find the class definition" do
+    find_sexp("AClass").should be_a_tree_like(s(:class, :AClass, :*))
+  end
+
   it "should find the method definition" do
     find_sexp("a_method").should be_a_tree_like(s(:defn,
                                                     :a_method,
@@ -86,8 +90,8 @@ describe "When more than one class is present" do
     @store= RatCatcherStore.parse(src_code)
   end
     
-  should_find_the_right_store 'AClass', 'ClassStore', 'AClass'
-  should_find_the_right_store 'AnotherClass', 'ClassStore', 'AnotherClass'
+  should_find_the_right_store 'AClass', :class, 'AClass'
+  should_find_the_right_store 'AnotherClass', :class, 'AnotherClass'
 end
 
 describe "Searching for a class definition when there are several of them" do

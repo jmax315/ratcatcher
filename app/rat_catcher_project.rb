@@ -24,11 +24,7 @@ class RatCatcherProject
   end
 
   def find(path)
-    first_path_element, rest_of_path = path.split("/", 2)
-    if rest_of_path
-      @items[first_path_element].find(rest_of_path)
-    else
-      @items[first_path_element]
-    end
+    first_path_element = path.split("/", 2)[0]
+    @items[first_path_element].find(path)
   end
 end

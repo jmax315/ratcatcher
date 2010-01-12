@@ -21,12 +21,15 @@ class ProjectItemStore
     
     first_path_element, rest_of_path = path.split("/", 2)
 
-#     if first_path_element == "."
-#       return find(rest_of_path)
-#     end
-
-    @store.matches(first_path_element, rest_of_path)
+    if first_path_element != @name
+      return nil
+    elsif rest_of_path
+      return @store.find(rest_of_path)
+    else
+      return self
+    end
   end
+
 
   def apply(refactoring, *args)
     @store.apply(refactoring, *args)

@@ -3,7 +3,6 @@ require 'ruby2ruby'
 
 #Todo: make these absolute paths
 require 'app/rename_variable'
-require 'app/always_matcher'
 require 'app/tree_like_matcher'
 
 
@@ -88,6 +87,17 @@ class RatCatcherStore
     end
   end
 
+  def has_name?
+    @sexp && @sexp[0] == :class
+  end
+
+  def name
+    @sexp[1].to_s
+  end
+
+  def matches?(expected_name)
+    has_name?  &&  name == expected_name
+  end
 
 #     if first_path_element == "."
 #       return find(rest_of_path)
