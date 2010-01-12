@@ -6,13 +6,12 @@ require current_dir + '/path_spec_helpers'
 
 
 describe "A RatCatcherProject" do
-  it "should be fixed"
-#   before :each do
-#     @store= RatCatcherProject.new
-#     @store['initial_chunk.rb']= 'class Waco; end'
-#   end
+  before :each do
+    @store= RatCatcherProject.new
+    @store['initial_chunk.rb']= 'class Waco; end'
+  end
 
-#   should_find_the_right_store 'initial_chunk.rb', 'ProjectItemStore', 'initial_chunk.rb'
+  should_find_the_right_store 'initial_chunk.rb', 'initial_chunk.rb'
 end 
 
 
@@ -22,7 +21,7 @@ describe "A RatCatcherProject" do
     @store['first_chunk.rb']= 'class Zed; end'
   end
 
-  should_find_the_right_store 'first_chunk.rb/Zed', :class, 'Zed'
+  should_find_the_right_store 'first_chunk.rb/Zed', 'Zed'
 end 
 
 
@@ -32,7 +31,7 @@ describe "A RatCatcherProject" do
     @store['a_chunk.rb']= 'class Rocky; end; class Bullwinkle; end'
   end
 
-  should_find_the_right_store 'a_chunk.rb/Bullwinkle', :class, 'Bullwinkle'
+  should_find_the_right_store 'a_chunk.rb/Bullwinkle', 'Bullwinkle'
 end 
 
 
@@ -42,5 +41,5 @@ describe "A RatCatcherProject" do
     @store['bee_chunk.rb']= 'class Rocky; def fly; end; end'
   end
 
-  should_find_the_right_store 'bee_chunk.rb/Rocky/fly', :defn, 'fly'
+  should_find_the_right_store 'bee_chunk.rb/Rocky/fly', 'fly'
 end 

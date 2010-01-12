@@ -90,8 +90,8 @@ describe "When more than one class is present" do
     @store= RatCatcherStore.parse(src_code)
   end
     
-  should_find_the_right_store 'AClass', :class, 'AClass'
-  should_find_the_right_store 'AnotherClass', :class, 'AnotherClass'
+  should_find_the_right_store 'AClass', 'AClass'
+  should_find_the_right_store 'AnotherClass', 'AnotherClass'
 end
 
 describe "Searching for a class definition when there are several of them" do
