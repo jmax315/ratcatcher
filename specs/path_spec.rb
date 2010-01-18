@@ -120,45 +120,20 @@ describe "Searching for a class definition when there are several of them" do
   end
 
   it "should find the AClass class definition" do
-    pending
-    @store.find("AClass").class.should == ClassStore
-  end
-
-  it "should find the AClass class definition" do
-    pending
-    @store.find("AClass").text.should == "AClass"
+    @store.find("AClass").sexp.should be_a_tree_like(s(:class, :AClass, :*))
   end
 
   it "should find the method definition" do
-    pending
-    @store.find("AClass/a_method").class.should == DefnStore
-  end
-
-  it "should find the method definition" do
-    pending
-    @store.find("AClass/a_method").text.should == "a_method"
+    @store.find("AClass/a_method").sexp.should be_a_tree_like(s(:defn, :a_method, :*))
   end
 
   it "should find the BClass class definition" do
-    pending
-    @store.find("BClass").class.should == ClassStore
-  end
-
-  it "should find the BClass class definition" do
-    pending
-    @store.find("BClass").text.should == "BClass"
+    @store.find("BClass").sexp.should be_a_tree_like(s(:class, :BClass, :*))
   end
 
   it "should find the method definition" do
-    pending
-    @store.find("BClass/b_method").class.should == DefnStore
+    @store.find("BClass/b_method").sexp.should be_a_tree_like(s(:defn, :b_method, :*))
   end
-
-  it "should find the method definition" do
-    pending
-    @store.find("BClass/b_method").text.should == "b_method"
-  end
-    
 end
 
 
@@ -181,13 +156,7 @@ describe "Searching for a class definition when there are several of them" do
   end
 
   it "should find c_method" do
-    pending
-    @store.find("c_method").class.should == DefnStore
-  end
-
-  it "should find c_method" do
-    pending
-    @store.find("c_method").text.should == "c_method"
+    @store.find("c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
   end
 
 end
