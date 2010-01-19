@@ -11,7 +11,10 @@ describe "A RatCatcherProject" do
     @store['initial_chunk.rb']= 'class Waco; end'
   end
 
-  should_find_the_right_store 'initial_chunk.rb', 'initial_chunk.rb'
+  it "searching for 'initial_chunk.rb' should find initial_chunk.rb" do
+    @store.find('initial_chunk.rb').should respond_to(:name)
+    @store.find('initial_chunk.rb').name.should == 'initial_chunk.rb'
+  end
 end 
 
 
@@ -21,7 +24,10 @@ describe "A RatCatcherProject" do
     @store['first_chunk.rb']= 'class Zed; end'
   end
 
-  should_find_the_right_store 'first_chunk.rb/Zed', 'Zed'
+  it "searching for 'first_chunk.rb/Zed' should find Zed" do
+    @store.find('first_chunk.rb/Zed').should respond_to(:name)
+    @store.find('first_chunk.rb/Zed').name.should == 'Zed'
+  end
 end 
 
 
@@ -31,7 +37,10 @@ describe "A RatCatcherProject" do
     @store['a_chunk.rb']= 'class Rocky; end; class Bullwinkle; end'
   end
 
-  should_find_the_right_store 'a_chunk.rb/Bullwinkle', 'Bullwinkle'
+  it "searching for 'a_chunk.rb/Bullwinkle' should find Bullwinkle" do
+    @store.find('a_chunk.rb/Bullwinkle').should respond_to(:name)
+    @store.find('a_chunk.rb/Bullwinkle').name.should == 'Bullwinkle'
+  end
 end 
 
 
@@ -41,5 +50,8 @@ describe "A RatCatcherProject" do
     @store['bee_chunk.rb']= 'class Rocky; def fly; end; end'
   end
 
-  should_find_the_right_store 'bee_chunk.rb/Rocky/fly', 'fly'
+  it "searching for 'bee_chunk.rb/Rocky/fly' should find fly" do
+    @store.find('bee_chunk.rb/Rocky/fly').should respond_to(:name)
+    @store.find('bee_chunk.rb/Rocky/fly').name.should == 'fly'
+  end
 end 
