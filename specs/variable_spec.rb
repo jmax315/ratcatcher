@@ -86,3 +86,58 @@ describe "handling a variable name referenced as a method parameter" do
     store.to_ruby.should == "new_v = 1\na_method(new_v)\n"
   end
 end
+
+
+describe 'Method within a class' do
+  before :each do
+    src_code= %q{
+class MyClass
+  def my_first_method(ferd)
+    ferd= 'foo'
+  end
+end
+    }
+    @store= RatCatcherStore.parse(src_code)
+  end
+
+  it "should be able to rename on the method" do
+    pending "clean up RatCatcherStore#find and kill the children first"
+    method_store= @store.find('MyClass/my_first_method')
+    method_store.apply(:rename_variable, 'ferd', 'frobazz')
+    @store.to_ruby.should == %q{
+class MyClass
+  def my_first_method(frobazz)
+    frobazz = 'foo'
+  end
+end
+    }
+  end
+end
+
+
+describe 'Two methods with identicaly named parameters' do
+  before :each do
+    src_code= %q{
+      class MyClass
+        def my_first_method(ferd)
+          ferd= 'foo'
+        end
+
+        def my_other_method(ferd)
+          ferd= 'not foo'
+        end
+      end
+    }
+    @store= RatCatcherStore.parse(src_code)
+  end
+
+  it "should be able to rename one method's parameter without affecting the other's" do
+    method_store= @store.find('MyClass/my_first_method')
+    method_store.apply(:rename_variable, 'ferd', 'frobazz')
+    method_store.to_ruby.should == "def my_first_method(frobazz)\n  frobazz = \"foo\"\nend"
+    pending
+    other_method_store.to_ruby.should == "def my_other_method(ferd)\n  ferd = \"not foo\"\nend"
+    other_method_store= @store.find('MyClass/my_other_method')
+  end
+end
+
