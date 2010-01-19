@@ -72,72 +72,60 @@ end
 
 
 
-describe "When more than one class is present" do
+describe "A ProjectItem with two classes" do
   before :each do
     src_code= %q{
       class AClass
         def a_method
           "ferd"
         end
-      end
-      
-      class AnotherClass
-        def another_method
-          "foo"
-        end
-      end
-    }
-    @store= RatCatcherStore.parse(src_code)
-  end
-    
-  should_find_the_right_store 'AClass', 'AClass'
-  should_find_the_right_store 'AnotherClass', 'AnotherClass'
-end
-
-describe "Searching for a class definition when there are several of them" do
-  before :each do
-    src_code= %q{
-      class AClass
-        def a_method
-          "ferd"
+        def c_method
+          "fubar"
         end
       end
       class BClass
         def b_method
           "foo"
         end
+        def c_method
+          "fooseball"
+        end
       end
     }
     @store= RatCatcherStore.parse(src_code)
   end
 
-  it "should find the AClass class definition" do
+  it "should be able to find the first class" do
     @store.find("AClass").sexp.should be_a_tree_like(s(:class, :AClass, :*))
   end
 
-  it "should find the method definition" do
+  it "should be able to find the first method in the first class" do
     @store.find("AClass/a_method").sexp.should be_a_tree_like(s(:defn, :a_method, :*))
   end
 
-  it "should find the AClass class definition" do
-    @store.find("AClass").sexp.should be_a_tree_like(s(:class, :AClass, :*))
+  it "should be able to find the duplicately named method in the first class" do
+    @store.find("AClass/c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
   end
 
-  it "should find the method definition" do
-    @store.find("AClass/a_method").sexp.should be_a_tree_like(s(:defn, :a_method, :*))
-  end
-
-  it "should find the BClass class definition" do
+  it "should be able to find the second class" do
     @store.find("BClass").sexp.should be_a_tree_like(s(:class, :BClass, :*))
   end
 
-  it "should find the method definition" do
+  it "should be able to find the first method in the second class" do
     @store.find("BClass/b_method").sexp.should be_a_tree_like(s(:defn, :b_method, :*))
   end
+
+  it "should be able to find the duplicately named method in the second class" do
+    @store.find("BClass/c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
+  end
+
+  it "should not confuse the two duplicately named methods"
+  # pending 'cause we don't have a good way to tell which method we've
+  # found.
 end
 
 
-describe "Searching for a class definition when there are several of them" do
+describe "Searching for a method buried in conditional logic" do
   before :each do
     src_code= %q{
       class BClass
