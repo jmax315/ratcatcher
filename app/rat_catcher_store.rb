@@ -99,41 +99,6 @@ class RatCatcherStore
     has_name?  &&  name == expected_name
   end
 
-#     if first_path_element == "."
-#       return find(rest_of_path)
-#     end
-
-#     find_child_match(first_path_element, rest_of_path)
-#  end
-
-#   def find_child_match(first_path_element, rest_of_path)
-#     @children.each do |kid|
-#       kid_match= kid.matches(first_path_element, rest_of_path)
-#       return kid_match if kid_match
-#     end
-#     nil
-#   end
-
-#   def matches(first_path_element, rest_of_path)
-#     if respond_to?(:name)
-#       if first_path_element != name
-#         nil
-#       elsif rest_of_path
-#         find(rest_of_path)
-#       else
-#         self
-#       end
-#     else
-#       find_child_match(first_path_element, rest_of_path)
-#     end
-#   end
-
-#   def path_reference(path)
-#     path.inject(self) do |value, index|
-#       value= value[index]
-#     end
-#   end
-  
   def apply(refactoring, *args)
     the_refactoring= RenameVariable.new(args[0], args[1])
     @sexp= the_refactoring.process(@sexp)
