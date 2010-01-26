@@ -52,23 +52,23 @@ class RatCatcherStore
 
   def walk(path_components)
     if path_components.size < 1
-      return nil
-    end
-
-    if !have_name?
-      sub_components= path_components
+      nil
+    elsif !have_name?
+      walk_children(path_components)
     elsif name != path_components[0]
-      return nil
+      nil
     elsif path_components.size == 1
-      return self
+      self
     else
-      sub_components= path_components[1..-1]
+      walk_children(path_components[1..-1])
     end
+  end
 
+  def walk_children(path_components)
     @sexp.each do |sub_expression|
       if sub_expression.kind_of?(Sexp)
         sub_store= RatCatcherStore.from_sexp(sub_expression)
-        sub_match= sub_store.walk(sub_components)
+        sub_match= sub_store.walk(path_components)
         if sub_match
           return sub_match
         end
