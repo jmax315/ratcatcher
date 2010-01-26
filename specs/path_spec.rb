@@ -111,9 +111,9 @@ describe "A ProjectItem with two classes" do
     @store.find("BClass/c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
   end
 
-  it "should not confuse the two duplicately named methods"
-  # pending 'cause we don't have a good way to tell which method we've
-  # found.
+  it "should not confuse the two duplicately named methods" do
+    @store.find("BClass/c_method").sexp.should == @store.sexp[2][3][1][2]
+  end
 end
 
 
