@@ -7,7 +7,6 @@ require 'app/tree_like_matcher'
 
 
 class RatCatcherStore
-  attr_accessor :children
   attr_reader :sexp
 
   def self.parse source_code
@@ -22,7 +21,6 @@ class RatCatcherStore
   private
   
   def initialize new_sexp
-    @children= []
     @sexp= new_sexp
   end
 
@@ -36,20 +34,20 @@ class RatCatcherStore
     Ruby2Ruby.new.process(sexp)
   end
 
-  def size
-    @children.size
-  end
-
-  def [](index)
-    @children[index]
-  end
-
   def find(path)
-    if !path || path == '' || path == '.'
-      return self
+    if !path
+      return nil
     end
     path_components= path.split('/')
     walk(path_components)
+  end
+
+  def have_name?
+    sexp[1]  &&  sexp[1].kind_of?(Symbol)
+  end
+
+  def name
+    sexp[1].to_sym
   end
 
   def walk(path_components)
@@ -57,34 +55,26 @@ class RatCatcherStore
       return nil
     end
 
-    if path_components[0] == '.'  ||
-        TreeLikeMatcher.new(s(:_, path_components[0].to_sym, :*)).matches?(self.sexp)
-      if path_components.size < 2
-        return self
-      end
-
-      sub_components= path_components[1..-1]
-      @sexp[2..-1].each do |sub_expression|
-        if sub_expression.kind_of?(Sexp)
-          sub_store= RatCatcherStore.from_sexp(sub_expression)
-          sub_match= sub_store.walk(sub_components)
-          if sub_match
-            return sub_match
-          end
-        end
-      end
+    if !have_name?
+      sub_components= path_components
+    elsif name != path_components[0]
+      return nil
+    elsif path_components.size == 1
+      return self
     else
-      @sexp[1..-1].each do |sub_expression|
-        if sub_expression.kind_of?(Sexp)
-          sub_store= RatCatcherStore.from_sexp(sub_expression)
-          sub_match= sub_store.walk(path_components)
-          if sub_match
-            return sub_match
-          end
+      sub_components= path_components[1..-1]
+    end
+
+    @sexp.each do |sub_expression|
+      if sub_expression.kind_of?(Sexp)
+        sub_store= RatCatcherStore.from_sexp(sub_expression)
+        sub_match= sub_store.walk(sub_components)
+        if sub_match
+          return sub_match
         end
       end
-      nil
     end
+    nil
   end
 
   def has_name?

@@ -28,16 +28,16 @@ describe "Searching inside a class definition" do
     @store.find("Wombat").should == nil
   end
 
- it "should find the store itself if the path is nil" do
-    @store.find(nil).should == @duplicate_store
+ it "should not find anything if the path is nil" do
+    @store.find(nil).should be_nil
  end
 
-  it "should find the store itself if the path is empty" do
-    @store.find("").should == @duplicate_store
+  it "should not find anything  if the path is empty" do
+    @store.find("").should be_nil
   end
 
-  it "should find the store itself if the path is '.'" do
-    @store.find(".").should == @duplicate_store
+  it "should not find anything if the path is '.'" do
+    @store.find(".").should be_nil
   end
 
   it "should find the class definition" do
@@ -45,17 +45,10 @@ describe "Searching inside a class definition" do
   end
 
   it "should find the method definition" do
-    find_sexp("a_method").should be_a_tree_like(s(:defn,
-                                                    :a_method,
-                                                    :_,
-                                                    :_))
-  end
-
-  it "should find the method definition even with a redundant ./ in the path" do
-    find_sexp("./a_method").should be_a_tree_like(s(:defn,
-                                                      :a_method,
-                                                      :_,
-                                                      :_))
+    find_sexp("AClass/a_method").should be_a_tree_like(s(:defn,
+                                                         :a_method,
+                                                         :_,
+                                                         :_))
   end
 
   def find_sexp(path)
@@ -143,7 +136,7 @@ describe "Searching for a method buried in conditional logic" do
   end
 
   it "should find c_method" do
-    @store.find("c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
+    @store.find("BClass/c_method").sexp.should be_a_tree_like(s(:defn, :c_method, :*))
   end
 
 end
