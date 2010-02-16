@@ -101,16 +101,13 @@ end
   end
 
   it "should be able to rename on the method" do
-    pending "clean up RatCatcherStore#find and kill the children first"
     method_store= @store.find('MyClass/my_first_method')
     method_store.apply(:rename_variable, 'ferd', 'frobazz')
-    @store.to_ruby.should == %q{
-class MyClass
+    @store.to_ruby.should == %q{class MyClass
   def my_first_method(frobazz)
-    frobazz = 'foo'
+    frobazz = "foo"
   end
-end
-    }
+end}
   end
 end
 
@@ -135,9 +132,8 @@ describe 'Two methods with identicaly named parameters' do
     method_store= @store.find('MyClass/my_first_method')
     method_store.apply(:rename_variable, 'ferd', 'frobazz')
     method_store.to_ruby.should == "def my_first_method(frobazz)\n  frobazz = \"foo\"\nend"
-    pending
-    other_method_store.to_ruby.should == "def my_other_method(ferd)\n  ferd = \"not foo\"\nend"
     other_method_store= @store.find('MyClass/my_other_method')
+    other_method_store.to_ruby.should == "def my_other_method(ferd)\n  ferd = \"not foo\"\nend"
   end
 end
 

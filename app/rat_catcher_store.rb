@@ -7,27 +7,45 @@ require 'app/tree_like_matcher'
 
 
 class RatCatcherStore
-  attr_reader :sexp
+end
 
+class TopStore < RatCatcherStore
+  attr_accessor :sexp
+
+  def initialize(a_sexp)
+    self.sexp= a_sexp
+  end
+end
+
+class InternalStore < RatCatcherStore
+  def initialize(parent_sexp, child_index)
+    @parent_sexp= parent_sexp
+    @child_index= child_index
+  end
+
+  def sexp
+    @parent_sexp[@child_index]
+  end
+
+  def sexp=(new_value)
+    @parent_sexp[@child_index]= new_value
+  end
+end
+
+class RatCatcherStore
   def self.parse source_code
-    RatCatcherStore.from_sexp(RubyParser.new.process(source_code))
+    TopStore.new(RubyParser.new.process(source_code))
     rescue ParseError
   end
 
-  def self.from_sexp new_sexp
-    RatCatcherStore.new(new_sexp)
-  end
-
-  private
-  
   def initialize new_sexp
-    @sexp= new_sexp
+    self.sexp= new_sexp
   end
 
   public
 
   def ==(right)
-    right.nil? ? false : @sexp == right.sexp
+    right.nil? ? false : self.sexp == right.sexp
   end
 
   def to_ruby
@@ -65,9 +83,10 @@ class RatCatcherStore
   end
 
   def walk_children(path_components)
-    @sexp.each do |sub_expression|
+    (1..self.sexp.size).each do |index|
+      sub_expression= self.sexp[index]
       if sub_expression.kind_of?(Sexp)
-        sub_store= RatCatcherStore.from_sexp(sub_expression)
+        sub_store= InternalStore.new(self.sexp, index)
         sub_match= sub_store.walk(path_components)
         if sub_match
           return sub_match
@@ -78,11 +97,11 @@ class RatCatcherStore
   end
 
   def has_name?
-    @sexp && @sexp[0] == :class
+    self.sexp && self.sexp[0] == :class
   end
 
   def name
-    @sexp[1].to_s
+    self.sexp[1].to_s
   end
 
   def matches?(expected_name)
@@ -91,6 +110,6 @@ class RatCatcherStore
 
   def apply(refactoring, *args)
     the_refactoring= RenameVariable.new(args[0], args[1])
-    @sexp= the_refactoring.process(@sexp)
+    self.sexp= the_refactoring.process(self.sexp)
   end
 end
