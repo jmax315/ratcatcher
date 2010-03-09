@@ -1,9 +1,8 @@
 require 'ruby_parser'
 require 'ruby2ruby'
 
-#Todo: make these absolute paths
-require 'app/rename_variable'
-require 'app/tree_like_matcher'
+require File.expand_path(File.dirname(__FILE__)) + '/rename_variable'
+require File.expand_path(File.dirname(__FILE__)) + '/tree_like_matcher'
 
 
 class RatCatcherStore

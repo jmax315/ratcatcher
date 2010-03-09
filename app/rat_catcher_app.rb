@@ -1,17 +1,8 @@
-require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store.rb'
-
+require 'json'
 
 class RatCatcherApp
-
-  attr_accessor :data_file_name,
-                :store
-
-  def initialize
-    @store= nil
+  def invoke(wrapped_call)
+    unwrapped_call= JSON.parse wrapped_call
+    send(*unwrapped_call).to_json
   end
-
-  def replace_node(path, new_text)
-    @store= @store.replace_node(path, new_text)
-  end
-
 end
