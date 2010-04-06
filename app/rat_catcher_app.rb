@@ -24,13 +24,13 @@ class RatCatcherApp
     "1\n" + encoded_call
   end
 
-  def self.from_rcp(wrapped_call)
-    count,payload = wrapped_call.split("\n", 2)
+  def self.from_json(payload)
     unwrapped_call= JSON.parse(payload)
   end
 
+  #TODO change invoke() to return json instead of rcp
   def invoke(wrapped_call)
-    unwrapped_call= RatCatcherApp.from_rcp(wrapped_call)
+    unwrapped_call= RatCatcherApp.from_json(wrapped_call)
     send(*unwrapped_call).to_rcp
   end
 
@@ -41,5 +41,12 @@ class RatCatcherApp
       payload += input_stream.readline
     end
     payload
+  end
+
+  def interpret_commands(input_stream, output_stream)
+    wrapped_call= read_next(input_stream)
+    puts wrapped_call
+    result= invoke(wrapped_call)
+    output_stream.write(result)
   end
 end
