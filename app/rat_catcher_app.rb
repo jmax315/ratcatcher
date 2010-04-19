@@ -1,27 +1,24 @@
 require 'json'
 
 class Array
-  def to_rcp()
-    RatCatcherApp.to_rcp(self)
-  end
+ def to_rcp()
+ end
 end
 
 class String
-  def to_rcp()
-    RatCatcherApp.to_rcp(self)
-  end
+ def to_rcp()
+ end
 end
 
 class NilClass
-  def to_rcp()
-    RatCatcherApp.to_rcp(self)
-  end
+ def to_rcp()
+ end
 end
 
 class RatCatcherApp
-  def self.to_rcp(call)
-    encoded_call= call.to_json
-    "1\n" + encoded_call
+  def self.to_rcp(output_stream, json_string)
+    output_stream.write("#{json_string.count('\n')}\n")
+    output_stream.write(json_string)
   end
 
   def self.from_json(payload)
@@ -34,7 +31,7 @@ class RatCatcherApp
     send(*unwrapped_call).to_rcp
   end
 
-  def read_next(input_stream)
+  def self.from_rcp(input_stream)
     line_count= input_stream.readline.to_i
     payload= ""
     line_count.times do
@@ -44,7 +41,7 @@ class RatCatcherApp
   end
 
   def interpret_commands(input_stream, output_stream)
-    wrapped_call= read_next(input_stream)
+    wrapped_call= RatCatcherApp.read_next(input_stream)
     puts wrapped_call
     result= invoke(wrapped_call)
     output_stream.write(result)
