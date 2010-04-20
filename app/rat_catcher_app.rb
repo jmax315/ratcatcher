@@ -1,6 +1,11 @@
 require 'json'
 
 class RatCatcherApp
+  def initialize(input_stream, output_stream)
+    @input_stream = input_stream
+    @output_stream = output_stream
+  end
+
   def self.to_rcp(output_stream, json_string)
     if (json_string[-1..-1] != "\n")
       json_string += "\n"
@@ -28,9 +33,9 @@ class RatCatcherApp
     payload
   end
 
-  def interpret_commands(input_stream, output_stream)
-    wrapped_call= RatCatcherApp.from_rcp(input_stream)
+  def interpret_commands
+    wrapped_call= RatCatcherApp.from_rcp(@input_stream)
     result= invoke(wrapped_call)
-    RatCatcherApp.to_rcp(output_stream, result)
+    RatCatcherApp.to_rcp(@output_stream, result)
   end
 end

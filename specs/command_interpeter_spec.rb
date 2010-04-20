@@ -49,7 +49,7 @@ end
 
 describe "invoking a method" do
   before :each do
-    @rat_catcher= RatCatcherApp.new
+    @rat_catcher= RatCatcherApp.new(nil, nil)
   end
 
   it "should call the method specified" do
@@ -105,16 +105,17 @@ end
 
 describe "the command interpreter" do
   before :each do
-    @rat_catcher= RatCatcherApp.new
     @output_stream= StringIO.new("", "w")
+    @input_stream= StringIO.new("", "r")
+    @rat_catcher= RatCatcherApp.new(@input_stream, @output_stream)
   end
 
   it "should capture an input command and return the results" do
     @rat_catcher.should_receive(:an_arbitrary_method).and_return("[\"the results\"]\n")
     encoded_call= "1\n[\"an_arbitrary_method\"]\n"
-    input_stream= StringIO.new(encoded_call)
+    @input_stream.string= encoded_call
 
-    @rat_catcher.interpret_commands(input_stream, @output_stream)
+    @rat_catcher.interpret_commands
     @output_stream.string.should == "1\n[\"the results\"]\n"
   end
 end
