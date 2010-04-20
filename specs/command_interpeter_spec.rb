@@ -126,4 +126,6 @@ describe "the command interpreter" do
       @input_from_ratcatcher.read.should == "1\n[\"the results\"]\n"
     end
   end
+
+  it "should handle multiple commands (loop)"
 end
