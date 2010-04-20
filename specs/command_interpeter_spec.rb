@@ -6,14 +6,25 @@ describe "encoding the Rat Catcher Protocol" do
   end
 
   it "should include line count followed by JSON encoding" do
-    RatCatcherApp.to_rcp(@output_stream, "a_string")
-    @output_stream.string.should == "1\na_string"
+    RatCatcherApp.to_rcp(@output_stream, "a_string\n")
+    @output_stream.string.should == "1\na_string\n"
   end
 
   it "should encode multi-line strings" do
-    RatCatcherApp.to_rcp(@output_stream, "line 1\nline2")
-    @output_stream.string.should == "2\nline 1\nline2"
+    RatCatcherApp.to_rcp(@output_stream, "line 1\nline2\n")
+    @output_stream.string.should == "2\nline 1\nline2\n"
   end
+
+  it "should append a newline if none at end" do
+    RatCatcherApp.to_rcp(@output_stream, "a_string")
+    @output_stream.string.should == "1\na_string\n"
+  end
+
+  it "should even append a newline to multi-line strings if needed" do
+    RatCatcherApp.to_rcp(@output_stream, "line 1\nline2")
+    @output_stream.string.should == "2\nline 1\nline2\n"
+  end
+
 end
 
 describe "decoding the Rat Catcher Protocol" do
@@ -42,45 +53,39 @@ describe "invoking a method" do
   end
 
   it "should call the method specified" do
-    pending
     @rat_catcher.should_receive(:do_something)
     encoded_call= ['do_something'].to_json
     @rat_catcher.invoke(encoded_call)
   end
 
   it "should call a different method" do
-    pending
     @rat_catcher.should_receive(:do_something_else)
     encoded_call= ['do_something_else'].to_json
     @rat_catcher.invoke(encoded_call)
   end
 
   it "should pass an argument to the method" do
-    pending
     @rat_catcher.should_receive(:do_something_else).with("an argument")
     encoded_call= ['do_something_else', 'an argument'].to_json
     @rat_catcher.invoke(encoded_call)
   end
 
   it "should handle multi-line calls" do
-    pending
     @rat_catcher.should_receive(:do_something_else).with("an argument")
     encoded_call= "[\n  \"do_something_else\",\n  \"an argument\"\n]\n"
     @rat_catcher.invoke(encoded_call)
   end
 
   it "should receive an encoded return value" do
-    pending
     @rat_catcher.should_receive(:do_something_else).and_return("ferd")
     encoded_call= ['do_something_else'].to_json
-    @rat_catcher.invoke(encoded_call).should == "ferd".to_rcp
+    @rat_catcher.invoke(encoded_call).should == "ferd"
   end
 
   it "should receive an encoded return value containing a newline" do
-    pending
     @rat_catcher.should_receive(:the_method).and_return("line 1\nline2\n")
     encoded_call= ['the_method'].to_json
-    @rat_catcher.invoke(encoded_call).should == "line 1\nline2\n".to_rcp
+    @rat_catcher.invoke(encoded_call).should == "line 1\nline2\n"
   end
 end
 
@@ -105,12 +110,11 @@ describe "the command interpreter" do
   end
 
   it "should capture an input command and return the results" do
-    pending
     @rat_catcher.should_receive(:an_arbitrary_method).and_return("[\"the results\"]\n")
     encoded_call= "1\n[\"an_arbitrary_method\"]\n"
     input_stream= StringIO.new(encoded_call)
 
     @rat_catcher.interpret_commands(input_stream, @output_stream)
-    @output_stream.string.should == "[\"the results\"]\n"
+    @output_stream.string.should == "1\n[\"the results\"]\n"
   end
 end
