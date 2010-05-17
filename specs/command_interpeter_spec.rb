@@ -105,27 +105,29 @@ end
 
 describe "the command interpreter" do
   before :each do
-    @input_from_ratcatcher, @output_stream = IO.pipe
-    @input_stream, @output_to_ratcatcher = IO.pipe
+    @output_stream_sink, @output_stream = IO.pipe
+    @input_stream, @input_stream_source = IO.pipe
   end
 
   it "should capture an input command and return the results" do
     if !fork
-      @output_to_ratcatcher.close
-      @input_from_ratcatcher.close
+      @input_stream_source.close
+      @output_stream_sink.close
+
       @rat_catcher= RatCatcherApp.new(@input_stream, @output_stream)
-      @rat_catcher.should_receive(:an_arbitrary_method).and_return("[\"the results\"]\n")
+      @rat_catcher.stub!(:an_arbitrary_method).and_return("[\"the results\"]\n")
       @rat_catcher.interpret_commands
       Kernel.exit!
     else
       @input_stream.close
       @output_stream.close
       encoded_call= "1\n[\"an_arbitrary_method\"]\n"
-      @output_to_ratcatcher.write(encoded_call)
+      @input_stream_source.write(encoded_call)
 
-      @input_from_ratcatcher.read.should == "1\n[\"the results\"]\n"
+      @output_stream_sink.read.should == "1\n[\"the results\"]\n"
     end
   end
 
   it "should handle multiple commands (loop)"
+
 end
