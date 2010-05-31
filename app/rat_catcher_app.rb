@@ -25,17 +25,22 @@ class RatCatcherApp
   end
 
   def from_rcp
-    line_count= @input_stream.readline.to_i
+    line_count= @input_stream.gets.to_i
     payload= ""
     line_count.times do
-      payload += @input_stream.readline
+      payload += @input_stream.gets
     end
     payload
   end
 
   def interpret_commands
-    wrapped_call= from_rcp
-    result= invoke(wrapped_call)
-    to_rcp(result)
+    while true do
+      wrapped_call= from_rcp
+      if wrapped_call == ""
+        break
+      end
+      result= invoke(wrapped_call)
+      to_rcp(result)
+    end
   end
 end
