@@ -43,4 +43,8 @@ class RatCatcherApp
       to_rcp(result)
     end
   end
+
+  def create_project_item(source_code)
+    true
+  end
 end
