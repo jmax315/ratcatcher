@@ -6,8 +6,8 @@ class ProjectItemStore
     @name= name
   end
 
-  def to_ruby
-    @store.to_ruby
+  def source
+    @store.source
   end
 
   def sexp

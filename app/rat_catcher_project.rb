@@ -20,7 +20,7 @@ class RatCatcherProject
   end
 
   def [] (key)
-    @items[key].to_ruby
+    @items[key].source
   end
 
   def find(path)

@@ -45,6 +45,6 @@ class RatCatcherApp
   end
 
   def create_project_item(source_code)
-    true
+    RatCatcherStore.parse(source_code)
   end
 end

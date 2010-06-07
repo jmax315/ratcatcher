@@ -47,7 +47,7 @@ class RatCatcherStore
     right.nil? ? false : self.sexp == right.sexp
   end
 
-  def to_ruby
+  def source
     Ruby2Ruby.new.process(sexp)
   end
 
