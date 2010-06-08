@@ -79,13 +79,13 @@ describe "invoking a method" do
   it "should receive an encoded return value" do
     @rat_catcher.should_receive(:do_something_else).and_return("ferd")
     encoded_call= ['do_something_else'].to_json
-    @rat_catcher.invoke(encoded_call).should == "ferd"
+    @rat_catcher.invoke(encoded_call).should == "\"ferd\""
   end
 
   it "should receive an encoded return value containing a newline" do
     @rat_catcher.should_receive(:the_method).and_return("line 1\nline2\n")
     encoded_call= ['the_method'].to_json
-    @rat_catcher.invoke(encoded_call).should == "line 1\nline2\n"
+    @rat_catcher.invoke(encoded_call).should == "\"line 1\\nline2\\n\""
   end
 end
 
@@ -115,7 +115,7 @@ describe "the command interpreter" do
       @output_stream_sink.close
 
       @rat_catcher= RatCatcherApp.new(@input_stream, @output_stream)
-      @rat_catcher.stub!(:an_arbitrary_method).and_return("[\"the results\"]\n")
+      @rat_catcher.stub!(:an_arbitrary_method).and_return("the results")
       @rat_catcher.interpret_commands
       Kernel.exit!
     else
@@ -125,7 +125,7 @@ describe "the command interpreter" do
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the results\"]\n"
+      @output_stream_sink.gets.should == "\"the results\"\n"
     end
   end
 
@@ -136,8 +136,8 @@ describe "the command interpreter" do
 
       @rat_catcher= RatCatcherApp.new(@input_stream, @output_stream)
 
-      @rat_catcher.stub!(:an_arbitrary_method).and_return("[\"the results\"]\n")
-      @rat_catcher.stub!(:another_method).and_return("[\"the other results\"]\n")
+      @rat_catcher.stub!(:an_arbitrary_method).and_return("the results")
+      @rat_catcher.stub!(:another_method).and_return("the other results")
 
       @rat_catcher.interpret_commands
 
@@ -150,13 +150,13 @@ describe "the command interpreter" do
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the results\"]\n"
+      @output_stream_sink.gets.should == "\"the results\"\n"
 
       encoded_call= "1\n[\"another_method\"]\n"
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the other results\"]\n"
+      @output_stream_sink.gets.should == "\"the other results\"\n"
     end
   end
 

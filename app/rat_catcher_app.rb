@@ -1,4 +1,5 @@
 require 'json'
+require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store'
 
 class RatCatcherApp
   def initialize(input_stream, output_stream)
@@ -18,10 +19,9 @@ class RatCatcherApp
     JSON.parse(payload)
   end
 
-  #TODO change invoke() to return json instead of rcp
   def invoke(wrapped_call)
     unwrapped_call= from_json(wrapped_call)
-    send(*unwrapped_call)
+    send(*unwrapped_call).to_json
   end
 
   def from_rcp
@@ -36,9 +36,7 @@ class RatCatcherApp
   def interpret_commands
     while true do
       wrapped_call= from_rcp
-      if wrapped_call == ""
-        break
-      end
+      break if wrapped_call == ""
       result= invoke(wrapped_call)
       to_rcp(result)
     end
