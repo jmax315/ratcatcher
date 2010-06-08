@@ -7,7 +7,7 @@ class RatCatcherApp
     @output_stream = output_stream
   end
 
-  def to_rcp(json_string)
+  def rcp_write(json_string)
     if (json_string[-1..-1] != "\n")
       json_string += "\n"
     end
@@ -24,8 +24,13 @@ class RatCatcherApp
     send(*unwrapped_call).to_json
   end
 
-  def from_rcp
+  #ToDo: Split this in two
+  def rcp_read
     line_count= @input_stream.gets.to_i
+    if line_count <= 0
+      return nil
+    end
+
     payload= ""
     line_count.times do
       payload += @input_stream.gets
@@ -33,12 +38,9 @@ class RatCatcherApp
     payload
   end
 
-  def interpret_commands
-    while true do
-      wrapped_call= from_rcp
-      break if wrapped_call == ""
-      result= invoke(wrapped_call)
-      to_rcp(result)
+  def command_loop
+    until (wrapped_call= rcp_read).nil?
+      rcp_write(invoke(wrapped_call))
     end
   end
 
