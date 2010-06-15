@@ -24,22 +24,16 @@ class RatCatcherApp
     send(*unwrapped_call).to_json
   end
 
-  #ToDo: Split this in two
   def rcp_read
-    line_count= @input_stream.gets.to_i
-    if line_count <= 0
-      return nil
-    end
-
     payload= ""
-    line_count.times do
+    @input_stream.gets.to_i.times do
       payload += @input_stream.gets
     end
     payload
   end
 
   def command_loop
-    until (wrapped_call= rcp_read).nil?
+    until (wrapped_call= rcp_read).length == 0
       rcp_write(invoke(wrapped_call))
     end
   end
