@@ -5,6 +5,7 @@ class RatCatcherApp
   def initialize(input_stream, output_stream)
     @input_stream = input_stream
     @output_stream = output_stream
+    @project_items= {}
   end
 
   def rcp_write(json_string)
@@ -21,7 +22,7 @@ class RatCatcherApp
 
   def invoke(wrapped_call)
     unwrapped_call= from_json(wrapped_call)
-    send(*unwrapped_call).to_json
+    [send(*unwrapped_call)].to_json
   end
 
   def rcp_read
@@ -34,11 +35,20 @@ class RatCatcherApp
 
   def command_loop
     until (wrapped_call= rcp_read).length == 0
-      rcp_write(invoke(wrapped_call))
+      result= invoke(wrapped_call)
+      rcp_write(result)
     end
   end
 
   def create_project_item(source_code)
-    RatCatcherStore.parse(source_code)
+    store= RatCatcherStore.parse(source_code)
+    key= store.hash
+    @project_items[key]= store
+    key
+  end
+
+  def code_from_cookie(cookie)
+    item= @project_items[cookie]
+    item && item.source
   end
 end
