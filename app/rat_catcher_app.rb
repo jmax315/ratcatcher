@@ -51,4 +51,11 @@ class RatCatcherApp
     item= @project_items[cookie]
     item && item.source
   end
+
+  def rename_variable(cookie, from, to)
+    item= @project_items[cookie]
+    if item
+      item.apply(:rename_variable, from, to)
+    end
+  end
 end

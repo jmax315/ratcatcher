@@ -33,11 +33,31 @@ describe 'loading code' do
   it 'should get the code back' do
     @retrieved_code.should == @src
   end
-
-  it 'should not rename the_wrong_variable' do
-    pending
-    @tree.apply(:rename_variable, 'the_wrong_variable', 'new_name')
-    variable_should_be('a_variable')
-  end
 end
 
+describe 'renaming a variable' do
+  before :each do
+    @input= StringIO.new
+    @output= StringIO.new
+    @the_app= RatCatcherApp.new(@input, @output)
+    @src= "a_variable = 5"
+
+    @input.string= "1\n[\"create_project_item\", \"#{@src}\"]\n"
+    @output.string= ""
+    @the_app.command_loop
+    @magic_cookie= rcp_decode(@output.string)
+
+    @input.string= "1\n[\"rename_variable\", #{@magic_cookie}, \"a_variable\", \"different_variable\"]\n"
+    @output.string= ""
+    @the_app.command_loop
+
+    @input.string= "1\n[\"code_from_cookie\", #{@magic_cookie}]\n"
+    @output.string= ""
+    @the_app.command_loop
+    @retrieved_code= rcp_decode(@output.string)
+  end
+
+  it 'should work for a simple case' do
+    @retrieved_code.should == "different_variable = 5"
+  end
+end
