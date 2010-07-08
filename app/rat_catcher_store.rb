@@ -37,10 +37,6 @@ class RatCatcherStore
     rescue ParseError
   end
 
-  def initialize new_sexp
-    self.sexp= new_sexp
-  end
-
   public
 
   def ==(right)
@@ -61,10 +57,6 @@ class RatCatcherStore
 
   def have_name?
     sexp[1]  &&  sexp[1].kind_of?(Symbol)
-  end
-
-  def name
-    sexp[1].to_sym
   end
 
   def walk(path_components)
@@ -95,16 +87,8 @@ class RatCatcherStore
     nil
   end
 
-  def has_name?
-    self.sexp && self.sexp[0] == :class
-  end
-
   def name
     self.sexp[1].to_s
-  end
-
-  def matches?(expected_name)
-    has_name?  &&  name == expected_name
   end
 
   def apply(refactoring, *args)

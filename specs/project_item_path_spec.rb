@@ -20,4 +20,8 @@ describe "A RatCatcherProjectItem" do
   it "should find itself when passed the path '.'" do
     @item.find('.').should == @item
   end
+
+  it "should return nil when passed an incorrect path" do
+    @item.find('foo').should be_nil
+  end
 end 
