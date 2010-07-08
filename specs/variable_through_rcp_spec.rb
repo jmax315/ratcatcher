@@ -12,6 +12,16 @@ def rcp_decode(s)
 end
 
 
+class RatCatcherApp
+  def do_commands(command)
+    @input_stream.string= command
+    @output_stream.string= ""
+    command_loop
+    rcp_decode(@output_stream.string)
+  end
+end
+
+
 describe 'loading code' do
   before :each do
     @input= StringIO.new
@@ -19,15 +29,9 @@ describe 'loading code' do
     @the_app= RatCatcherApp.new(@input, @output)
     @src= "a_variable = 5"
 
-    @input.string= "1\n[\"create_project_item\", \"#{@src}\"]\n"
-    @output.string= ""
-    @the_app.command_loop
-    @magic_cookie= rcp_decode(@output.string)
+    @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
 
-    @input.string= "1\n[\"code_from_cookie\", #{@magic_cookie}]\n"
-    @output.string= ""
-    @the_app.command_loop
-    @retrieved_code= rcp_decode(@output.string)
+    @retrieved_code= @the_app.do_commands("1\n[\"code_from_cookie\", #{@magic_cookie}]\n")
   end
 
   it 'should get the code back' do
@@ -42,19 +46,11 @@ describe 'renaming a variable' do
     @the_app= RatCatcherApp.new(@input, @output)
     @src= "a_variable = 5"
 
-    @input.string= "1\n[\"create_project_item\", \"#{@src}\"]\n"
-    @output.string= ""
-    @the_app.command_loop
-    @magic_cookie= rcp_decode(@output.string)
+    @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
 
-    @input.string= "1\n[\"rename_variable\", #{@magic_cookie}, \"a_variable\", \"different_variable\"]\n"
-    @output.string= ""
-    @the_app.command_loop
+    @the_app.do_commands("1\n[\"rename_variable\", #{@magic_cookie}, \"a_variable\", \"different_variable\"]\n")
 
-    @input.string= "1\n[\"code_from_cookie\", #{@magic_cookie}]\n"
-    @output.string= ""
-    @the_app.command_loop
-    @retrieved_code= rcp_decode(@output.string)
+    @retrieved_code= @the_app.do_commands("1\n[\"code_from_cookie\", #{@magic_cookie}]\n")
   end
 
   it 'should work for a simple case' do
