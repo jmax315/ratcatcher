@@ -49,7 +49,7 @@ end
 
 describe "invoking a method" do
   before :each do
-    @rat_catcher= RatCatcherApp.new(nil, nil)
+    @rat_catcher= RatCatcherApp.new
   end
 
   it "should call the method specified" do

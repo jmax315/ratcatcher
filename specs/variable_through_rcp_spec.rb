@@ -14,6 +14,14 @@ end
 
 class RatCatcherApp
   def do_commands(command)
+    if @input_stream == $stdin
+      @input_stream= StringIO.new
+    end
+
+    if @output_stream == $stdout
+      @output_stream= StringIO.new
+    end
+
     @input_stream.string= command
     @output_stream.string= ""
     command_loop
@@ -24,9 +32,7 @@ end
 
 describe 'loading code' do
   before :each do
-    @input= StringIO.new
-    @output= StringIO.new
-    @the_app= RatCatcherApp.new(@input, @output)
+    @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
     @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
@@ -41,9 +47,7 @@ end
 
 describe 'renaming a variable' do
   before :each do
-    @input= StringIO.new
-    @output= StringIO.new
-    @the_app= RatCatcherApp.new(@input, @output)
+    @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
     @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")

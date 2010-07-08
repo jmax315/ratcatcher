@@ -2,7 +2,7 @@ require 'json'
 require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store'
 
 class RatCatcherApp
-  def initialize(input_stream, output_stream)
+  def initialize(input_stream= $stdin, output_stream= $stdout)
     @input_stream = input_stream
     @output_stream = output_stream
     @project_items= {}
