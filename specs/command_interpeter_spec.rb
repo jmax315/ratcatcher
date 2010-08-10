@@ -90,13 +90,13 @@ describe "invoking a method" do
 end
 
 describe "handling an input stream" do
-  it "should call capture a single-line command" do
+  it "should call a single-line command" do
     encoded_call= "1\n[\"do_something_else\",\"an argument\"]\n"
     input_stream= StringIO.new(encoded_call)
     RatCatcherApp.new(input_stream, nil).rcp_read.should == "[\"do_something_else\",\"an argument\"]\n"
   end
 
-  it "should call capture a multi-line command" do
+  it "should call a multi-line command" do
     encoded_call= "4\n[\n  \"do_something_else\",\n  \"an argument\"\n]\n"
     input_stream= StringIO.new(encoded_call)
     RatCatcherApp.new(input_stream, nil).rcp_read.should == "[\n  \"do_something_else\",\n  \"an argument\"\n]\n"
