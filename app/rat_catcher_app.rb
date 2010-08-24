@@ -58,4 +58,8 @@ class RatCatcherApp
       item.apply(:rename_variable, from, to)
     end
   end
+
+  def echo(*args)
+    args
+  end
 end
