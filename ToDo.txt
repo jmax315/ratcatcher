@@ -1,1 +1,6 @@
 Handle ruby_parser errors.
+
+Write a spec to directly test RatCatcherApp.rename_variable
+
+Refactor rename_variable to use general object invocation protocol
+(i.e., get rid of the wrapper on RatCatcherApp)

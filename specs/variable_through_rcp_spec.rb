@@ -35,9 +35,9 @@ describe 'loading code' do
     @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
-    @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
 
-    @retrieved_code= @the_app.do_commands("1\n[\"code_from_cookie\", #{@magic_cookie}]\n")
+    @retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
   end
 
   it 'should get the code back' do
@@ -50,11 +50,11 @@ describe 'loading and retrieving code' do
     @the_app= RatCatcherApp.new
     @src= "the_answer = 42"
 
-    @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
   end
 
   it 'should get the stored code from cookie' do
-    retrieved_code= @the_app.do_commands("1\n[\"code_from_cookie\", #{@magic_cookie}]\n")
+    retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
     retrieved_code.should == @src
   end
 end
@@ -64,11 +64,11 @@ describe 'renaming a variable' do
     @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
-    @magic_cookie= @the_app.do_commands("1\n[\"create_project_item\", \"#{@src}\"]\n")
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
 
-    @the_app.do_commands("1\n[\"rename_variable\", #{@magic_cookie}, \"a_variable\", \"different_variable\"]\n")
+    @the_app.do_commands(%(1\n["rename_variable", "#{@magic_cookie}", "a_variable", "different_variable"]\n))
 
-    @retrieved_code= @the_app.do_commands("1\n[\"code_from_cookie\", #{@magic_cookie}]\n")
+    @retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
   end
 
   it 'should work for a simple case' do
