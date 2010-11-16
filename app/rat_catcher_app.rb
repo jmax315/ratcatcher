@@ -22,7 +22,8 @@ class RatCatcherApp
 
   def invoke(wrapped_call)
     unwrapped_call= from_json(wrapped_call)
-    [send(*unwrapped_call)].to_json
+    return_value= send(*unwrapped_call)
+    [return_value, ""].to_json
   end
 
   def rcp_read

@@ -24,7 +24,6 @@ describe "encoding the Rat Catcher Protocol" do
     RatCatcherApp.new(nil, @output_stream).rcp_write("line 1\nline2")
     @output_stream.string.should == "2\nline 1\nline2\n"
   end
-
 end
 
 describe "decoding the Rat Catcher Protocol" do
@@ -79,13 +78,13 @@ describe "invoking a method" do
   it "should receive an encoded return value" do
     @rat_catcher.should_receive(:do_something_else).and_return("ferd")
     encoded_call= ['do_something_else'].to_json
-    @rat_catcher.invoke(encoded_call).should == "[\"ferd\"]"
+    @rat_catcher.invoke(encoded_call).should == "[\"ferd\",\"\"]"
   end
 
   it "should receive an encoded return value containing a newline" do
     @rat_catcher.should_receive(:the_method).and_return("line 1\nline2\n")
     encoded_call= ['the_method'].to_json
-    @rat_catcher.invoke(encoded_call).should == "[\"line 1\\nline2\\n\"]"
+    @rat_catcher.invoke(encoded_call).should == "[\"line 1\\nline2\\n\",\"\"]"
   end
 end
 
@@ -125,7 +124,7 @@ describe "the command interpreter" do
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the results\"]\n"
+      @output_stream_sink.gets.should == "[\"the results\",\"\"]\n"
     end
   end
 
@@ -150,13 +149,13 @@ describe "the command interpreter" do
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the results\"]\n"
+      @output_stream_sink.gets.should == "[\"the results\",\"\"]\n"
 
       encoded_call= "1\n[\"another_method\"]\n"
       @input_stream_source.write(encoded_call)
 
       @output_stream_sink.gets.should == "1\n"
-      @output_stream_sink.gets.should == "[\"the other results\"]\n"
+      @output_stream_sink.gets.should == "[\"the other results\",\"\"]\n"
     end
   end
 
