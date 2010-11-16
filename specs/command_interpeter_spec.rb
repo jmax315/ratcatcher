@@ -88,6 +88,19 @@ describe "invoking a method" do
   end
 end
 
+describe "handling a Ruby error" do
+  before :each do
+    @rat_catcher= RatCatcherApp.new
+  end
+
+  it "should return an error indicator" do
+    encoded_call= ['non_function'].to_json
+    result= JSON.parse(@rat_catcher.invoke(encoded_call))
+    result[0].should be_nil
+    result[1].should =~ /undefined method `non_function' for #<RatCatcherApp:0x[0-9A-Fa-f]+>/
+  end
+end
+
 describe "handling an input stream" do
   it "should call a single-line command" do
     encoded_call= "1\n[\"do_something_else\",\"an argument\"]\n"
@@ -118,7 +131,7 @@ describe "the command interpreter" do
       @rat_catcher.command_loop
       Kernel.exit!
     else
-      @input_stream.close
+       @input_stream.close
       @output_stream.close
       encoded_call= "1\n[\"an_arbitrary_method\"]\n"
       @input_stream_source.write(encoded_call)

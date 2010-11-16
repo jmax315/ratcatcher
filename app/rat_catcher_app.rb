@@ -22,7 +22,11 @@ class RatCatcherApp
 
   def invoke(wrapped_call)
     unwrapped_call= from_json(wrapped_call)
-    return_value= send(*unwrapped_call)
+    begin
+      return_value= send(*unwrapped_call)
+    rescue Exception => e
+      return [nil, e.to_s].to_json
+    end
     [return_value, ""].to_json
   end
 
