@@ -12,8 +12,8 @@ describe "handling attempts to parse bogus code" do
     end
     
   it "should stay sane when handed this code" do
-    RatCatcherStore.parse(@code).should be_nil
-  end
+      lambda { RatCatcherStore.parse(@code) }.should raise_error(ParseError)
+    end
     
   it "should not catch non parse exceptions" do
     RubyParser.should_receive(:new).and_raise("not a parse")

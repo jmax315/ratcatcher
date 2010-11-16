@@ -34,7 +34,6 @@ end
 class RatCatcherStore
   def self.parse source_code
     TopStore.new(RubyParser.new.process(source_code))
-    rescue ParseError
   end
 
   public
