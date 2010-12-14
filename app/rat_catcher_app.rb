@@ -53,9 +53,6 @@ class RatCatcherApp
   end
 
   def code_from_cookie(cookie)
-    File.open("ferd", "a") do |f|
-      f.puts "code_from_cookie: cookie: #{cookie.inspect}\n"
-    end
     item= @project_items[cookie]
     item && item.source
   end
