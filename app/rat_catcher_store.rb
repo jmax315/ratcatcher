@@ -2,6 +2,7 @@ require 'ruby_parser'
 require 'ruby2ruby'
 
 require File.expand_path(File.dirname(__FILE__)) + '/rename_variable'
+require File.expand_path(File.dirname(__FILE__)) + '/rename_method'
 require File.expand_path(File.dirname(__FILE__)) + '/tree_like_matcher'
 
 
@@ -91,7 +92,11 @@ class RatCatcherStore
   end
 
   def apply(refactoring, *args)
-    the_refactoring= RenameVariable.new(args[0], args[1])
+    if refactoring == :rename_variable
+      the_refactoring= RenameVariable.new(args[0], args[1])
+    else
+      the_refactoring= RenameMethod.new(args[0], args[1])
+    end
     self.sexp= the_refactoring.process(self.sexp)
   end
 end
