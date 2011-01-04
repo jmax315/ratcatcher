@@ -13,6 +13,11 @@ class RenameMethod < SexpProcessor
      s(:defn, maybe_rename(sexp.shift), sexp.shift, sexp.shift)
    end
 
+   def process_call(sexp)
+     discard_type(sexp)
+     s(:call, sexp.shift, maybe_rename(sexp.shift), sexp.shift)
+   end
+
 #   def process_lasgn(sexp)
 #     discard_type(sexp)
 #     s(:lasgn,
