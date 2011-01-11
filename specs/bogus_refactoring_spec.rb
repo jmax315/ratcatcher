@@ -14,7 +14,7 @@ describe "RatCatcherStore" do
     
   it "should throw an exception when asked to do an unknown refactoring" do
       parsed_code= RatCatcherStore.parse(@code)
-    lambda { parsed_code.apply(:bogus_refactoring) }.should raise_error("unknown refactoring: bogus_refactoring")
+    lambda { parsed_code.refactor(:bogus_refactoring) }.should raise_error("unknown refactoring: bogus_refactoring")
     end
     
   # it "should not catch non parse exceptions" do

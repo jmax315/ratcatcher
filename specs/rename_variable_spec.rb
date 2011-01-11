@@ -14,12 +14,12 @@ describe 'variable assignment' do
   end
 
   it 'should rename a_variable' do
-    @tree.apply(:rename_variable, 'a_variable', 'new_name')
+    @tree.refactor(:rename_variable, 'a_variable', 'new_name')
     variable_should_be('new_name')
   end
 
   it 'should not rename the_wrong_variable' do
-    @tree.apply(:rename_variable, 'the_wrong_variable', 'new_name')
+    @tree.refactor(:rename_variable, 'the_wrong_variable', 'new_name')
     variable_should_be('a_variable')
   end
 end
@@ -27,7 +27,7 @@ end
 describe 'variable passed to a method' do
   before :each do
     @tree = RatCatcherStore.parse('the_stop=11; thing.go_method(the_stop)')
-    @tree.apply(:rename_variable, 'the_stop','the_go')
+    @tree.refactor(:rename_variable, 'the_stop','the_go')
   end
   
   it 'variable should change' do
@@ -38,7 +38,7 @@ end
 describe 'instance variable' do
   before :each do
     @tree = RatCatcherStore.parse('@the_stop = 1')
-    @tree.apply(:rename_variable, '@the_stop','@the_go')
+    @tree.refactor(:rename_variable, '@the_stop','@the_go')
   end
   
   it 'variable should change' do
@@ -49,7 +49,7 @@ end
 describe 'variable assignment using variable reference' do
   before :each do
     @tree= RatCatcherStore.parse 'a_variable = a_variable + 5'
-    @tree.apply(:rename_variable, 'a_variable', 'new_name')
+    @tree.refactor(:rename_variable, 'a_variable', 'new_name')
   end
 
   it 'should rename a_variable in the tree on the left of the =' do
@@ -69,7 +69,7 @@ describe "handling a variable name introduced as a method parameter" do
   before :each do
     src_code= 'def a_method(a_param, a_different_param); puts a_param; end'
     @store= RatCatcherStore.parse(src_code)
-    @store.apply(:rename_variable, 'a_param', 'new_name')
+    @store.refactor(:rename_variable, 'a_param', 'new_name')
   end
 
   it 'should rename the variable in the parameter list and the code body' do
@@ -82,7 +82,7 @@ describe "handling a variable name referenced as a method parameter" do
   it 'should rename the variable in the parameter list' do
     src_code= 'v= 1; a_method(v)'
     store= RatCatcherStore.parse(src_code)
-    store.apply(:rename_variable, 'v', 'new_v')
+    store.refactor(:rename_variable, 'v', 'new_v')
     store.source.should == "new_v = 1\na_method(new_v)\n"
   end
 end
@@ -102,7 +102,7 @@ end
 
   it "should be able to rename on the method" do
     method_store= @store.find('MyClass/my_first_method')
-    method_store.apply(:rename_variable, 'ferd', 'frobazz')
+    method_store.refactor(:rename_variable, 'ferd', 'frobazz')
     @store.source.should == %q{class MyClass
   def my_first_method(frobazz)
     frobazz = "foo"
@@ -130,7 +130,7 @@ describe 'Two methods with identicaly named parameters' do
 
   it "should be able to rename one method's parameter without affecting the other's" do
     method_store= @store.find('MyClass/my_first_method')
-    method_store.apply(:rename_variable, 'ferd', 'frobazz')
+    method_store.refactor(:rename_variable, 'ferd', 'frobazz')
     method_store.source.should == "def my_first_method(frobazz)\n  frobazz = \"foo\"\nend"
     other_method_store= @store.find('MyClass/my_other_method')
     other_method_store.source.should == "def my_other_method(ferd)\n  ferd = \"not foo\"\nend"

@@ -9,12 +9,12 @@ describe 'when a method is defined' do
   end
 
   it 'should rename a_method if asked to' do
-    @tree.apply(:rename_method, 'a_method', 'a_new_method')
+    @tree.refactor(:rename_method, 'a_method', 'a_new_method')
     @tree.sexp.should be_a_tree_like(s(:defn, :a_new_method, :_, :_))
   end
 
   it 'should not rename a_method if asked to rename a_different_method' do
-    @tree.apply(:rename_method, 'a_different_method', 'a_new_method')
+    @tree.refactor(:rename_method, 'a_different_method', 'a_new_method')
     @tree.sexp.should be_a_tree_like(s(:defn, :a_method, :_, :_))
   end
 end
@@ -25,12 +25,12 @@ describe 'when a method is called' do
   end
 
   it 'should rename a_method if asked to' do
-    @tree.apply(:rename_method, 'a_method', 'a_new_name')
+    @tree.refactor(:rename_method, 'a_method', 'a_new_name')
     @tree.sexp.should be_a_tree_like(s(:call, :_, :a_new_name, :_))
   end
 
   it 'should not rename a_method if asked to rename a_different_method' do
-    @tree.apply(:rename_method, 'a_different_method', 'a_new_name')
+    @tree.refactor(:rename_method, 'a_different_method', 'a_new_name')
     @tree.sexp.should be_a_tree_like(s(:call, :_, :a_method, :_))
   end
 end
@@ -41,12 +41,12 @@ describe 'when a method is called with a block' do
   end
 
   it 'should rename a_method if asked to' do
-    @tree.apply(:rename_method, 'a_method', 'a_new_name')
+    @tree.refactor(:rename_method, 'a_method', 'a_new_name')
     @tree.sexp.should be_a_tree_like(s(:iter, s(:call, :_, :a_new_name, :_), :_, :_))
   end
 
   it 'should not rename a_method if asked to rename a_different_method' do
-    @tree.apply(:rename_method, 'a_different_method', 'a_new_name')
+    @tree.refactor(:rename_method, 'a_different_method', 'a_new_name')
     @tree.sexp.should be_a_tree_like(s(:iter, s(:call, :_, :a_method, :_), :_, :_))
   end
 end

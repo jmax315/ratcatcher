@@ -31,8 +31,8 @@ class ProjectItemStore
   end
 
 
-  def apply(refactoring, *args)
-    @store.apply(refactoring, *args)
+  def refactor(name, *args)
+    @store.refactor(name, *args)
   end
 end
 

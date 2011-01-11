@@ -60,7 +60,7 @@ class RatCatcherApp
   def rename_variable(cookie, from, to)
     item= @project_items[cookie]
     if item
-      item.apply(:rename_variable, from, to)
+      item.refactor(:rename_variable, from, to)
     end
   end
 

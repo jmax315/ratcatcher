@@ -6,8 +6,8 @@ class RatCatcherProject
     @items= {}
   end
 
-  def apply(refactoring, *args)
-    @items.values.each {|item| item.apply(refactoring, *args)}
+  def refactor(name, *args)
+    @items.values.each {|item| item.refactor(name, *args)}
   end
 
   def size

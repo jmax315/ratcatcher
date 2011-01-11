@@ -30,7 +30,7 @@ describe 'applying a rename-variable refactoring to a single-item project' do
   it "should rename the variable" do
     project= RatCatcherProject.new
     project["first chunk"]= "old_name = 5"
-    project.apply(:rename_variable, "old_name", "new_name")
+    project.refactor(:rename_variable, "old_name", "new_name")
 
     project["first chunk"].should == "new_name = 5"
   end
@@ -41,7 +41,7 @@ describe 'applying a rename-variable refactoring to a two-item project' do
     @project= RatCatcherProject.new
     @project["first chunk"]= "old_name = 7"
     @project["second chunk"]= "old_name = 5"
-    @project.apply(:rename_variable, "old_name", "new_name")
+    @project.refactor(:rename_variable, "old_name", "new_name")
   end
 
   it "should rename the variable in the first item" do
