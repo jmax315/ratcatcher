@@ -8,8 +8,6 @@ Refactor rename_variable to use general object invocation protocol
 We don't signal any kind of error if the refactoring is completely
 unimplemented.
 
-Clean up the refactoring-object creation in RatCatcherStore#apply
-
 Handle the case for rename_method where some bozo defines a method called 'send'
 
 Handle the case for rename_method where some bozo uses define_method
