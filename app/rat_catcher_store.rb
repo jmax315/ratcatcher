@@ -1,9 +1,12 @@
 require 'ruby_parser'
 require 'ruby2ruby'
 
-require File.expand_path(File.dirname(__FILE__)) + '/rename_variable'
-require File.expand_path(File.dirname(__FILE__)) + '/rename_method'
-require File.expand_path(File.dirname(__FILE__)) + '/tree_like_matcher'
+unless Object.const_defined?(:CurrentDir)
+  CurrentDir= File.expand_path(File.dirname(__FILE__))
+end
+
+require CurrentDir + '/tree_like_matcher'
+require CurrentDir + '/refactoring'
 
 
 class RatCatcherStore
@@ -91,21 +94,7 @@ class RatCatcherStore
     self.sexp[1].to_s
   end
 
-  def get_refactoring_class(refactoring_name)
-    words= refactoring_name.to_s.split(/_/)
-    words.map! {|s| s.capitalize}
-    class_name= words.join
-
-    begin
-      refactoring_class= Kernel.const_get(class_name)
-    rescue NameError
-      raise "unknown refactoring: #{refactoring_name}"
-    end
-    refactoring_class
-  end
-
   def apply(refactoring, *args)
-    the_refactoring= get_refactoring_class(refactoring).new(*args)
-    self.sexp= the_refactoring.process(self.sexp)
+    self.sexp= Refactoring.new(refactoring).create(*args).process(self.sexp)
   end
 end
