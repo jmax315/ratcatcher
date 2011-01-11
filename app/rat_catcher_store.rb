@@ -91,12 +91,21 @@ class RatCatcherStore
     self.sexp[1].to_s
   end
 
-  def apply(refactoring, *args)
-    if refactoring == :rename_variable
-      the_refactoring= RenameVariable.new(args[0], args[1])
-    else
-      the_refactoring= RenameMethod.new(args[0], args[1])
+  def get_refactoring_class(refactoring_name)
+    words= refactoring_name.to_s.split(/_/)
+    words.map! {|s| s.capitalize}
+    class_name= words.join
+
+    begin
+      refactoring_class= Kernel.const_get(class_name)
+    rescue NameError
+      raise "unknown refactoring: #{refactoring_name}"
     end
+    refactoring_class
+  end
+
+  def apply(refactoring, *args)
+    the_refactoring= get_refactoring_class(refactoring).new(*args)
     self.sexp= the_refactoring.process(self.sexp)
   end
 end
