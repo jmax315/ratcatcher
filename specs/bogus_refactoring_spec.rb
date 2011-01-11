@@ -16,9 +16,4 @@ describe "RatCatcherStore" do
       parsed_code= RatCatcherStore.parse(@code)
     lambda { parsed_code.refactor(:bogus_refactoring) }.should raise_error("unknown refactoring: bogus_refactoring")
     end
-    
-  # it "should not catch non parse exceptions" do
-  #   RubyParser.should_receive(:new).and_raise("not a parse")
-  #   lambda{RatCatcherStore.parse(@code)}.should raise_error("not a parse")
-  # end
 end
