@@ -6,6 +6,10 @@ class Refactoring
     @name= name.to_s
   end
 
+  def self.list
+    ["rename_variable", "rename_method"]
+  end
+
   def create(*args)
     get_refactoring_class.new(*args)
   end
