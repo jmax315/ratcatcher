@@ -8,6 +8,10 @@ class RatCatcherApp
     @project_items= {}
   end
 
+  def self.refactorings
+    ["rename_variable", "rename_method"]
+  end
+
   def rcp_write(json_string)
     if (json_string[-1..-1] != "\n")
       json_string += "\n"

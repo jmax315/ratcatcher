@@ -1,6 +1,5 @@
-unless Object.const_defined?(:CurrentDir)
-  CurrentDir= File.expand_path(File.dirname(__FILE__))
-end
+
+CurrentDir= File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:CurrentDir)
 
 class Refactoring
   def initialize(name)
@@ -18,7 +17,7 @@ class Refactoring
   end
 
   def file_name
-    CurrentDir + '/' + @name
+    CurrentDir + '/refactorings/' + @name
   end
 
   def get_refactoring_class
