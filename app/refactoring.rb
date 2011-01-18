@@ -7,7 +7,7 @@ class Refactoring
   end
 
   def self.list
-    ["rename_variable", "rename_method"]
+    Dir.glob('app/refactorings/*.rb').map{|s| File.basename(s, '.rb')}
   end
 
   def create(*args)

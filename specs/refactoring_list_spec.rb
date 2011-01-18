@@ -10,4 +10,10 @@ describe "RatCatcherApp#refactorings" do
   it "should find the correct number of refactorings" do
     Refactoring.list.length().should == Dir.glob('app/refactorings/*.rb').length()
   end
+
+  it "should find a different set of files" do
+    Dir.should_receive(:glob).and_return(["../app/fake_directory/foo.rb"])
+    Refactoring.list.should == ["foo"]
+  end
+
 end
