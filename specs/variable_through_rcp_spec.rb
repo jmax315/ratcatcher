@@ -8,7 +8,6 @@ require cur_dir + '/../app/tree_like_matcher'
 def rcp_decode(s)
   answer_json= s[s.index("\n")..-1]
   @unpacked_answer= JSON.parse(answer_json)
-  @unpacked_answer[0]
 end
 
 
@@ -24,8 +23,14 @@ class RatCatcherApp
 
     @input_stream.string= command
     @output_stream.string= ""
+
     command_loop
-    rcp_decode(@output_stream.string)
+
+    response= rcp_decode(@output_stream.string)
+    if response[1] != ""
+      raise response[1]
+    end
+    response[0]
   end
 end
 
@@ -66,7 +71,7 @@ describe 'renaming a variable' do
 
     @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
 
-    @the_app.do_commands(%(1\n["rename_variable", "#{@magic_cookie}", "a_variable", "different_variable"]\n))
+    @the_app.do_commands(%(1\n["refactor", "rename_variable", "#{@magic_cookie}", "a_variable", "different_variable"]\n))
 
     @retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
   end

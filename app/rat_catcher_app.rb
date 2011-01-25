@@ -57,10 +57,11 @@ class RatCatcherApp
     item && item.source
   end
 
-  def rename_variable(cookie, from, to)
+  def refactor(refactoring, *args)
+    cookie= args[0]
     item= @project_items[cookie]
     if item
-      item.refactor(:rename_variable, from, to)
+      item.refactor(refactoring.to_sym, args[1], args[2])
     end
   end
 
