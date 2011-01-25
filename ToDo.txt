@@ -1,13 +1,3 @@
-Handle ruby_parser errors.
-
-Write a spec to directly test RatCatcherApp.rename_variable
-
-Refactor rename_variable to use general object invocation protocol
-(i.e., get rid of the wrapper on RatCatcherApp)
-
-We don't signal any kind of error if the refactoring is completely
-unimplemented.
-
 Handle the case for rename_method where some bozo defines a method called 'send'
 
 Handle the case for rename_method where some bozo uses define_method
