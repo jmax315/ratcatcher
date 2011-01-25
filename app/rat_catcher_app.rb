@@ -61,7 +61,7 @@ class RatCatcherApp
     cookie= args[0]
     item= @project_items[cookie]
     if item
-      item.refactor(refactoring.to_sym, args[1], args[2])
+      item.refactor(refactoring.to_sym, *args[1..-1])
     end
   end
 
