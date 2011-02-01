@@ -27,3 +27,21 @@ describe "creating a new ratcatcher object from source code" do
     @app.code_from_cookie(@different_cookie).should == @different_src_code
   end
 end
+
+
+describe "creating a new ratcatcher object from an empty string" do
+  before :each do
+    @app= RatCatcherApp.new
+
+    @src_code= ""
+    @cookie= @app.create_project_item(@src_code)
+  end
+
+  it "should accept source code" do
+    @cookie.should_not be_nil
+  end
+
+  it "should contain the source code" do
+    @app.code_from_cookie(@cookie).should == @src_code
+  end
+end

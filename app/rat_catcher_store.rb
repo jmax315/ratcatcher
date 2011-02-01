@@ -47,7 +47,7 @@ class RatCatcherStore
   end
 
   def source
-    Ruby2Ruby.new.process(sexp)
+    Ruby2Ruby.new.process(sexp) || ""
   end
 
   def find(path)
