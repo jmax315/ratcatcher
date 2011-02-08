@@ -14,11 +14,6 @@ class RenameMethod < RefactoringProcessor
     discard_type(sexp)
     s(:call, sexp.shift, maybe_rename(sexp.shift), sexp.shift)
   end
-
-  def maybe_rename(variable)
-    (@old_name == variable.to_s) ? @new_name.to_sym : variable
-  end
-
 end
 
 # vim:sw=2:ai

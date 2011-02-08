@@ -6,12 +6,7 @@ class RenameClass < RefactoringProcessor
    end
 
    def process_class(sexp)
-     if sexp[1] == @old_name.to_sym
-       discard_type(sexp)
-       sexp.shift
-       s(:class, @new_name.to_sym, sexp.shift, sexp.shift)
-     else
-       s(sexp.shift, sexp.shift, sexp.shift, sexp.shift)
-     end
+     discard_type(sexp)
+     s(:class, maybe_rename(sexp.shift), sexp.shift, sexp.shift)
    end
 end

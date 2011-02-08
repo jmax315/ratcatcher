@@ -41,12 +41,6 @@ class RenameVariable < RefactoringProcessor
 
     new_sexp
   end
-
-private
-  def maybe_rename(variable)
-    (@old_name == variable.to_s) ? @new_name.to_sym : variable
-  end
-
 end
 
 # vim:sw=2:ai
