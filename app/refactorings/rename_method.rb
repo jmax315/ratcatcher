@@ -1,6 +1,3 @@
-#require 'ruby_parser'
-#require 'sexp_processor'
-
 class RenameMethod < SexpProcessor
    def initialize(old_name, new_name)
      super()
