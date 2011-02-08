@@ -27,6 +27,11 @@ describe 'when the class is defined in the file' do
   end
 end
 
+describe 'renaming a reference to a class' do
+  it 'should rename the reference'
+end
+
+
 # describe 'when a method is defined' do
 #   before :each do
 #     @tree= RatCatcherStore.parse 'def a_method; end'
