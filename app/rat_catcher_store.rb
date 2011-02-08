@@ -95,6 +95,7 @@ class RatCatcherStore
   end
 
   def refactor(name, *args)
-    self.sexp= Refactoring.new(name).create(*args).process(self.sexp)
+    refactoring= Refactoring.new(name).create(*args)
+    self.sexp= refactoring.process(self.sexp)
   end
 end

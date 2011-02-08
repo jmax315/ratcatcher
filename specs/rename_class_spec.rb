@@ -1,5 +1,5 @@
-# cur_dir= File.expand_path(File.dirname(__FILE__))
-# require cur_dir + '/../app/rat_catcher_store'
+cur_dir= File.expand_path(File.dirname(__FILE__))
+require cur_dir + '/../app/rat_catcher_store'
 # require cur_dir + '/../app/tree_like_matcher'
 
 
@@ -8,6 +8,14 @@ describe 'when the buffer is empty' do
     @tree= RatCatcherStore.parse ''
     @tree.refactor(:rename_class, 'OldClass', 'NewClass')
     @tree.sexp.should be_nil
+  end
+end
+
+describe 'when the class is not defined in the file' do
+  it 'should not change the file' do
+    @tree= RatCatcherStore.parse 'class AnotherClass; end'
+    @tree.refactor(:rename_class, 'OldClass', 'NewClass')
+    @tree.source.should == "class AnotherClass\nend"
   end
 end
 
