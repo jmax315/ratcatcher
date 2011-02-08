@@ -1,5 +1,6 @@
-
 CurrentDir= File.expand_path(File.dirname(__FILE__)) unless Object.const_defined?(:CurrentDir)
+
+require CurrentDir + '/refactoring_processor'
 
 class Refactoring
   def initialize(name)

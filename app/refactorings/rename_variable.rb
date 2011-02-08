@@ -1,7 +1,7 @@
 require 'ruby_parser'
 require 'sexp_processor'
 
-class RenameVariable < SexpProcessor
+class RenameVariable < RefactoringProcessor
   def initialize(old_name, new_name)
     super()
     @old_name= old_name
@@ -43,10 +43,6 @@ class RenameVariable < SexpProcessor
   end
 
 private
-  def discard_type(sexp)
-    sexp.shift
-  end
-
   def maybe_rename(variable)
     (@old_name == variable.to_s) ? @new_name.to_sym : variable
   end

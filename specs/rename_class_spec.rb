@@ -19,6 +19,14 @@ describe 'when the class is not defined in the file' do
   end
 end
 
+describe 'when the class is defined in the file' do
+  it 'should rename the class' do
+    @tree= RatCatcherStore.parse 'class OldClass; end'
+    @tree.refactor(:rename_class, 'OldClass', 'NewClass')
+    @tree.source.should == "class NewClass\nend"
+  end
+end
+
 # describe 'when a method is defined' do
 #   before :each do
 #     @tree= RatCatcherStore.parse 'def a_method; end'
