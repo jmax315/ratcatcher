@@ -1,8 +1,10 @@
+require 'app/maybe_renamable'
+
 class RenameMethod < RefactoringProcessor
+  include MaybeRenamable
+
   def initialize(old_name, new_name)
-    super()
-    @old_name= old_name
-    @new_name= new_name
+    super
   end
   
   def process_defn(sexp)

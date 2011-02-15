@@ -1,11 +1,12 @@
 require 'ruby_parser'
 require 'sexp_processor'
+require 'app/maybe_renamable'
 
 class RenameVariable < RefactoringProcessor
+  include MaybeRenamable
+
   def initialize(old_name, new_name)
-    super()
-    @old_name= old_name
-    @new_name= new_name
+    super
   end
  
   def process_lasgn(sexp)
