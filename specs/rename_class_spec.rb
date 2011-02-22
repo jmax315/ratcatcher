@@ -28,7 +28,16 @@ describe 'when the class is defined in the file' do
 end
 
 describe 'renaming a reference to a class' do
-  it 'should rename the reference'
+  it 'should rename the reference' do
+    @tree= RatCatcherStore.parse <<-CODE
+       class Foo
+       end
+       Foo.new
+    CODE
+
+    @tree.refactor(:rename_class, 'Foo', 'Bar')
+    @tree.source.should == "class Bar\nend\nBar.new\n"
+  end
 end
 
 

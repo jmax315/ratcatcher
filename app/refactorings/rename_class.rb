@@ -11,4 +11,9 @@ class RenameClass < RefactoringProcessor
     discard_type(sexp)
     s(:class, maybe_rename(sexp.shift), sexp.shift, sexp.shift)
   end
+
+  def process_const(sexp)
+    discard_type(sexp)
+    s(:const, maybe_rename(sexp.shift))
+  end
 end
