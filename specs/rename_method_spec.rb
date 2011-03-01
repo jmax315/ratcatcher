@@ -20,12 +20,12 @@ describe 'when a method is defined' do
 
   it 'should rename a method call in an argument default value' do
     @tree.refactor(:rename_method, 'something', 'nothing')
-    @tree.source.should == "def a_method(arg = nothing)\n  different_method(0)\nend"
+    @tree.source.should be_code_like "def a_method(arg = nothing)\n  different_method(0)\nend"
   end
 
   it 'should rename a method call in the method body' do
     @tree.refactor(:rename_method, 'different_method', 'the_larch')
-    @tree.source.should == "def a_method(arg = something)\n  the_larch(0)\nend"
+    @tree.source.should be_code_like "def a_method(arg = something)\n  the_larch(0)\nend"
   end
 end
 
@@ -79,16 +79,16 @@ describe 'when a method, b, is called like a.b.c' do
 
   it 'should rename a_method if asked to' do
     @tree.refactor(:rename_method, 'b', 'newbie')
-    @tree.source.should == 'a.newbie.c'
+    @tree.source.should be_code_like 'a.newbie.c'
   end
 
   it 'should rename a_method if asked to' do
     @tree.refactor(:rename_method, 'a', 'newbie')
-    @tree.source.should == 'newbie.b.c'
+    @tree.source.should be_code_like 'newbie.b.c'
   end
 
   it 'should rename a_method if asked to' do
     @tree.refactor(:rename_method, 'c', 'newbie')
-    @tree.source.should == 'a.b.newbie'
+    @tree.source.should be_code_like 'a.b.newbie'
   end
 end

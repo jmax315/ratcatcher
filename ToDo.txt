@@ -8,11 +8,7 @@ Handle include and require.
 Handle the case where loading the refactoring class file doesn't
 actually define the appropriate refactoring.
 
-Move @old_name, @new_name, and maybe_rename() into a mixin.
-
 Change refactoring tests to use tree_like, instead of converting back
 to Ruby source, or compare strings more robustly.
-
-Check all calls to sexp.shift and add process() wrappers as appropriate.
 
 Rename .source to .to_ruby?

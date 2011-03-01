@@ -16,7 +16,7 @@ describe "creating a new ratcatcher object from source code" do
   end
 
   it "should contain the source code" do
-    @app.code_from_cookie(@cookie).should == @src_code
+    @app.code_from_cookie(@cookie).should be_code_like @src_code
   end
   
   it "should accept different source code" do
@@ -24,7 +24,7 @@ describe "creating a new ratcatcher object from source code" do
   end
   
   it "should contain the different source code" do
-    @app.code_from_cookie(@different_cookie).should == @different_src_code
+    @app.code_from_cookie(@different_cookie).should be_code_like @different_src_code
   end
 end
 
@@ -42,6 +42,6 @@ describe "creating a new ratcatcher object from an empty string" do
   end
 
   it "should contain the source code" do
-    @app.code_from_cookie(@cookie).should == @src_code
+    @app.code_from_cookie(@cookie).should be_code_like @src_code
   end
 end

@@ -46,7 +46,7 @@ describe 'loading code' do
   end
 
   it 'should get the code back' do
-    @retrieved_code.should == @src
+    @retrieved_code.should be_code_like @src
   end
 end
 
@@ -60,7 +60,7 @@ describe 'loading and retrieving code' do
 
   it 'should get the stored code from cookie' do
     retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
-    retrieved_code.should == @src
+    retrieved_code.should be_code_like @src
   end
 end
 
@@ -77,6 +77,6 @@ describe 'renaming a variable' do
   end
 
   it 'should work for a simple case' do
-    @retrieved_code.should == "different_variable = 5"
+    @retrieved_code.should be_code_like "different_variable = 5"
   end
 end

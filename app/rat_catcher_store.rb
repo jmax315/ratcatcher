@@ -7,6 +7,7 @@ end
 
 require CurrentDir + '/tree_like_matcher'
 require CurrentDir + '/refactoring'
+require CurrentDir + '/store_nodes/project_item_store'
 
 
 class RatCatcherStore
