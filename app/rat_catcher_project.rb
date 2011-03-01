@@ -22,9 +22,4 @@ class RatCatcherProject
   def [] (key)
     @items[key].source
   end
-
-  def find(path)
-    first_path_element = path.split("/", 2)[0]
-    @items[first_path_element].find(path)
-  end
 end
