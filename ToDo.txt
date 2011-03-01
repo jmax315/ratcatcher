@@ -8,7 +8,4 @@ Handle include and require.
 Handle the case where loading the refactoring class file doesn't
 actually define the appropriate refactoring.
 
-Change refactoring tests to use tree_like, instead of converting back
-to Ruby source, or compare strings more robustly.
-
 Rename .source to .to_ruby?
