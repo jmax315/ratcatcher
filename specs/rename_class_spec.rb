@@ -53,5 +53,9 @@ describe 'renaming a parent class' do
 end
 
 describe 'renaming an inner class' do
-  it "should rename the inner class"
+  it "should rename the inner class" do
+    @tree= RatCatcherStore.parse "class Outer; Inner.new; end"
+    @tree.refactor(:rename_class, 'Inner', 'Space')
+    @tree.source.should == "class Outer\n  Space.new\nend"
+  end
 end
