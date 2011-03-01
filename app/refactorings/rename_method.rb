@@ -9,12 +9,12 @@ class RenameMethod < RefactoringProcessor
   
   def process_defn(sexp)
     discard_type(sexp)
-    s(:defn, maybe_rename(sexp.shift), sexp.shift, sexp.shift)
+    s(:defn, maybe_rename(sexp.shift), process(sexp.shift), process(sexp.shift))
   end
 
   def process_call(sexp)
     discard_type(sexp)
-    s(:call, sexp.shift, maybe_rename(sexp.shift), sexp.shift)
+    s(:call, process(sexp.shift), maybe_rename(sexp.shift), process(sexp.shift))
   end
 end
 

@@ -1,6 +1,5 @@
 cur_dir= File.expand_path(File.dirname(__FILE__))
 require cur_dir + '/../app/rat_catcher_store'
-# require cur_dir + '/../app/tree_like_matcher'
 
 
 describe 'when the buffer is empty' do
@@ -41,51 +40,18 @@ describe 'renaming a reference to a class' do
 end
 
 
-# describe 'when a method is defined' do
-#   before :each do
-#     @tree= RatCatcherStore.parse 'def a_method; end'
-#   end
+describe 'renaming a parent class' do
+  it 'should rename the reference' do
+    @tree= RatCatcherStore.parse <<-CODE
+       class ChildClass < ParentClass
+       end
+    CODE
 
-#   it 'should rename a_method if asked to' do
-#     @tree.refactor(:rename_method, 'a_method', 'a_new_method')
-#     @tree.sexp.should be_a_tree_like(s(:defn, :a_new_method, :_, :_))
-#   end
+    @tree.refactor(:rename_class, 'ParentClass', 'StepParentClass')
+    @tree.source.should == "class ChildClass < StepParentClass\nend"
+  end
+end
 
-#   it 'should not rename a_method if asked to rename a_different_method' do
-#     @tree.refactor(:rename_method, 'a_different_method', 'a_new_method')
-#     @tree.sexp.should be_a_tree_like(s(:defn, :a_method, :_, :_))
-#   end
-# end
-
-# describe 'when a method is called' do
-#   before :each do
-#     @tree= RatCatcherStore.parse 'a_method("foo")'
-#   end
-
-#   it 'should rename a_method if asked to' do
-#     @tree.refactor(:rename_method, 'a_method', 'a_new_name')
-#     @tree.sexp.should be_a_tree_like(s(:call, :_, :a_new_name, :_))
-#   end
-
-#   it 'should not rename a_method if asked to rename a_different_method' do
-#     @tree.refactor(:rename_method, 'a_different_method', 'a_new_name')
-#     @tree.sexp.should be_a_tree_like(s(:call, :_, :a_method, :_))
-#   end
-# end
-
-# describe 'when a method is called with a block' do
-#   before :each do
-#     @tree= RatCatcherStore.parse 'a_method("foo") { puts "got here" }'
-#   end
-
-#   it 'should rename a_method if asked to' do
-#     @tree.refactor(:rename_method, 'a_method', 'a_new_name')
-#     @tree.sexp.should be_a_tree_like(s(:iter, s(:call, :_, :a_new_name, :_), :_, :_))
-#   end
-
-#   it 'should not rename a_method if asked to rename a_different_method' do
-#     @tree.refactor(:rename_method, 'a_different_method', 'a_new_name')
-#     @tree.sexp.should be_a_tree_like(s(:iter, s(:call, :_, :a_method, :_), :_, :_))
-#   end
-# end
-
+describe 'renaming an inner class' do
+  it "should rename the inner class"
+end
