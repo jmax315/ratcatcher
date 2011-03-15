@@ -7,6 +7,14 @@ class RatCatcherProject
   end
 
   def refactor(name, *args)
+    if (name == :rename_item)
+      old_name= args[0]
+      new_name= args[1]
+      if @items[old_name]
+        @items[new_name]= @items[old_name]
+        @items.delete(old_name)
+      end
+    end
     @items.values.each {|item| item.refactor(name, *args)}
   end
 

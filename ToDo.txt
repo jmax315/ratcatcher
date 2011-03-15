@@ -3,7 +3,7 @@ called 'send'
 
 Handle the case for rename_method where some bozo uses define_method
 
-Handle include and require.
+Handle include and require with complex expressions (bitch. how?)
 
 Handle the case where loading the refactoring class file doesn't
 actually define the appropriate refactoring.
