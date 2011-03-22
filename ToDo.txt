@@ -9,3 +9,5 @@ Handle the case where loading the refactoring class file doesn't
 actually define the appropriate refactoring.
 
 Rename .source to .to_ruby?
+
+Integration test with complicated example and multiple refactorings.

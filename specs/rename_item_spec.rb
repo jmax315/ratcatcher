@@ -27,6 +27,7 @@ describe "renaming a project item (another case)" do
     @project['an_item']= 'class C; "another_item"; end'
     @project['another_item']= "require 'an_item'; class D; end"
     @project['item_with_call']= 'fubar("an_item")'
+    @project['item_with_dot_rb']= "require 'an_item.rb'"
   end
 
   it 'should change all references to the file' do
@@ -48,4 +49,40 @@ describe "renaming a project item (another case)" do
     @project.refactor(:rename_item, 'an_item', 'a_new_item')
     @project['item_with_call'].should be_code_like('fubar("an_item")')
   end
+
+  it 'should change all references to the file' do
+    @project.refactor(:rename_item, 'an_item', 'a_new_item')
+    @project['item_with_dot_rb'].should be_code_like("require 'a_new_item.rb'")
+  end
+
+  it 'should not change arbitrary strings within filenames' do
+    @project.refactor(:rename_item, 'item', 'a_new_item')
+    @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
+  end
+
+  it "should change all references to the file even if it's a path" do
+    @project.refactor(:rename_item, 'item', 'a_new_item')
+    @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
+  end
+
+end
+
+describe "renaming an item with a path component" do
+  before :each do
+    @project= RatCatcherProject.new
+    @project['../item']= "'foo'"
+    @project['more_code']= "require '../item'"
+  end
+
+  it "should rename the item" do
+    @project.refactor(:rename_item, '../item', '../different_item')
+    @project['more_code'].should be_code_like "require '../different_item'"
+  end
+
+  it "should not rename the item if the path isn't specified" do
+    @project.refactor(:rename_item, 'item', 'different_item')
+    @project['more_code'].should be_code_like "require '../item'"
+  end
+
+  it "should handle referencing the same item via different paths"
 end

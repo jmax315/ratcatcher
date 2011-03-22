@@ -10,22 +10,14 @@ class RenameItem < RefactoringProcessor
     @in_arglist= false
   end
 
-  # def process_call(sexp)
-  #   discard_type(sexp)
-  #   object= sexp.shift
-  #   method= sexp.shift
-  #   args= sexp.shift
-  #   s(:call, object, method, args)
-  # end
-
   def process_str(sexp)
     discard_type(sexp)
     string= sexp.shift
-    if (@in_require_call && @in_arglist && string == @old_name)
-      s(:str, @new_name)
-    else
-      s(:str, string)
+    if (@in_require_call && @in_arglist)
+      string.gsub!(/^#{Regexp.escape(@old_name)}$/, @new_name)
+      string.gsub!(/^#{Regexp.escape(@old_name)}.rb$/, @new_name + '.rb')
     end
+    s(:str, string)
   end
 
   def process_arglist(sexp)
