@@ -15,7 +15,14 @@ class RatCatcherProject
         @items.delete(old_name)
       end
     end
-    @items.values.each {|item| item.refactor(name, *args)}
+    @items.each do |key, item|
+      if name == :rename_item
+        new_args= args + [key]
+      else
+        new_args= args
+      end
+      item.refactor(name, *new_args)
+    end
   end
 
   def size

@@ -5,18 +5,25 @@ require 'app/maybe_renamable'
 class RenameItem < RefactoringProcessor
   include MaybeRenamable
 
-  def initialize(old_name, new_name)
-    super
+  def initialize(old_name, new_name, item_name)
+    super(old_name, new_name)
+    @item_name= item_name
     @in_arglist= false
+  end
+
+  def normalize(path)
+    path
   end
 
   def process_str(sexp)
     discard_type(sexp)
     string= sexp.shift
-    if (@in_require_call && @in_arglist)
-      string.gsub!(/^#{Regexp.escape(@old_name)}$/, @new_name)
-      string.gsub!(/^#{Regexp.escape(@old_name)}.rb$/, @new_name + '.rb')
-    end
+
+    return s(:str, string) unless (@in_require_call && @in_arglist)
+
+    string.gsub!(/^#{Regexp.escape(normalize(@old_name))}$/, @new_name)
+    string.gsub!(/^#{Regexp.escape(normalize(@old_name))}.rb$/, @new_name + '.rb')
+
     s(:str, string)
   end
 

@@ -1,88 +1,43 @@
-cur_dir= File.expand_path(File.dirname(__FILE__))
-require cur_dir + '/../app/rat_catcher_store'
+def is_same_file(current_source_file, reference, file_being_renamed)
+  current_source_file_directory= File.dirname(current_source_file)
 
+  absolute_reference= File.expand_path(reference, current_source_file_directory)
 
-describe "renaming a project item" do
-  before :each do
-    @project= RatCatcherProject.new
-    @project['an_item']= 'class C; end'
-  end
-
-  it "should do nothing when there isn't an item by that name" do
-    @project.refactor(:rename_item, 'a_different_item', 'a_new_item')
-    @project['an_item'].should be_code_like 'class C; end'
-    @project.size.should == 1
-  end
-
-  it 'should change the item if there is one by that name' do
-    @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['a_new_item'].should be_code_like 'class C; end'
-    @project.size.should == 1
-  end
+  absolute_reference == file_being_renamed
 end
 
-describe "renaming a project item (another case)" do
-  before :each do
-    @project= RatCatcherProject.new
-    @project['an_item']= 'class C; "another_item"; end'
-    @project['another_item']= "require 'an_item'; class D; end"
-    @project['item_with_call']= 'fubar("an_item")'
-    @project['item_with_dot_rb']= "require 'an_item.rb'"
+describe "determining whether two paths refer to the same file" do
+
+  it "should return true for identical filenames" do
+    is_same_file("/source.rb", "referenced_file.rb", "/referenced_file.rb").should be_true
   end
 
-  it 'should change all references to the file' do
-    @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['another_item'].should be_code_like("require 'a_new_item'; class D; end")
+  it "should return false for different filenames" do
+    is_same_file("/source.rb", "referenced_file.rb", "/not_the_referenced_file.rb").should be_false
   end
 
-  it "shouldn't change references to other files" do
-    @project.refactor(:rename_item, 'a_different_item', 'a_new_item')
-    @project['another_item'].should be_code_like("require 'an_item'; class D; end")
+  it "should return true for equivalent filenames" do
+    is_same_file("/source.rb", "./referenced_file.rb", "/referenced_file.rb").should be_true
   end
 
-  it "shouldn't change strings that aren't call arguments" do
-    @project.refactor(:rename_item, 'another_item', 'a_new_item')
-    @project['an_item'].should be_code_like 'class C; "another_item"; end'
+  it "should return true for pathologically equivalent filenames" do
+    is_same_file("/sub/source.rb", "./../sub/../sub/referenced_file.rb", "/sub/referenced_file.rb").should be_true
   end
 
-  it "shouldn't change strings that are arguments for non-require calls" do
-    @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['item_with_call'].should be_code_like('fubar("an_item")')
+  it "should return true when refering to a file in a sub-directory" do
+    is_same_file("/foo.rb", "sub/bar.rb", "/sub/bar.rb").should be_true
   end
 
-  it 'should change all references to the file' do
-    @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['item_with_dot_rb'].should be_code_like("require 'a_new_item.rb'")
+  it "should return true when refering to a file in a parent directory" do
+    is_same_file("/sub/source.rb", "../bar.rb", "/bar.rb").should be_true
   end
 
-  it 'should not change arbitrary strings within filenames' do
-    @project.refactor(:rename_item, 'item', 'a_new_item')
-    @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
+  it "should return true when refering to a file in a sibling directory" do
+    is_same_file("/sub1/source.rb", "../sub2/bar.rb", "/sub2/bar.rb").should be_true
   end
 
-  it "should change all references to the file even if it's a path" do
-    @project.refactor(:rename_item, 'item', 'a_new_item')
-    @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
+  it "should return true when refering to an absolute path" do
+    is_same_file("/sub1/source.rb", "/sub2/bar.rb", "/sub2/bar.rb").should be_true
   end
 
-end
-
-describe "renaming an item with a path component" do
-  before :each do
-    @project= RatCatcherProject.new
-    @project['../item']= "'foo'"
-    @project['more_code']= "require '../item'"
-  end
-
-  it "should rename the item" do
-    @project.refactor(:rename_item, '../item', '../different_item')
-    @project['more_code'].should be_code_like "require '../different_item'"
-  end
-
-  it "should not rename the item if the path isn't specified" do
-    @project.refactor(:rename_item, 'item', 'different_item')
-    @project['more_code'].should be_code_like "require '../item'"
-  end
-
-  it "should handle referencing the same item via different paths"
 end
