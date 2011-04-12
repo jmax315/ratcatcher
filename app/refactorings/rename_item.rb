@@ -1,3 +1,4 @@
+require 'app/refactoring_processor'
 require 'app/maybe_renamable'
 
 # s(:call, nil, :require, s(:arglist, s(:str, "ferd")))
@@ -13,6 +14,12 @@ class RenameItem < RefactoringProcessor
 
   def normalize(path)
     path
+  end
+
+  def self.is_same_file(current_source_file, reference, file_being_renamed)
+    current_source_file_directory= File.dirname(current_source_file)
+    absolute_reference= File.expand_path(reference, current_source_file_directory)
+    absolute_reference == file_being_renamed
   end
 
   def process_str(sexp)
