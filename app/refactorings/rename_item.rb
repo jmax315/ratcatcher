@@ -16,10 +16,10 @@ class RenameItem < RefactoringProcessor
     path
   end
 
-  def is_same_file(reference, file_being_renamed)
+  def is_same_file(reference)
     current_source_file_directory= File.dirname(@item_name)
     absolute_reference= File.expand_path(reference, current_source_file_directory)
-    absolute_reference == file_being_renamed
+    absolute_reference == @old_name
   end
 
   def process_str(sexp)
