@@ -16,8 +16,8 @@ class RenameItem < RefactoringProcessor
     path
   end
 
-  def self.is_same_file(current_source_file, reference, file_being_renamed)
-    current_source_file_directory= File.dirname(current_source_file)
+  def is_same_file(reference, file_being_renamed)
+    current_source_file_directory= File.dirname(@item_name)
     absolute_reference= File.expand_path(reference, current_source_file_directory)
     absolute_reference == file_being_renamed
   end
