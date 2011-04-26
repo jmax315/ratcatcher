@@ -13,3 +13,8 @@ Rename .source to .to_ruby?
 Integration test with complicated example and multiple refactorings.
 
 Add reorder arguments refactoring.
+
+Extend rename_item refactoring to handle item names without .rb extension
+
+Change third item in rename_item refactoring initialize method to
+project base. Current specs and code ARE WRONG.

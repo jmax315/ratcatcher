@@ -40,7 +40,7 @@ describe 'loading code' do
     @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
-    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}", "loading code"]\n))
 
     @retrieved_code= @the_app.do_commands(%(1\n["code_from_cookie", "#{@magic_cookie}"]\n))
   end
@@ -55,7 +55,7 @@ describe 'loading and retrieving code' do
     @the_app= RatCatcherApp.new
     @src= "the_answer = 42"
 
-    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}", "loading and retrieving code"]\n))
   end
 
   it 'should get the stored code from cookie' do
@@ -69,7 +69,7 @@ describe 'renaming a variable' do
     @the_app= RatCatcherApp.new
     @src= "a_variable = 5"
 
-    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}"]\n))
+    @magic_cookie= @the_app.do_commands(%(1\n["create_project_item", "#{@src}", "renaming a variable"]\n))
 
     @the_app.do_commands(%(1\n["refactor", "rename_variable", "#{@magic_cookie}", "a_variable", "different_variable"]\n))
 

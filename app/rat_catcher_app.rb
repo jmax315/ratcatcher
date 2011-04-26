@@ -45,8 +45,8 @@ class RatCatcherApp
     end
   end
 
-  def create_project_item(source_code)
-    store= RatCatcherStore.parse(source_code)
+  def create_project_item(source_code, item)
+    store= RatCatcherStore.parse(source_code, item)
     cookie= store.hash.to_s
     @project_items[cookie]= store
     cookie

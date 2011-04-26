@@ -37,8 +37,8 @@ class InternalStore < RatCatcherStore
 end
 
 class RatCatcherStore
-  def self.parse source_code
-    TopStore.new(RubyParser.new.process(source_code))
+  def self.parse source_code, item_name
+    TopStore.new(RubyParser.new.process(source_code, item_name))
   end
 
   public

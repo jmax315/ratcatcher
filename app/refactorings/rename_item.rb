@@ -22,6 +22,10 @@ class RenameItem < RefactoringProcessor
     absolute_reference == @old_name
   end
 
+  def relative_file_name(reference)
+    @new_name
+  end
+
   def process_str(sexp)
     discard_type(sexp)
     string= sexp.shift

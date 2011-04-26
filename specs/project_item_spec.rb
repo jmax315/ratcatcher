@@ -4,7 +4,7 @@ require current_dir + '/../app/rat_catcher_store'
 
 describe "A RatCatcherProjectItemStore" do
   before :each do
-    @store= RatCatcherStore.parse 'a_var= 4'
+    @store= RatCatcherStore.parse 'a_var= 4', "junk"
     @project_item= ProjectItemStore.new("J. Project Item Store", @store)
   end
 
