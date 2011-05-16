@@ -10,7 +10,7 @@ describe 'variable assignment' do
   end
 
   before :each do
-    @tree= RatCatcherStore.parse 'a_variable = 5', "junk"
+    @tree= RatCatcherStore.parse 'a_variable = 5'
   end
 
   it 'should rename a_variable' do
@@ -26,7 +26,7 @@ end
 
 describe 'variable passed to a method' do
   before :each do
-    @tree = RatCatcherStore.parse('the_stop=11; thing.go_method(the_stop)', "junk")
+    @tree = RatCatcherStore.parse('the_stop=11; thing.go_method(the_stop)')
     @tree.refactor(:rename_variable, 'the_stop','the_go')
   end
   
@@ -37,7 +37,7 @@ end
 
 describe 'instance variable' do
   before :each do
-    @tree = RatCatcherStore.parse('@the_stop = 1', "junk")
+    @tree = RatCatcherStore.parse('@the_stop = 1')
     @tree.refactor(:rename_variable, '@the_stop','@the_go')
   end
   
@@ -48,7 +48,7 @@ end
 
 describe 'variable assignment using variable reference' do
   before :each do
-    @tree= RatCatcherStore.parse 'a_variable = a_variable + 5', "junk"
+    @tree= RatCatcherStore.parse 'a_variable = a_variable + 5'
     @tree.refactor(:rename_variable, 'a_variable', 'new_name')
   end
 
@@ -68,7 +68,7 @@ end
 describe "handling a variable name introduced as a method parameter" do
   before :each do
     src_code= 'def a_method(a_param, a_different_param); puts a_param; end'
-    @store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
     @store.refactor(:rename_variable, 'a_param', 'new_name')
   end
 
@@ -81,7 +81,7 @@ end
 describe "handling a variable name referenced as a method parameter" do
   it 'should rename the variable in the parameter list' do
     src_code= 'v= 1; a_method(v)'
-    store= RatCatcherStore.parse(src_code, "junk")
+    store= RatCatcherStore.parse(src_code)
     store.refactor(:rename_variable, 'v', 'new_v')
     store.source.should be_code_like "new_v = 1\na_method(new_v)\n"
   end
@@ -97,7 +97,7 @@ class MyClass
   end
 end
     }
-    @store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should be able to rename on the method" do
@@ -125,7 +125,7 @@ describe 'Two methods with identicaly named parameters' do
         end
       end
     }
-    @store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should be able to rename one method's parameter without affecting the other's" do

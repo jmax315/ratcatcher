@@ -5,7 +5,7 @@ require cur_dir + '/../app/tree_like_matcher'
 
 describe 'when a method is defined' do
   before :each do
-    @tree= RatCatcherStore.parse 'def a_method(arg= something); different_method(0); end', "junk"
+    @tree= RatCatcherStore.parse 'def a_method(arg= something); different_method(0); end'
   end
 
   it 'should rename a_method if asked to' do
@@ -31,7 +31,7 @@ end
 
 describe 'when a method is called' do
   before :each do
-    @tree= RatCatcherStore.parse 'a_method("foo")', "junk"
+    @tree= RatCatcherStore.parse 'a_method("foo")'
   end
 
   it 'should rename a_method if asked to' do
@@ -47,7 +47,7 @@ end
 
 describe 'when a method is called with a block' do
   before :each do
-    @tree= RatCatcherStore.parse 'a_method("foo") { puts "got here" }', "junk"
+    @tree= RatCatcherStore.parse 'a_method("foo") { puts "got here" }'
   end
 
   it 'should rename a_method if asked to' do
@@ -63,7 +63,7 @@ end
 
 describe 'when a method is called inside another method call' do
   before :each do
-    @tree= RatCatcherStore.parse 'a_method(a_method("foo"))', "junk"
+    @tree= RatCatcherStore.parse 'a_method(a_method("foo"))'
   end
 
   it 'should rename a_method if asked to' do
@@ -74,7 +74,7 @@ end
 
 describe 'when a method, b, is called like a.b.c' do
   before :each do
-    @tree= RatCatcherStore.parse 'a.b.c', "junk"
+    @tree= RatCatcherStore.parse 'a.b.c'
   end
 
   it 'should rename a_method if asked to' do

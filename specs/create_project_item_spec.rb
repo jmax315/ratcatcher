@@ -5,10 +5,10 @@ describe "creating a new ratcatcher object from source code" do
     @app= RatCatcherApp.new
 
     @src_code= "print(\"Ruby says 'Hi there'.\")"
-    @cookie= @app.create_project_item(@src_code, "junk")
+    @cookie= @app.create_project_item(@src_code)
 
     @different_src_code= "print(\"2+2=4.\")"
-    @different_cookie= @app.create_project_item(@different_src_code, "more_junk")
+    @different_cookie= @app.create_project_item(@different_src_code)
   end
 
   it "should accept source code" do
@@ -34,7 +34,7 @@ describe "creating a new ratcatcher object from an empty string" do
     @app= RatCatcherApp.new
 
     @src_code= ""
-    @cookie= @app.create_project_item(@src_code, "empty string")
+    @cookie= @app.create_project_item(@src_code)
   end
 
   it "should accept source code" do

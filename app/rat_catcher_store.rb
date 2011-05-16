@@ -8,6 +8,7 @@ end
 require CurrentDir + '/tree_like_matcher'
 require CurrentDir + '/refactoring'
 require CurrentDir + '/store_nodes/project_item_store'
+require CurrentDir + '/file_constant_processor'
 
 
 class RatCatcherStore
@@ -37,8 +38,10 @@ class InternalStore < RatCatcherStore
 end
 
 class RatCatcherStore
-  def self.parse source_code, item_name
-    TopStore.new(RubyParser.new.process(source_code, item_name))
+  def self.parse source_code
+    item_name= Object.new
+    syntax_tree= RubyParser.new.process(source_code, item_name)
+    TopStore.new(FILEConstantProcessor.new(item_name).process(syntax_tree))
   end
 
   public

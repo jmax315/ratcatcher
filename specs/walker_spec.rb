@@ -8,8 +8,7 @@ class AClass;
   def the_method
   end
 end
-},
-"junk")
+})
   end
 
   it "should return nil when passed an empty path components array" do
@@ -44,8 +43,7 @@ describe "Finding a method from a method node" do
 %q{
 def the_method
 end
-},
-"junk")
+})
   end
 
   it "should return nil when passed an empty path components array" do

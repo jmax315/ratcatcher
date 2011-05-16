@@ -31,7 +31,7 @@ class RatCatcherProject
 
   def []= (key, value)
     @items[key]= ProjectItemStore.new(key,
-                                      RatCatcherStore.parse(value, key))
+                                      RatCatcherStore.parse(value))
   end
 
   def [] (key)

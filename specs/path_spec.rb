@@ -12,8 +12,8 @@ describe "Searching inside a class definition" do
         end
       end
     }
-    @store= RatCatcherStore.parse(src_code, "junk")
-    @duplicate_store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
+    @duplicate_store= RatCatcherStore.parse(src_code)
   end
 
   it "should parse the same twice" do
@@ -85,7 +85,7 @@ describe "A ProjectItem with two classes" do
         end
       end
     }
-    @store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should be able to find the first class" do
@@ -133,7 +133,7 @@ describe "Searching for a method buried in conditional logic" do
         end
       end
     }
-    @store= RatCatcherStore.parse(src_code, "junk")
+    @store= RatCatcherStore.parse(src_code)
   end
 
   it "should find c_method" do

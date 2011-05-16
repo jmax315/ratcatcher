@@ -12,28 +12,31 @@ class RenameItem < RefactoringProcessor
     @in_arglist= false
   end
 
-  def normalize(path)
-    path
-  end
-
   def is_same_file(reference)
     current_source_file_directory= File.dirname(@item_name)
     absolute_reference= File.expand_path(reference, current_source_file_directory)
     absolute_reference == @old_name
   end
 
-  def relative_file_name(reference)
-    @new_name
-  end
-
   def process_str(sexp)
     discard_type(sexp)
     string= sexp.shift
 
+    # puts "RenameItem#process_str:"
+    # puts "       string: #{string.inspect}"
+    # puts "    @in_require_call: #{@in_require_call}"
+    # puts "    @in_arglist: #{@in_arglist}"
+    # puts "    @old_name: #{@old_name}"
+    # puts "    @new_name: #{@new_name}"
+    # puts
+
     return s(:str, string) unless (@in_require_call && @in_arglist)
 
-    string.gsub!(/^#{Regexp.escape(normalize(@old_name))}$/, @new_name)
-    string.gsub!(/^#{Regexp.escape(normalize(@old_name))}.rb$/, @new_name + '.rb')
+    string.gsub!(/^#{Regexp.escape(@old_name)}$/, @new_name)
+    string.gsub!(/\/#{Regexp.escape(@old_name)}$/, '/' + @new_name)
+
+    string.gsub!(/^#{Regexp.escape(@old_name)}.rb$/, @new_name + '.rb')
+    string.gsub!(/\/#{Regexp.escape(@old_name)}.rb$/, '/' + @new_name + '.rb')
 
     s(:str, string)
   end
@@ -53,9 +56,10 @@ class RenameItem < RefactoringProcessor
     discard_type(sexp)
     object= process(sexp.shift)
     method= sexp.shift
-    @in_require_call= (method == :require)
+    old_in_require_call= @in_require_call
+    @in_require_call ||= (method == :require)
     args= process(sexp.shift)
-    @in_require_call= false
+    @in_require_call= old_in_require_call
     s(:call, object, method, args)
   end
 end

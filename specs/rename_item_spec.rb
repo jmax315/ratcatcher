@@ -107,6 +107,24 @@ describe "renaming an item with a complex expression" do
   end
 end
 
+describe "not changing things which shouldn't" do
+  before :each do
+    @project= RatCatcherProject.new
+    @project['spec/first_item.rb']= <<-END
+        require File.expand_path(File.dirname(__FILE__)) + '/../lib/app/something.rb'
+    END
+  end
+
+  it "should not change expressions which don't refer to the target item" do
+    @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb')
+    @project['spec/first_item.rb'].should be_code_like <<-END
+        require File.expand_path(File.dirname(__FILE__)) + '/../lib/app/something.rb'
+    END
+  end
+
+  it "should do something (tell the user?) useful if it can't handle a require"
+end
+
 #   before :each do
 #     @project= RatCatcherProject.new
 #     @project['item']= "'foo'"
