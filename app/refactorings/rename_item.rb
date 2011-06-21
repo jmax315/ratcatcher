@@ -1,5 +1,6 @@
 require 'app/refactoring_processor'
 require 'app/maybe_renamable'
+require 'ruby2ruby'
 
 # s(:call, nil, :require, s(:arglist, s(:str, "ferd")))
 
@@ -9,7 +10,6 @@ class RenameItem < RefactoringProcessor
   def initialize(old_name, new_name, item_name)
     super(old_name, new_name)
     @item_name= item_name
-    @in_arglist= false
   end
 
   def is_same_file(reference)
@@ -18,38 +18,35 @@ class RenameItem < RefactoringProcessor
     absolute_reference == @old_name
   end
 
-  def process_str(sexp)
-    discard_type(sexp)
-    string= sexp.shift
-
-    # puts "RenameItem#process_str:"
-    # puts "       string: #{string.inspect}"
-    # puts "    @in_require_call: #{@in_require_call}"
-    # puts "    @in_arglist: #{@in_arglist}"
-    # puts "    @old_name: #{@old_name}"
-    # puts "    @new_name: #{@new_name}"
-    # puts
-
-    return s(:str, string) unless (@in_require_call && @in_arglist)
-
-    string.gsub!(/^#{Regexp.escape(@old_name)}$/, @new_name)
-    string.gsub!(/\/#{Regexp.escape(@old_name)}$/, '/' + @new_name)
-
-    string.gsub!(/^#{Regexp.escape(@old_name)}.rb$/, @new_name + '.rb')
-    string.gsub!(/\/#{Regexp.escape(@old_name)}.rb$/, '/' + @new_name + '.rb')
-
-    s(:str, string)
-  end
 
   def process_arglist(sexp)
+
+    sexp_clone = Sexp.from_array(sexp.to_a)
+
     discard_type(sexp)
-    @in_arglist= true
-    new_sexp= s(:arglist)
-    while (!sexp.empty?)
-      new_sexp << process(sexp.shift)
+    if @in_require_call
+
+      ruby_string = Ruby2Ruby.new.process(sexp.shift)
+      the_file = eval(ruby_string)
+      if the_file == @old_name || the_file=="#{@old_name}.rb"
+        s(:arglist,
+          s(:call,
+            s(:call,
+              s(:const, :File),
+              :dirname,
+              s(:arglist, s(:const, :__FILE__))),
+            :+,
+            s(:arglist, s(:str,"/" + @new_name))))
+      else
+        sexp_clone
+      end
+    else
+      new_sexp= s(:arglist)
+      while (!sexp.empty?)
+        new_sexp << process(sexp.shift)
+      end
+      new_sexp
     end
-    @in_arglist= false
-    new_sexp
   end
 
   def process_call(sexp)

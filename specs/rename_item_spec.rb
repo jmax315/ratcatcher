@@ -32,7 +32,7 @@ describe "renaming a project item (another case)" do
 
   it 'should change all references to the file' do
     @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['another_item'].should be_code_like("require 'a_new_item'; class D; end")
+    @project['another_item'].should be_code_like("require File.dirname(__FILE__) + '/a_new_item'; class D; end")
   end
 
   it "shouldn't change references to other files" do
@@ -52,16 +52,10 @@ describe "renaming a project item (another case)" do
 
   it 'should change all references to the file with .rb' do
     @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['item_with_dot_rb'].should be_code_like("require 'a_new_item.rb'")
+    @project['item_with_dot_rb'].should be_code_like("require File.dirname(__FILE__) + '/a_new_item'")
   end
 
   it 'should not change arbitrary strings within filenames' do
-    @project.refactor(:rename_item, 'item', 'a_new_item')
-    @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
-  end
-
-  it "should change all references to the file even if it's a path" do
-    pending "What the heck were we thinking when we wrote this?"
     @project.refactor(:rename_item, 'item', 'a_new_item')
     @project['item_with_dot_rb'].should be_code_like("require 'an_item.rb'")
   end
@@ -80,21 +74,21 @@ describe "renaming an item with a path component" do
   it "should work when the new item has the same directory as the old" do
     @project.refactor(:rename_item, 'sub/something.rb', 'sub/something_else.rb')
     @project['first_item.rb'].should be_code_like <<-END
-       require 'sub/something_else.rb'
+       require File.dirname(__FILE__) + '/sub/something_else.rb'
     END
   end
 
   it "should work when the new item has a different directory from the old" do
     @project.refactor(:rename_item, 'sub/something.rb', 'other/something.rb')
     @project['first_item.rb'].should be_code_like <<-END
-       require 'other/something.rb'
+       require File.dirname(__FILE__) + '/other/something.rb'
     END
   end
 
   it "should not rename things in subdirectories when not asked" do
     @project.refactor(:rename_item, 'something.rb', 'something_else.rb')
     @project['first_item.rb'].should be_code_like <<-END
-       require 'sub/something_else.rb'
+       require 'sub/something.rb'
     END
   end
 end
@@ -109,10 +103,9 @@ describe "renaming an item with a dynamic path component" do
   end
 
   it "should work when the new item has the same directory as the old" do
-    pending 'Maybe we should live with this limitation?'
     @project.refactor(:rename_item, 'sub/something.rb', 'sub/something_else.rb')
     @project['first_item.rb'].should be_code_like <<-END
-       require 'sub/' + 'something_else.rb'
+       require File.dirname(__FILE__) + '/sub/something_else.rb'
     END
   end
 end
@@ -128,7 +121,7 @@ describe "renaming an item in the parent directory" do
   it "should work when the new item has the same directory as the old" do
     @project.refactor(:rename_item, 'something.rb', 'something_else.rb')
     @project['sub/first_item.rb'].should be_code_like <<-END
-       require 'something_else.rb'
+       require File.dirname(__FILE__) + '/something_else.rb'
     END
   end
 end
@@ -167,6 +160,7 @@ describe "renaming an item with a complex expression" do
   end
 
   it "should work" do
+    pending "Make this work!"
     @project.refactor(:rename_item, 'app/something.rb', 'app/something_else.rb')
     @project['spec/first_item.rb'].should be_code_like <<-END
         require File.expand_path(File.dirname(__FILE__)) + '/../app/something_else.rb'
@@ -186,7 +180,7 @@ describe "renaming other targets" do
     pending 'This is where we got stumped for now.'
     @project.refactor(:rename_item, 'app/something.rb', 'app/something_else.rb')
     @project['spec/first_item.rb'].should be_code_like <<-END
-        require File.expand_path(File.dirname(__FILE__)) + '/../lib/app/something.rb'
+        require File.dirname(__FILE__) + '/../lib/app/something.rb'
     END
   end
 
