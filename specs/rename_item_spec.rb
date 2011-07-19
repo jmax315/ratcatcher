@@ -155,23 +155,6 @@ describe "renaming an item in child directory with a complex expression" do
   end
 end
 
-describe "renaming an item with a complex expression" do
-  before :each do
-    @project= RatCatcherProject.new
-    @project['spec/first_item.rb']= <<-END
-        require File.expand_path(File.dirname(__FILE__)) + '/../app/something.rb'
-    END
-  end
-
-  it "should work" do
-    pending "Make this work!"
-    @project.refactor(:rename_item, 'app/something.rb', 'app/something_else.rb')
-    @project['spec/first_item.rb'].should be_code_like <<-END
-        require File.expand_path(File.dirname(__FILE__)) + '/../app/something_else.rb'
-    END
-  end
-end
-
 describe "renaming other targets" do
   before :each do
     @project= RatCatcherProject.new
@@ -186,8 +169,20 @@ describe "renaming other targets" do
         require File.expand_path(File.dirname(__FILE__)) + '/../lib/app/something.rb'
     END
   end
+end
 
-  it "should do something (tell the user?) useful if it can't handle a require"
+describe "error handling" do
+  before :each do
+    @project= RatCatcherProject.new
+    @project['spec/first_item.rb']= <<-END
+        here= File.expand_path(File.dirname(__FILE__))
+        require  here + '/../lib/app/something.rb'
+    END
+  end
+
+  it "should do something (tell the user?) useful if it can't handle a require" do
+    @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb')
+  end
 end
 
 #   before :each do
