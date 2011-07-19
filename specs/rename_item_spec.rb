@@ -177,10 +177,9 @@ describe "renaming other targets" do
   end
 
   it "should not change expressions which don't refer to the target item" do
-    pending 'This is where we got stumped for now.'
     @project.refactor(:rename_item, 'app/something.rb', 'app/something_else.rb')
     @project['spec/first_item.rb'].should be_code_like <<-END
-        require File.dirname(__FILE__) + '/../lib/app/something.rb'
+        require File.expand_path(File.dirname(__FILE__)) + '/../lib/app/something.rb'
     END
   end
 
