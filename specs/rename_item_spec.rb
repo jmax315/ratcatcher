@@ -181,6 +181,7 @@ describe "error handling" do
   end
 
   it "should do something (tell the user?) useful if it can't handle a require" do
+    pending
     @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb')
   end
 end
