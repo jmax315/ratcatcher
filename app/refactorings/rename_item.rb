@@ -27,8 +27,10 @@ class RenameItem < RefactoringProcessor
     if @in_require_call
 
       ruby_string = Ruby2Ruby.new.process(sexp.shift)
-      the_file = eval(ruby_string)
-      if the_file == @old_name || the_file=="#{@old_name}.rb"
+      the_file = File.expand_path('.', eval(ruby_string))
+
+      if the_file == File.expand_path('.', @old_name) ||
+         the_file == "#{File.expand_path('.', @old_name)}.rb"
         s(:arglist,
           s(:call,
             s(:call,

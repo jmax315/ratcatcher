@@ -1,5 +1,7 @@
 cur_dir= File.expand_path(File.dirname(__FILE__))
+require cur_dir + '/code_like_matcher'
 require cur_dir + '/../app/rat_catcher_store'
+require cur_dir + '/../app/rat_catcher_project'
 
 
 describe "renaming a project item" do
@@ -32,7 +34,11 @@ describe "renaming a project item (another case)" do
 
   it 'should change all references to the file' do
     @project.refactor(:rename_item, 'an_item', 'a_new_item')
-    @project['another_item'].should be_code_like("require File.dirname(__FILE__) + '/a_new_item'; class D; end")
+    @project['another_item'].should be_code_like <<EOF
+require File.dirname(__FILE__) + '/a_new_item'
+class D
+end
+EOF
   end
 
   it "shouldn't change references to other files" do
@@ -134,19 +140,17 @@ describe "renaming an item in child directory with a complex expression" do
     END
   end
 
-  it 'should rename files in child directories' do
-    pending 'Our substitution algorithm cannot handle this even if we decide the rename applies'
+  it 'should not rename this' do
     @project.refactor(:rename_item, 'spec/sub/something.rb', 'spec/sub/something_else.rb')
     @project['spec/first_item.rb'].should be_code_like <<-END
-        require File.expand_path(File.dirname(__FILE__)) + '/sub/something_else.rb'
+        require File.expand_path(File.dirname(__FILE__)) + '/sub/something.rb'
     END
   end
 
-  it 'should not rename this' do
-    pending 'Our substitution algorithm handles this even though the rename does not apply'
+  it 'should rename files in child directories' do
     @project.refactor(:rename_item, 'sub/something.rb', 'sub/something_else.rb')
     @project['spec/first_item.rb'].should be_code_like <<-END
-        require File.expand_path(File.dirname(__FILE__)) + '/sub/something.rb'
+        require File.dirname(__FILE__) + '/sub/something_else.rb'
     END
   end
 end
