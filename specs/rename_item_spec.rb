@@ -2,7 +2,7 @@ cur_dir= File.expand_path(File.dirname(__FILE__))
 require cur_dir + '/code_like_matcher'
 require cur_dir + '/../app/rat_catcher_store'
 require cur_dir + '/../app/rat_catcher_project'
-
+require cur_dir + '/../app/rat_catcher_exception'
 
 describe "renaming a project item" do
   before :each do
@@ -180,9 +180,24 @@ describe "error handling" do
     END
   end
 
-  it "should do something (tell the user?) useful if it can't handle a require" do
+  it "should throw an exception by default if it can't handle a require" do
+    lambda do
+      @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb')
+    end.should raise_exception RatCatcherException
+  end
+
+  it "should throw an exception if strict is specified and it can't handle a require" do
     pending
-    @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb')
+    lambda do
+      @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb', :strict)
+    end.should raise_exception RatCatcherException
+  end
+
+  it "should silently do nothing if not-strict is specified and it can't handle a require" do
+    pending
+    lambda do
+      @project.refactor(:rename_item, 'lib/app/something.rb', 'lib/app/something_else.rb', :not-strict)
+    end.should raise_exception RatCatcherException
   end
 end
 

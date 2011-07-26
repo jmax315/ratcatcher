@@ -1,0 +1,2 @@
+class RatCatcherException < Exception
+end
