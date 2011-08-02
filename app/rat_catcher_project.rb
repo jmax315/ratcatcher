@@ -2,6 +2,7 @@ base_directory= File.expand_path(File.dirname(__FILE__))
 require base_directory + '/rat_catcher_store'
 
 class RatCatcherProject
+
   def initialize
     @items= {}
   end
@@ -17,7 +18,7 @@ class RatCatcherProject
     end
     @items.each do |key, item|
       if name == :rename_item
-        new_args= args + [key]
+        new_args= [old_name,  new_name, key] + args[2..-1]
       else
         new_args= args
       end

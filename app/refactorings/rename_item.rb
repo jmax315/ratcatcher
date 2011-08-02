@@ -11,9 +11,11 @@ require 'ruby2ruby'
 class RenameItem < RefactoringProcessor
   include MaybeRenamable
 
-  def initialize(old_name, new_name, item_name)
+  def initialize(old_name, new_name, item_name, *options)
     super(old_name, new_name)
     @item_name= item_name
+    puts "RenameItem#initialize: options: #{options.inspect}"
+    @options= options[0] || {}
   end
 
   def is_same_file(reference)
@@ -34,7 +36,8 @@ class RenameItem < RefactoringProcessor
       begin
         the_file = File.expand_path('.', eval(ruby_string))
       rescue
-        raise RatCatcherException
+        puts "@options: #{@options.inspect}"
+        raise RatCatcherException unless @options[:ignore_complex_requires]
       end
 
       if the_file == File.expand_path('.', @old_name) ||
