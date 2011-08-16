@@ -195,14 +195,24 @@ describe "error handling" do
     end.should raise_exception RatCatcherException
   end
 
-  it "should silently do nothing if not-strict is specified and it can't handle a require" do
+  it "should silently do nothing if ignore_complex_exception is specified and it can't handle a require" do
     lambda do
       @project.refactor(:rename_item,
                         'lib/app/something.rb',
                         'lib/app/something_else.rb',
                         :ignore_complex_requires => true)
-    end.should_not raise_exception RatCatcherException
+    end.should_not raise_exception Exception
   end
+
+  it "should silently do nothing if ignore_complex_exception is specified as a bare keyword and it can't handle a require" do
+    lambda do
+      @project.refactor(:rename_item,
+                        'lib/app/something.rb',
+                        'lib/app/something_else.rb',
+                        :ignore_complex_requires)
+    end.should_not raise_exception Exception
+  end
+
 end
 
 #   before :each do

@@ -14,7 +14,15 @@ class RenameItem < RefactoringProcessor
   def initialize(old_name, new_name, item_name, *options)
     super(old_name, new_name)
     @item_name= item_name
-    @options= options[0] || {}
+    @options= {}
+
+    options.each do |an_option|
+      if an_option.kind_of?(Hash)
+        @options.merge!(an_option)
+      else
+        @options[an_option]= true
+      end
+    end
   end
 
   def is_same_file(reference)
