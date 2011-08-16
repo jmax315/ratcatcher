@@ -14,7 +14,6 @@ class RenameItem < RefactoringProcessor
   def initialize(old_name, new_name, item_name, *options)
     super(old_name, new_name)
     @item_name= item_name
-    puts "RenameItem#initialize: options: #{options.inspect}"
     @options= options[0] || {}
   end
 
@@ -36,7 +35,6 @@ class RenameItem < RefactoringProcessor
       begin
         the_file = File.expand_path('.', eval(ruby_string))
       rescue
-        puts "@options: #{@options.inspect}"
         raise RatCatcherException unless @options[:ignore_complex_requires]
       end
 
