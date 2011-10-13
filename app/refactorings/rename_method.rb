@@ -1,4 +1,4 @@
-require 'app/maybe_renamable'
+require File.expand_path(File.dirname(__FILE__)) + '/../maybe_renamable'
 
 class RenameMethod < RefactoringProcessor
   include MaybeRenamable

@@ -19,7 +19,6 @@ describe "RatCatcherApp#refactorings" do
   Dir.glob('app/refactorings/*.rb').each do |file|
     refactoring_name= File.basename(file, '.rb')
     it "should find the #{refactoring_name} refactoring" do
-      pending
       refactoring= Refactoring.new(refactoring_name)
       refactoring.get_refactoring_class.name.should == refactoring.class_name
     end

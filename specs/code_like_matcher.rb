@@ -1,4 +1,4 @@
-require 'ripper'
+require File.expand_path(File.dirname(__FILE__)) + '/../app/rat_catcher_ripper'
 
 class CodeLikeMatcher
   def initialize(expected)
@@ -6,7 +6,7 @@ class CodeLikeMatcher
   end
 
   def normalize(code)
-    RubyParser.new.process(code)
+    RatCatcherRipper.new(code).process
   end
 
   def match_helper(expected, target)

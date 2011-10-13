@@ -28,7 +28,7 @@ class Refactoring
   def get_refactoring_class
     begin
       require file_name
-    rescue LoadError
+    rescue LoadError => e
       raise RatCatcherException.new("unknown refactoring: #{@name}")
     end
     Kernel.const_get(class_name)
