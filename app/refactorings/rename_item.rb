@@ -3,7 +3,6 @@ current_dir= File.expand_path(File.dirname(__FILE__))
 require current_dir + '/../refactoring_processor'
 require current_dir + '/../maybe_renamable'
 require current_dir + '/../rat_catcher_exception'
-require 'ruby2ruby'
 
 # Here's what a parsed call looks like.
 # s(:call, nil, :require, s(:arglist, s(:str, "ferd")))
@@ -39,7 +38,7 @@ class RenameItem < RefactoringProcessor
     discard_type(sexp)
     if @in_require_call
 
-      ruby_string = Ruby2Ruby.new.process(sexp.shift)
+      ruby_string = Ripper2ruby.new.process(sexp.shift)
       begin
         the_file = File.expand_path('.', eval(ruby_string))
       rescue

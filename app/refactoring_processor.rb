@@ -1,4 +1,4 @@
-require 'sexp_processor'
+require File.expand_path(File.dirname(__FILE__)) + '/ripper_sexp_processor'
 
 class RefactoringProcessor < SexpProcessor
   def initialize

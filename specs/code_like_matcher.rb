@@ -1,5 +1,4 @@
-require 'ruby_parser'
-require 'ruby2ruby'
+require 'ripper'
 
 class CodeLikeMatcher
   def initialize(expected)

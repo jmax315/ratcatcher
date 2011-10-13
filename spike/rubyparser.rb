@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby 
 
-require 'ruby_parser'
-require 'ruby2ruby'
+require 'ripper'
+require 'pp'
 
 toy_source= if (ARGV[0])
               ARGV[0]
@@ -9,10 +9,39 @@ toy_source= if (ARGV[0])
               $stdin.read
             end
 
-print "toy_source: ", toy_source, "\n\n"
+#puts "toy_source: #{toy_source}\n"
 
-toy_tree= RubyParser.new.process toy_source
-print "toy_tree:   ", toy_tree, "\n\n"
+class MyRipper < Ripper
+  def initialize(*args)
+    super(*args)
+  end
 
-toy_output= Ruby2Ruby.new.process toy_tree
-print "toy_output: ", toy_output, "\n\n"
+  PARSER_EVENTS.each do |event|
+    eval <<-End
+      def on_#{event}(*args)
+        args.unshift :#{event}
+        args
+      end
+      End
+  end
+
+  SCANNER_EVENTS.each do |event|
+      eval <<-End
+      def on_#{event}(tok)
+        tok
+      end
+      End
+  end
+end
+
+def re_source(ptree)
+  puts "re_source(#{ptree.inspect})"
+  source= ptree[1..-2].inject('') do |s, subtree|
+    s + re_source(subtree)
+  end
+  source + ptree[-1].join('')
+end
+
+tree= MyRipper.new(toy_source).parse
+pp tree
+puts re_source(tree)

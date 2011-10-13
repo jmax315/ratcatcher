@@ -1,4 +1,3 @@
-require 'json'
 require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store'
 
 class RatCatcherApp

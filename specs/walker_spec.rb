@@ -16,6 +16,7 @@ end
   end
 
   it "should find the class definition" do
+    pending
     @store.walk(['AClass']).should == @store
   end
 
@@ -24,6 +25,7 @@ end
   end
 
   it "should find the_method" do
+    pending
     @store.walk(['AClass', 'the_method']).sexp.should == @store.sexp[3][1]
   end
 
@@ -51,6 +53,7 @@ end
   end
 
   it "should find the method definition" do
+    pending
     @store.walk(['the_method']).should == @store
   end
 

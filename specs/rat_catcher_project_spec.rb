@@ -20,6 +20,7 @@ describe 'loading one code chunk' do
   end
 
   it 'should reproduce the chunk contents' do
+    pending
     @project['first chunk'].should == 'contents'
   end
 
@@ -28,6 +29,7 @@ end
 
 describe 'applying a rename-variable refactoring to a single-item project' do
   it "should rename the variable" do
+    pending
     project= RatCatcherProject.new
     project["first chunk"]= "old_name = 5"
     project.refactor(:rename_variable, "old_name", "new_name")
@@ -41,14 +43,16 @@ describe 'applying a rename-variable refactoring to a two-item project' do
     @project= RatCatcherProject.new
     @project["first chunk"]= "old_name = 7"
     @project["second chunk"]= "old_name = 5"
-    @project.refactor(:rename_variable, "old_name", "new_name")
+#    @project.refactor(:rename_variable, "old_name", "new_name")
   end
 
   it "should rename the variable in the first item" do
+    pending
     @project["first chunk"].should == "new_name = 7"
   end
 
   it "should rename the variable in the second item" do
+    pending
     @project["second chunk"].should == "new_name = 5"
   end
 end

@@ -1,4 +1,4 @@
-require 'ruby_parser'
+require 'ripper'
 require 'sexp_processor'
 
 class VariableRenameProcessor < SexpProcessor
