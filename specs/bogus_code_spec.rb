@@ -1,4 +1,4 @@
-current_dir= File.expand_path(File.dirname(__FILE__))
+require_relative '../app/rat_catcher_store'
 
 describe "handling attempts to parse bogus code" do
   before :each do

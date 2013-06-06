@@ -1,4 +1,6 @@
-describe "RatCatcherApp#refactorings" do
+require_relative '../app/refactoring'
+
+describe "Refactoring::list" do
   it "should return a list including the rename_variable refactoring" do
     Refactoring.list.should include "rename_variable"
   end

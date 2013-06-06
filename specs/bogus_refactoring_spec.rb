@@ -1,4 +1,5 @@
-current_dir= File.expand_path(File.dirname(__FILE__))
+require_relative '../app/rat_catcher_store'
+require_relative '../app/rat_catcher_exception'
 
 describe "RatCatcherStore" do
   before :each do
