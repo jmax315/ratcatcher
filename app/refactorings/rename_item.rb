@@ -1,8 +1,6 @@
-current_dir= File.expand_path(File.dirname(__FILE__))
-
-require current_dir + '/../refactoring_processor'
-require current_dir + '/../maybe_renamable'
-require current_dir + '/../rat_catcher_exception'
+require_relative '../refactoring_processor'
+require_relative '../maybe_renamable'
+require_relative '../rat_catcher_exception'
 
 # Here's what a parsed call looks like.
 # s(:call, nil, :require, s(:arglist, s(:str, "ferd")))
@@ -37,13 +35,7 @@ class RenameItem < RefactoringProcessor
 
     discard_type(sexp)
     if @in_require_call
-
-      ruby_string = Ripper2ruby.new.process(sexp.shift)
-      begin
-        the_file = File.expand_path('.', eval(ruby_string))
-      rescue
-        raise RatCatcherException unless @options[:ignore_complex_requires]
-      end
+      the_file = sexp.shift
 
       if the_file == File.expand_path('.', @old_name) ||
          the_file == "#{File.expand_path('.', @old_name)}.rb"

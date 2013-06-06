@@ -1,12 +1,10 @@
-require File.expand_path(File.dirname(__FILE__)) + '/../app/rat_catcher_ripper'
-
 class CodeLikeMatcher
   def initialize(expected)
     @expected = expected
   end
 
   def normalize(code)
-    RatCatcherRipper.new(code).process
+    code
   end
 
   def match_helper(expected, target)

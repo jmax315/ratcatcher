@@ -1,6 +1,4 @@
-require File.expand_path(File.dirname(__FILE__)) + '/ripper_sexp_processor'
-
-class RefactoringProcessor < SexpProcessor
+class RefactoringProcessor
   def initialize
     super()
   end
@@ -9,5 +7,3 @@ class RefactoringProcessor < SexpProcessor
     sexp.shift
   end
 end
-
-# vim:sw=2:ai

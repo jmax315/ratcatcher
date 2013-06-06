@@ -1,6 +1,4 @@
-require 'ripper'
-require File.expand_path(File.dirname(__FILE__)) + '/../ripper_sexp_processor'
-require File.expand_path(File.dirname(__FILE__)) + '/../maybe_renamable'
+require_relative '../maybe_renamable'
 
 class RenameVariable < RefactoringProcessor
   include MaybeRenamable

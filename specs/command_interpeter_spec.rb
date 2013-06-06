@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__)) + '/../app/rat_catcher_app'
+require_relative '../app/rat_catcher_app'
 
 describe "encoding the Rat Catcher Protocol" do
   before :each do

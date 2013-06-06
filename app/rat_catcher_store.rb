@@ -1,13 +1,6 @@
-require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_ripper'
-
-unless Object.const_defined?(:CurrentDir)
-  CurrentDir= File.expand_path(File.dirname(__FILE__))
-end
-
-require CurrentDir + '/tree_like_matcher'
-require CurrentDir + '/refactoring'
-require CurrentDir + '/store_nodes/project_item_store'
-require CurrentDir + '/file_constant_processor'
+require_relative 'tree_like_matcher'
+require_relative 'refactoring'
+require_relative 'store_nodes/project_item_store'
 
 
 class RatCatcherStore
@@ -39,8 +32,8 @@ end
 class RatCatcherStore
   def self.parse source_code
     item_name= Object.new
-    syntax_tree= RatCatcherRipper.new(source_code).process
-    TopStore.new(FILEConstantProcessor.new(item_name).process(syntax_tree))
+    syntax_tree= nil
+    TopStore.new(syntax_tree)
   end
 
   public
@@ -50,7 +43,7 @@ class RatCatcherStore
   end
 
   def source
-    Ripper2ruby.new.process(sexp) || ""
+    ""
   end
 
   def find(path)

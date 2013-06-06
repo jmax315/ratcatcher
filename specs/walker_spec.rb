@@ -21,6 +21,7 @@ end
   end
 
   it "should not find anything with bogus path components" do
+    pending
     @store.walk(['Bogus']).should be_nil
   end
 
@@ -30,10 +31,12 @@ end
   end
 
   it "should not find a_bogus_method" do
+    pending
     @store.walk(['AClass', 'a_bogus_method']).should be_nil
   end
 
   it "should not find ." do
+    pending
     @store.walk(['.']).should be_nil
   end
 end
@@ -58,10 +61,12 @@ end
   end
 
   it "should not find anything with bogus path components" do
+    pending
     @store.walk(['bogus']).should be_nil
   end
 
   it "should not find ." do
+    pending
     @store.walk(['.']).should be_nil
   end
 end

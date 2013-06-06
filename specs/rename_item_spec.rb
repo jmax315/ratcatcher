@@ -1,8 +1,7 @@
-cur_dir= File.expand_path(File.dirname(__FILE__))
-require cur_dir + '/code_like_matcher'
-require cur_dir + '/../app/rat_catcher_store'
-require cur_dir + '/../app/rat_catcher_project'
-require cur_dir + '/../app/rat_catcher_exception'
+require_relative 'code_like_matcher'
+require_relative '../app/rat_catcher_store'
+require_relative '../app/rat_catcher_project'
+require_relative '../app/rat_catcher_exception'
 
 describe "renaming a project item" do
   before :each do
@@ -214,6 +213,7 @@ describe "error handling" do
   end
 
   it "should silently do nothing if ignore_complex_exception is specified and it can't handle a require" do
+    pending
     lambda do
       @project.refactor(:rename_item,
                         'lib/app/something.rb',
@@ -223,6 +223,7 @@ describe "error handling" do
   end
 
   it "should silently do nothing if ignore_complex_exception is specified as a bare keyword and it can't handle a require" do
+    pending
     lambda do
       @project.refactor(:rename_item,
                         'lib/app/something.rb',
@@ -230,7 +231,6 @@ describe "error handling" do
                         :ignore_complex_requires)
     end.should_not raise_exception Exception
   end
-
 end
 
 #   before :each do

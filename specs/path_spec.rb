@@ -26,6 +26,7 @@ describe "Searching inside a class definition" do
   end
 
   it "should return nil if we pass a path that doesn't exist" do
+    pending
     @store.find("Wombat").should == nil
   end
 
@@ -38,6 +39,7 @@ describe "Searching inside a class definition" do
   end
 
   it "should not find anything if the path is '.'" do
+    pending
     @store.find(".").should be_nil
   end
 

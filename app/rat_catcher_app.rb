@@ -1,4 +1,5 @@
-require File.expand_path(File.dirname(__FILE__)) + '/rat_catcher_store'
+require 'json'
+require_relative 'rat_catcher_store'
 
 class RatCatcherApp
   def initialize(input_stream= $stdin, output_stream= $stdout)
