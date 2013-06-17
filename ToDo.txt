@@ -20,3 +20,5 @@ Change third item in rename_item refactoring initialize method to
 project base. Current specs and code ARE WRONG.
 
 Add check for non-hash splat argument in RenameItem#initialize
+
+Intercept error message(s) on parse errors.
