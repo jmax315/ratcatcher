@@ -42,7 +42,7 @@ class RatCatcherStore
   end
 
   def source
-    sexp.src.selector.to_source
+    sexp.src.expression ? sexp.src.selector.to_source : ''
   end
 
   def find(path)
