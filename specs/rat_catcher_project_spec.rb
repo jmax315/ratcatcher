@@ -20,7 +20,6 @@ describe 'loading one code chunk' do
   end
 
   it 'should reproduce the chunk contents' do
-    pending
     @project['first chunk'].should == 'contents'
   end
 

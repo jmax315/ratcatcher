@@ -1,3 +1,5 @@
+require 'parser/current'
+
 class ProjectItemStore
   attr_reader :name
 

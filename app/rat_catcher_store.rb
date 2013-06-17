@@ -31,8 +31,7 @@ end
 
 class RatCatcherStore
   def self.parse source_code
-    item_name= Object.new
-    syntax_tree= nil
+    syntax_tree= Parser::CurrentRuby.parse(source_code)
     TopStore.new(syntax_tree)
   end
 
@@ -43,7 +42,7 @@ class RatCatcherStore
   end
 
   def source
-    ""
+    sexp.src.selector.to_source
   end
 
   def find(path)
