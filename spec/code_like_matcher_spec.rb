@@ -8,12 +8,12 @@ describe 'code_like_matcher' do
 
   it 'should match with the extra_space on the right' do
     pending
-    @code_without_extra_space.should be_code_like(@code_with_extra_space)
+    expect(@code_without_extra_space).to be_code_like(@code_with_extra_space)
   end
 
   it 'should match with the extra_space on the left' do
     pending
-    @code_with_extra_space.should be_code_like(@code_without_extra_space)
+    expect(@code_with_extra_space).to be_code_like(@code_without_extra_space)
   end
 end
 
@@ -24,7 +24,7 @@ describe 'code_like_matcher' do
   end
 
   it 'should not match' do
-    @code_without_extra_space.should_not be_code_like(@code_with_extra_space)
+    expect(@code_without_extra_space).not_to be_code_like(@code_with_extra_space)
   end
 
 end
@@ -36,11 +36,11 @@ describe "messages for matcher" do
   end
 
   it "has appropriate failure message" do
-    @matcher.failure_message.should == "expected \"a =2\" to be code like \"a=1\""
+    expect(@matcher.failure_message).to eq("expected \"a =2\" to be code like \"a=1\"")
   end
 
   it "has appropriate negative failure message" do
-    @matcher.negative_failure_message.should == "expected \"a =2\" not to be code like \"a=1\""
+    expect(@matcher.failure_message_when_negated).to eq("expected \"a =2\" not to be code like \"a=1\"")
   end
 end
 

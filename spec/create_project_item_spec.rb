@@ -12,21 +12,21 @@ describe "creating a new ratcatcher object from source code" do
   end
 
   it "should accept source code" do
-    @cookie.should_not be_nil
+    expect(@cookie).not_to be_nil
   end
 
   it "should contain the source code" do
     pending
-    @app.code_from_cookie(@cookie).should be_code_like @src_code
+    expect(@app.code_from_cookie(@cookie)).to be_code_like @src_code
   end
   
   it "should accept different source code" do
-    @different_cookie.should_not be_nil
+    expect(@different_cookie).not_to be_nil
   end
   
   it "should contain the different source code" do
     pending
-    @app.code_from_cookie(@different_cookie).should be_code_like @different_src_code
+    expect(@app.code_from_cookie(@different_cookie)).to be_code_like @different_src_code
   end
 end
 
@@ -40,11 +40,11 @@ describe "creating a new ratcatcher object from an empty string" do
   end
 
   it "should accept source code" do
-    @cookie.should_not be_nil
+    expect(@cookie).not_to be_nil
   end
 
   it "should contain the source code" do
     pending
-    @app.code_from_cookie(@cookie).should be_code_like @src_code
+    expect(@app.code_from_cookie(@cookie)).to be_code_like @src_code
   end
 end

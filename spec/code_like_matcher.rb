@@ -20,7 +20,7 @@ class CodeLikeMatcher
     "expected #{@target.inspect} to be code like #{@expected.inspect}"
   end
 
-  def negative_failure_message
+  def failure_message_when_negated
     "expected #{@target.inspect} not to be code like #{@expected.inspect}"
   end
 end
