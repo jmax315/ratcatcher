@@ -1,3 +1,6 @@
 source 'https://rubygems.org'
-gem 'rspec'
-gem 'parser'
+gem 'parser', git: 'file:///home/jmax/projects/parser'
+group :development do
+  gem 'rspec'
+end
+
